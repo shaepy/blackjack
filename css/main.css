@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(255, 255, 255);
+    font-family: system-ui, sans-serif;
+    /* Ensures full height compatibility across devices */
+    min-height: 100dvh;
+    letter-spacing: .05rem;
+  }
+
+#main-content {
+    display: flex;
+    flex-direction: column;
+    padding: 2% 5%;
+    align-items: center;
+    gap: 15px;
+}
+
+button {
+    font-family: system-ui, sans-serif;
+    padding: 6px 10px;
+    letter-spacing: .06rem;
+    border-radius: 3px;
+    background-color: rgba(228, 228, 228, 0.868);
+    border: 1px solid rgb(129, 129, 129);
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}  
+
+button:hover {
+    background-color: rgb(211, 211, 211);
+    border: 1px solid rgb(133, 133, 133);
+    color: rgb(45, 45, 45);
+    cursor: pointer;
+}
+
+#dealer, #player {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+#actions {
+    display: none;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#result {
+    color: rgb(232, 41, 41);
+    padding: .3%;
+}
+
+#reset {
+    display: none;
+}
+
+#play {
+    display: inline;
+}

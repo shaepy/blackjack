@@ -17,7 +17,7 @@ body {
     flex-direction: column;
     padding: 2% 5%;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 button {
@@ -49,11 +49,12 @@ button:hover {
     display: none;
     flex-direction: row;
     gap: 10px;
+    padding: 16px 0;
 }
 
 #result {
     color: rgb(0, 0, 0);
-    padding: .3%;
+    padding: .8%;
 }
 
 #reset {
@@ -62,4 +63,23 @@ button:hover {
 
 #play {
     display: inline;
+}
+
+#instructions {
+    display: none;
+    flex-direction: column;
+    max-width: 420px;
+    padding: 20px 30px;
+    margin: 4px 0;
+    gap: 4px;
+    align-items: center;
+    background-color: rgb(227, 227, 227);
+}
+
+#instructions ul {
+    padding: 7px 30px;
+}
+
+#buttons {
+    padding: 10px 0;
 }

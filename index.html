@@ -12,9 +12,24 @@
     <div id="main-content">
         <h1>blackjack</h1>
 
-        <div>
+        <div id="buttons">
             <button id="reset">reset</button>
             <button id="play">start game</button>
+            <button id="info-button">how to play</button>
+        </div>
+
+        <div id="instructions">
+            <h2>How to Play</h2>
+            <p>It's you versus the Dealer. Your goal is to get as close to 21 as you can without going over. </p>
+            <p>Both of you start with two cards. The dealer will show one card face up, and one face down.</p>
+            <ul>
+                <li>Cards 2-10 are worth their number</li>
+                <li>Face (J, Q, K) cards are worth 10</li>
+                <li>Aces are flexible and can count as 11 or 1</li>
+            </ul>
+            <p>On your turn, you can <strong>Hit</strong> to draw another card, or <strong>Stand</strong> to hold your hand and end your turn.</p>
+            <p>Once you’re done, the dealer flips their hidden card and plays. They have to keep hitting until they reach at least 17.</p>
+            <p>Whoever is closer to 21 without going over wins.</p>
         </div>
 
         <div id="dealer">

@@ -7,13 +7,13 @@ const resetGame = document.querySelector('#reset')
 const actionsBar = document.querySelector('#actions')
 const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
+const infoButton = document.querySelector('#info-button')
+const instructions = document.querySelector('#instructions')
 
-// display cards
+// Display cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
 const displayResult = document.querySelector('#result h2')
-
-// display totals
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
 
@@ -24,10 +24,9 @@ let table = {
     player: []
 }
 
-// save positions to cards and totals
+// Save positions to cards, totals, and dealt card indexes
 let dealerCard1, dealerCard2, playerCard1, playerCard2
 let dealerTotal, playerTotal
-// for hitCard Idx
 let playerNewCardIdx, dealerNewCardIdx
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
@@ -36,6 +35,7 @@ startGame.addEventListener('click', play)
 hitButton.addEventListener('click', hit)
 standButton.addEventListener('click', stand)
 resetGame.addEventListener('click', reset)
+infoButton.addEventListener('click', showInstructions)
 
 /* --------------------------------------- Functions --------------------------------------- */
 
@@ -206,6 +206,13 @@ function shuffle() {
     })
 }
 
+function showInstructions() {
+    if (window.getComputedStyle(instructions).display === 'flex') {
+        instructions.style.display = 'none'
+    } else {
+        instructions.style.display = 'flex'
+    }
+}
 
 // bet screen display appears when play again is hit
 // make a bet screen/home menu (where start game button)
@@ -231,9 +238,11 @@ function shuffle() {
 // //	deals two cards to dealer 
 // //	deals two cards to player
 // //	display those cards
-//	dealer only shows one card
+// // dealer only shows one card
 // //   player shows both cards
 // //   if i get blackjack (ace+10), auto win
+
+// edge case: when two aces are in the hand, it will default both to 1. need to change it to only 1
 
 // // As a user, I can choose 'hit' to get another card and add to my total.
 // //   random card generator

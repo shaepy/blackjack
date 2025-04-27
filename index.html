@@ -16,6 +16,7 @@
             <button id="playAgain">play again</button>
             <button id="play">start game</button>
             <button id="info-button">how to play</button>
+            <!-- <button id="resetWallet">reset wallet</button> -->
         </div>
 
         <div id="instructions">
@@ -31,15 +32,15 @@
             <p>Once you’re done, the dealer flips their hidden card and plays. They have to keep hitting until they reach at least 17.</p>
             <p>Whoever is closer to 21 without going over wins.</p>
         </div>
+        
+        <div id="result"><h2></h2></div>
 
         <div id="dealer">
             <h2>dealer</h2>
             <div id="dealer-cards"></div>
             <div id="dealer-total"></div>
         </div>
-
-        <div id="result"><h2></h2></div>
-
+        
         <div id="player">
             <h2>player</h2>
             <div id="player-cards"></div>
@@ -53,10 +54,10 @@
         </div>
 
         <div id="bank">
-            <div>bet amount:</div>
-            <div id="bet" class="number">x</div>
-            <div>wallet:</div>
-            <div id="wallet" class="number">x</div>
+            <div>bet amount</div>
+            <div id="bet" class="number"></div>
+            <div>wallet</div>
+            <div id="wallet" class="number"></div>
         </div>
     </div>
 </body>

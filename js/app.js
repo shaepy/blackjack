@@ -25,6 +25,7 @@ const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
 const infoButton = document.querySelector('#info-button')
 const instructions = document.querySelector('#instructions')
+const resultDiv = document.querySelector('#result')
 
 // Display cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -57,9 +58,8 @@ infoButton.addEventListener('click', showInstructions)
 
 function play() {
     wallet -= bet
-    console.log(`wallet is now: ${wallet}`)
+    console.log(`wallet is now:`, wallet)
     displayFunds()
-
     startGame.style.display = 'none'
     actionsBar.style.display = 'flex'
     dealerElement.style.display = 'flex'
@@ -113,6 +113,7 @@ function addCardTotal() {
 function checkForBlackjack() {
     if (playerTotal === 21 && dealerTotal < 21) {
         displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
+        resultDiv.style.display = 'flex'  // if result, show resultDiv
         wallet += bet + (bet * (3/2))
         displayFunds()
         revealHiddenCard()
@@ -148,6 +149,7 @@ function hit() {
     // check for bust
     if (playerTotal > 21) {
         displayResult.innerText = `BUST! You Lose 😭`
+        resultDiv.style.display = 'flex'  // if result, show resultDiv
         revealHiddenCard()
         removeActionBar()
     } else if (playerTotal === 21) stand()
@@ -159,6 +161,7 @@ function stand() {
     while (dealerTotal <= 16) dealerHit()
     if (dealerTotal > 21) {
         displayResult.innerText = '🎊 You Win! Dealer BUST'
+        resultDiv.style.display = 'flex'  // if result, show resultDiv
         wallet += bet * 2
         displayFunds()
         removeActionBar()
@@ -195,7 +198,10 @@ function result() {
         displayFunds()
         displayResult.innerText = `🎉 Congrats! You Win`
     }
-    else if (!playerIsWinner) {displayResult.innerText = `You Lose 😓`}
+    else if (!playerIsWinner) {
+        displayResult.innerText = `You Lose 😓`
+    }
+    resultDiv.style.display = 'flex'  // if result, show resultDiv
     removeActionBar()
 }
 
@@ -216,6 +222,15 @@ function reset() {
     actionsBar.style.display = 'none'
     dealerElement.style.display = 'none'
     playerElement.style.display = 'none'
+    resultDiv.style.display = 'none'
+
+    if (wallet < bet) {
+        console.log('you are out of money, wallet is:', wallet)
+        wallet += 50
+        console.log('added free money. wallet is now:', wallet)
+        displayFunds()
+    }
+    console.log('wallet currently at', wallet)
 }
 
 // removes the actionBar from view and displays playAgain button

@@ -17,7 +17,7 @@ body {
     flex-direction: column;
     padding: 2% 5%;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 button {
@@ -54,7 +54,8 @@ button:hover {
 
 #result {
     color: rgb(0, 0, 0);
-    padding: .8%;
+    padding: 16px 0;
+    display: none;
 }
 
 #playAgain {
@@ -90,6 +91,9 @@ button:hover {
     gap: 20px;
     justify-content: space-around;
     align-items: center;
+    margin: 12px;
+    border: 1px solid black;
+    padding: 10px;
 }
 
 #bank .number {

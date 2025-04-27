@@ -46,8 +46,8 @@ function play() {
     playerElement.style.display = 'flex'
     dealCards()
     addCardTotal()
-    checkForBlackjack()
     displayCards()
+    checkForBlackjack()
 }
 
 function getCard() {
@@ -95,13 +95,16 @@ function checkForBlackjack() {
         displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
         revealHiddenCard()
         removeActionBar()
-    } else if (playerTotal === 21 && dealerTotal === 21) result()
+    } else if (playerTotal === 21 && dealerTotal === 21) {
+        revealHiddenCard()
+        result()
+    }
 }
 
 function displayCards() {
     if (displayPlayerCards.innerText === '' && displayDealerCards.innerText === '') {
         displayDealerCards.innerHTML = `<img src=${dealerCard1.src}>`
-        displayDealerCards.innerHTML +=  ` <img src='./img/black-red-1.png' id="hidden-card">`
+        displayDealerCards.innerHTML +=  ` <img src='./img/back-red-1.png' id="hidden-card">`
         displayDealerTotal.innerText = dealerCard1.value
 
         displayPlayerCards.innerHTML = `<img src=${playerCard1.src}>`
@@ -158,18 +161,9 @@ function closerTo21(n1, n2) {
 
 function result() {
     const playerIsWinner = closerTo21(playerTotal, dealerTotal)
-    if (playerTotal === dealerTotal) {
-        console.log('push')
-        displayResult.innerText = `Push. It's a tie.`
-    } 
-    else if (playerIsWinner) {
-        console.log('player wins! payout~')
-        displayResult.innerText = `Congrats! You Win 🎊`
-    }
-    else if (!playerIsWinner) {
-        console.log('player loses! dealer wins.')
-        displayResult.innerText = `You Lose 😓`
-    }
+    if (playerTotal === dealerTotal) {displayResult.innerText = `Push. It's a tie.`} 
+    else if (playerIsWinner) {displayResult.innerText = `Congrats! You Win 🎊`}
+    else if (!playerIsWinner) {displayResult.innerText = `You Lose 😓`}
     removeActionBar()
 }
 

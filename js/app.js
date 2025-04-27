@@ -53,8 +53,7 @@ function play() {
 function getCard() {
     // this only grabs cards with hasBeenPlayed as false
     const cardDeckCopy = cardDeck.filter((card) => card.hasBeenPlayed === false)
-    const x = Math.floor(Math.random() * cardDeckCopy.length) // create random Idx
-
+    const x = Math.floor(Math.random() * cardDeckCopy.length)
     const matchIdx = cardDeck.findIndex((card) => card === cardDeckCopy[x])
     cardDeck[matchIdx].hasBeenPlayed = true
     return cardDeckCopy[x]
@@ -66,14 +65,6 @@ function dealCards() {
     dealerCard2 = table.dealer[1] = getCard()
     playerCard1 = table.player[0] = getCard()
     playerCard2 = table.player[1] = getCard()
-}
-
-function checkForBlackjack() {
-    if (playerTotal === 21 && dealerTotal < 21) {
-        displayResult.innerText = 'Blackjack! You Win'
-        revealHiddenCard()
-        removeActionBar()
-    } else if (playerTotal === 21 && dealerTotal === 21) {result()}
 }
 
 function addCardTotal() {
@@ -97,7 +88,14 @@ function addCardTotal() {
             }
         })
     }
-    console.log(`dealer total: ${dealerTotal}, player total: ${playerTotal}`)
+}
+
+function checkForBlackjack() {
+    if (playerTotal === 21 && dealerTotal < 21) {
+        displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
+        revealHiddenCard()
+        removeActionBar()
+    } else if (playerTotal === 21 && dealerTotal === 21) result()
 }
 
 function displayCards() {
@@ -120,28 +118,22 @@ function hit() {
     const newCard = getCard()
     table.player.push(newCard)
     playerNewCardIdx = table.player.findIndex((card) => card === newCard)
-
     addCardTotal()
     displayCards()
-
     // check for bust
     if (playerTotal > 21) {
-        displayResult.innerText = `BUST!!`
+        displayResult.innerText = `BUST! You Lose 😭`
         revealHiddenCard()
         removeActionBar()
-    } else if (playerTotal === 21) {
-        stand()
-    }
+    } else if (playerTotal === 21) stand()
 }
 
 function stand() {
-    // dealer turn goes here
     revealHiddenCard()
-
+    // dealer's turn
     while (dealerTotal <= 16) dealerHit()
     if (dealerTotal > 21) {
-        displayResult.innerText = 'You win! Dealer BUST'
-        revealHiddenCard()
+        displayResult.innerText = 'You Win! Dealer BUST 🎊'
         removeActionBar()
         return
     }
@@ -153,7 +145,6 @@ function dealerHit () {
     table.dealer.push(newCard)
     dealerNewCardIdx = table.dealer.findIndex((card) => card === newCard)
     addCardTotal()
-
     displayDealerCards.innerHTML += ` <img src=${table.dealer[dealerNewCardIdx].src}>`
     displayDealerTotal.innerText = dealerTotal
 }
@@ -173,11 +164,11 @@ function result() {
     } 
     else if (playerIsWinner) {
         console.log('player wins! payout~')
-        displayResult.innerText = `You Win :)`
+        displayResult.innerText = `Congrats! You Win 🎊`
     }
     else if (!playerIsWinner) {
         console.log('player loses! dealer wins.')
-        displayResult.innerText = `You Lose :(`
+        displayResult.innerText = `You Lose 😓`
     }
     removeActionBar()
 }
@@ -189,15 +180,13 @@ function reset() {
     table.player = []
     dealerTotal = 0
     playerTotal = 0
-
     displayDealerCards.innerText = ''
     displayDealerTotal.innerText = ''
     displayPlayerCards.innerText = ''
     displayPlayerTotal.innerText = ''
     displayResult.innerText = ''
-
-    resetGame.style.display = 'none'
     startGame.style.display = 'inline'
+    resetGame.style.display = 'none'
     actionsBar.style.display = 'none'
     dealerElement.style.display = 'none'
     playerElement.style.display = 'none'
@@ -218,6 +207,9 @@ function revealHiddenCard() {
 
 function shuffle() {
     cardDeck.forEach(card => card.hasBeenPlayed = false)
+    cardDeck.forEach(card => {
+        if (card.rank === 'ace') card.value = 11
+    })
 }
 
 

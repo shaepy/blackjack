@@ -1,9 +1,25 @@
+/* --------------------------------------- Bet Mechanic -------------------------------------- */
+
+const displayBet = document.querySelector('#bet')
+const displayWallet = document.querySelector('#wallet')
+
+let bet = 10
+let wallet = 100
+
+function displayFunds() {
+    displayBet.textContent = bet
+    displayWallet.textContent = wallet
+}
+
+displayFunds()
+
+
 /* --------------------------------------- Constants -------------------------------------- */
 // Player Actions
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const startGame = document.querySelector('#play')
-const resetGame = document.querySelector('#reset')
+const playAgain = document.querySelector('#playAgain')
 const actionsBar = document.querySelector('#actions')
 const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
@@ -34,12 +50,16 @@ let playerNewCardIdx, dealerNewCardIdx
 startGame.addEventListener('click', play)
 hitButton.addEventListener('click', hit)
 standButton.addEventListener('click', stand)
-resetGame.addEventListener('click', reset)
+playAgain.addEventListener('click', reset)
 infoButton.addEventListener('click', showInstructions)
 
 /* --------------------------------------- Functions --------------------------------------- */
 
 function play() {
+    wallet -= bet
+    console.log(`wallet is now: ${wallet}`)
+    displayFunds()
+
     startGame.style.display = 'none'
     actionsBar.style.display = 'flex'
     dealerElement.style.display = 'flex'
@@ -93,6 +113,8 @@ function addCardTotal() {
 function checkForBlackjack() {
     if (playerTotal === 21 && dealerTotal < 21) {
         displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
+        wallet += bet + (bet * (3/2))
+        displayFunds()
         revealHiddenCard()
         removeActionBar()
     } else if (playerTotal === 21 && dealerTotal === 21) {
@@ -136,7 +158,9 @@ function stand() {
     // dealer's turn
     while (dealerTotal <= 16) dealerHit()
     if (dealerTotal > 21) {
-        displayResult.innerText = 'You Win! Dealer BUST 🎊'
+        displayResult.innerText = '🎊 You Win! Dealer BUST'
+        wallet += bet * 2
+        displayFunds()
         removeActionBar()
         return
     }
@@ -161,8 +185,16 @@ function closerTo21(n1, n2) {
 
 function result() {
     const playerIsWinner = closerTo21(playerTotal, dealerTotal)
-    if (playerTotal === dealerTotal) {displayResult.innerText = `Push. It's a tie.`} 
-    else if (playerIsWinner) {displayResult.innerText = `Congrats! You Win 🎊`}
+    if (playerTotal === dealerTotal) {
+        wallet += bet
+        displayFunds()
+        displayResult.innerText = `Push. It's a tie`
+    } 
+    else if (playerIsWinner) {
+        wallet += bet * 2
+        displayFunds()
+        displayResult.innerText = `🎉 Congrats! You Win`
+    }
     else if (!playerIsWinner) {displayResult.innerText = `You Lose 😓`}
     removeActionBar()
 }
@@ -180,15 +212,15 @@ function reset() {
     displayPlayerTotal.innerText = ''
     displayResult.innerText = ''
     startGame.style.display = 'inline'
-    resetGame.style.display = 'none'
+    playAgain.style.display = 'none'
     actionsBar.style.display = 'none'
     dealerElement.style.display = 'none'
     playerElement.style.display = 'none'
 }
 
-// removes the actionBar from view and displays resetGame button
+// removes the actionBar from view and displays playAgain button
 function removeActionBar() {
-    resetGame.style.display = 'inline'
+    playAgain.style.display = 'inline'
     actionsBar.style.display = 'none'
 }
 
@@ -209,10 +241,15 @@ function shuffle() {
 function showInstructions() {
     if (window.getComputedStyle(instructions).display === 'flex') {
         instructions.style.display = 'none'
-    } else {
-        instructions.style.display = 'flex'
-    }
+    } else {instructions.style.display = 'flex'}
 }
+
+
+
+
+
+
+/* --------------------------------------- Comments -------------------------------------- */
 
 // bet screen display appears when play again is hit
 // make a bet screen/home menu (where start game button)
@@ -230,9 +267,6 @@ function showInstructions() {
 
 // reset game remains at top in case of running out of currency
 
-
-// User Stories
-
 // // As a user, I can see what cards are dealt to me and the dealer
 // //	random card generator
 // //	deals two cards to dealer 
@@ -241,8 +275,6 @@ function showInstructions() {
 // // dealer only shows one card
 // //   player shows both cards
 // //   if i get blackjack (ace+10), auto win
-
-// edge case: when two aces are in the hand, it will default both to 1. need to change it to only 1
 
 // // As a user, I can choose 'hit' to get another card and add to my total.
 // //   random card generator
@@ -264,6 +296,8 @@ function showInstructions() {
 // //   - and keeps hitting until reaching 17, 21, or bust
 // //	- always stands on >= 17
 
+// edge case: when two aces are in the hand, it will default both to 1.
+
 // * As a user, I should see the result of the round.
 // //	- compare the result between my hand and the dealer's
 // //		- if myresult is closer to 21 than the dealer's, i win
@@ -280,7 +314,6 @@ function showInstructions() {
 // 	- bring player to bet selector with new wallet total
 // 	- optional: have option to play again with same bet
 
-// bet mechanics
 // * As a user, I should be able to place a bet to start the game.
 // 	- we need a starting amount
 // 	- store the value of the bet
@@ -290,6 +323,3 @@ function showInstructions() {
 // * As a user, I want to reset my game status when I run out of chips.
 // 	- reset game button when pressed,
 // 	- resets everything back to starting wallet total
-
-
-// Ace as 1 or 11 logic

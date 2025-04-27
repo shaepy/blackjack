@@ -57,7 +57,7 @@ button:hover {
     padding: .8%;
 }
 
-#reset {
+#playAgain {
     display: none;
 }
 
@@ -82,4 +82,16 @@ button:hover {
 
 #buttons {
     padding: 10px 0;
+}
+
+#bank {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#bank .number {
+    font-size: 1.2rem;
 }

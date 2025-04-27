@@ -1,6 +1,4 @@
-// checking cards.js
-console.log(cardDeck)
-
+/* --------------------------------------- Constants -------------------------------------- */
 // Player Actions
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
@@ -19,7 +17,8 @@ const displayResult = document.querySelector('#result h2')
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
 
-// cards in play go in here
+/* --------------------------------------- Variables -------------------------------------- */
+
 let table = {
     dealer: [],
     player: []
@@ -72,8 +71,8 @@ function dealCards() {
 function checkForBlackjack() {
     if (playerTotal === 21 && dealerTotal < 21) {
         displayResult.innerText = 'Blackjack! You Win'
-        resetGame.style.display = 'inline'
-        actionsBar.style.display = 'none'
+        revealHiddenCard()
+        removeActionBar()
     } else if (playerTotal === 21 && dealerTotal === 21) {result()}
 }
 
@@ -104,8 +103,8 @@ function addCardTotal() {
 function displayCards() {
     if (displayPlayerCards.innerText === '' && displayDealerCards.innerText === '') {
         displayDealerCards.innerHTML = `<img src=${dealerCard1.src}>`
-        displayDealerCards.innerHTML +=  ` <img src=${dealerCard2.src}>`
-        displayDealerTotal.innerText = dealerTotal
+        displayDealerCards.innerHTML +=  ` <img src='./img/black-red-1.png' id="hidden-card">`
+        displayDealerTotal.innerText = dealerCard1.value
 
         displayPlayerCards.innerHTML = `<img src=${playerCard1.src}>`
         displayPlayerCards.innerHTML +=  ` <img src=${playerCard2.src}>`
@@ -128,9 +127,8 @@ function hit() {
     // check for bust
     if (playerTotal > 21) {
         displayResult.innerText = `BUST!!`
-        resetGame.style.display = 'inline'
-        actionsBar.style.display = 'none'
-        // check for 21, auto stand
+        revealHiddenCard()
+        removeActionBar()
     } else if (playerTotal === 21) {
         stand()
     }
@@ -138,11 +136,13 @@ function hit() {
 
 function stand() {
     // dealer turn goes here
+    revealHiddenCard()
+
     while (dealerTotal <= 16) dealerHit()
     if (dealerTotal > 21) {
         displayResult.innerText = 'You win! Dealer BUST'
-        resetGame.style.display = 'inline'
-        actionsBar.style.display = 'none'
+        revealHiddenCard()
+        removeActionBar()
         return
     }
     result()
@@ -166,34 +166,25 @@ function closerTo21(n1, n2) {
 }
 
 function result() {
-    const playerIs = closerTo21(playerTotal, dealerTotal)
-
+    const playerIsWinner = closerTo21(playerTotal, dealerTotal)
     if (playerTotal === dealerTotal) {
         console.log('push')
         displayResult.innerText = `Push. It's a tie.`
     } 
-    else if (playerIs) {
+    else if (playerIsWinner) {
         console.log('player wins! payout~')
         displayResult.innerText = `You Win :)`
     }
-    else if (!playerIs) {
+    else if (!playerIsWinner) {
         console.log('player loses! dealer wins.')
         displayResult.innerText = `You Lose :(`
     }
-    resetGame.style.display = 'inline'
-    actionsBar.style.display = 'none'
-}
-
-function shuffle() {
-    cardDeck.forEach((card) => {
-        card.hasBeenPlayed = false
-    })
+    removeActionBar()
 }
 
 // eventually will become play again
 function reset() {    
     shuffle()
-
     table.dealer = []
     table.player = []
     dealerTotal = 0
@@ -212,7 +203,22 @@ function reset() {
     playerElement.style.display = 'none'
 }
 
+// removes the actionBar from view and displays resetGame button
+function removeActionBar() {
+    resetGame.style.display = 'inline'
+    actionsBar.style.display = 'none'
+}
 
+// reveals the dealer hiddenCard
+function revealHiddenCard() {
+    const hiddenCard = document.querySelector('#hidden-card')
+    if (hiddenCard) hiddenCard.src = dealerCard2.src
+    displayDealerTotal.innerText = dealerTotal
+}
+
+function shuffle() {
+    cardDeck.forEach(card => card.hasBeenPlayed = false)
+}
 
 
 // bet screen display appears when play again is hit

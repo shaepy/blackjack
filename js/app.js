@@ -1,18 +1,3 @@
-/* --------------------------------------- Bet Mechanic -------------------------------------- */
-
-const displayBet = document.querySelector('#bet')
-const displayWallet = document.querySelector('#wallet')
-
-let bet = 10
-let wallet = 100
-
-function displayFunds() {
-    displayBet.textContent = bet
-    displayWallet.textContent = wallet
-}
-
-displayFunds()
-
 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
@@ -22,7 +7,6 @@ const startGame = document.querySelector('#play')
 const playAgain = document.querySelector('#playAgain')
 const infoButton = document.querySelector('#info-button')
 const betSelectors = document.querySelectorAll('.bet')
-console.log(betSelectors)
 
 // Displays
 const actionsBar = document.querySelector('#actions')
@@ -30,24 +14,9 @@ const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
 const instructions = document.querySelector('#instructions')
 const resultDiv = document.querySelector('#result')
+const betSelectDiv = document.querySelector('#bet-selection')
 
-betSelectors.forEach(bet => bet.addEventListener('click', changeBet));
-console.log(bet)
-
-function changeBet(event) {
-    //this changes the bet when clicked
-    const button = event.target
-    console.log(event.target)
-
-    const betAmnt = button.dataset.bet
-    console.log(event.target.dataset.bet)
-
-    bet = betAmnt
-    console.log(`bet is now: ${bet}`)
-    displayFunds()
-}
-
-// Display cards, result, totals
+// Cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
 const displayResult = document.querySelector('#result h2')
@@ -74,16 +43,37 @@ standButton.addEventListener('click', stand)
 playAgain.addEventListener('click', reset)
 infoButton.addEventListener('click', showInstructions)
 
+/* --------------------------------------- Bet Mechanic -------------------------------------- */
+
+const displayBet = document.querySelector('#bet')
+const displayWallet = document.querySelector('#wallet')
+betSelectors.forEach(bet => bet.addEventListener('click', changeBet));
+
+let bet = 10
+let wallet = 200
+
+function displayFunds() {
+    displayBet.textContent = bet
+    displayWallet.textContent = wallet
+}
+
+function changeBet(event) {
+    bet = Number(event.target.dataset.bet)
+    displayFunds()
+}
+
 /* --------------------------------------- Functions --------------------------------------- */
 
+displayFunds()
+
 function play() {
+    const hideDivs = [startGame, betSelectDiv]
+    hideDivs.forEach(d => d.style.display = 'none')
+    const showGameDivs = [actionsBar, dealerElement, playerElement]
+    showGameDivs.forEach(d => d.style.display = 'flex')
+
     wallet -= bet
-    console.log(`wallet is now:`, wallet)
     displayFunds()
-    startGame.style.display = 'none'
-    actionsBar.style.display = 'flex'
-    dealerElement.style.display = 'flex'
-    playerElement.style.display = 'flex'
     dealCards()
     addCardTotal()
     displayCards()
@@ -91,7 +81,6 @@ function play() {
 }
 
 function getCard() {
-    // this only grabs cards with hasBeenPlayed as false
     const cardDeckCopy = cardDeck.filter((card) => card.hasBeenPlayed === false)
     const x = Math.floor(Math.random() * cardDeckCopy.length)
     const matchIdx = cardDeck.findIndex((card) => card === cardDeckCopy[x])
@@ -99,7 +88,6 @@ function getCard() {
     return cardDeckCopy[x]
 }
 
-// this deals cards to the table (2 to dealer, 2 to player)
 function dealCards() {
     dealerCard1 = table.dealer[0] = getCard()
     dealerCard2 = table.dealer[1] = getCard()
@@ -225,7 +213,6 @@ function result() {
     removeActionBar()
 }
 
-// eventually will become play again
 function reset() {    
     shuffle()
     table.dealer = []
@@ -239,6 +226,7 @@ function reset() {
         displayPlayerCards,
         displayPlayerTotal
     ]
+    resetDivs.forEach(div => div.innerText = '')
     const resetStyleDisplay = [
         playAgain,
         actionsBar,
@@ -246,19 +234,19 @@ function reset() {
         dealerElement,
         playerElement
     ]
-    resetDivs.forEach(div => div.innerText = '')
     resetStyleDisplay.forEach(element => element.style.display = 'none')
-    startGame.style.display = 'inline'
-    // if wallet is below bet, add funds
+    startGame.style.display = betSelectDiv.style.display = 'flex'
+
+    // if wallet is less than bet, give 100
     if (wallet < bet) {
-        wallet += 50
+        wallet += 100
         displayFunds()
     }
 }
 
 // removes the actionBar from view and displays playAgain button
 function removeActionBar() {
-    playAgain.style.display = 'inline'
+    playAgain.style.display = 'flex'
     actionsBar.style.display = 'none'
 }
 
@@ -285,23 +273,6 @@ function showInstructions() {
 
 
 /* --------------------------------------- Comments -------------------------------------- */
-
-// bet screen display appears when play again is hit
-// make a bet screen/home menu (where start game button)
-// hide bet screen 
-
-// start game is pressed and game screen is displayed
-// cards dealt 
-
-// make a result screen
-// this has the play again button.
-// result screen is defaulted to display: inline
-// set result screen display to appear when a result is displayed
-// play again button will encompass reset. 
-// play again takes you back to bet screen
-
-// reset game remains at top in case of running out of currency
-
 // // As a user, I can see what cards are dealt to me and the dealer
 // //	random card generator
 // //	deals two cards to dealer 

@@ -152,14 +152,13 @@ function addCardTotal() {
 function checkForBlackjack() {
     if (playerTotal === 21 && dealerTotal < 21) {
         displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
-        resultDiv.style.display = 'flex'  // if result, show resultDiv
         wallet += bet + (bet * (3/2))
         displayFunds()
         revealHiddenCard()
         removeActionBar()
     } else if (playerTotal === 21 && dealerTotal === 21) {
         revealHiddenCard()
-        result()
+        compareResult()
     }
 }
 
@@ -185,28 +184,39 @@ function hit() {
     playerNewCardIdx = table.player.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
+
+    if (playerTotal === 21) stand()
     // check for bust
-    if (playerTotal > 21) {
-        displayResult.innerText = `BUST! You Lose 😭`
-        resultDiv.style.display = 'flex'  // if result, show resultDiv
-        revealHiddenCard()
-        removeActionBar()
-    } else if (playerTotal === 21) stand()
+    checkForBust(playerTotal, dealerTotal)
+
 }
 
-function stand() {
-    revealHiddenCard()
-    // dealer's turn
-    while (dealerTotal <= 16) dealerHit()
-    if (dealerTotal > 21) {
+// this takes a player total and a dealer total to check for bust
+function checkForBust(pTotal, dTotal) {
+    if (pTotal > 21) {
+        displayResult.innerText = `BUST! You Lose 😭`
+        revealHiddenCard()
+        removeActionBar()
+    } 
+    else if (dTotal > 21) {
         displayResult.innerText = '🎊 You Win! Dealer BUST'
-        resultDiv.style.display = 'flex'  // if result, show resultDiv
         wallet += bet * 2
         displayFunds()
         removeActionBar()
+        return 1
+    } else {
         return
     }
-    result()
+}
+
+function stand() {
+    // dealer's turn
+    revealHiddenCard()
+    while (dealerTotal <= 16) dealerHit()
+        
+    const checkDealerBust = checkForBust(playerTotal, dealerTotal)
+
+    if (!checkDealerBust) compareResult()
 }
 
 function dealerHit () {
@@ -218,15 +228,15 @@ function dealerHit () {
     displayDealerTotal.innerText = dealerTotal
 }
 
-// returns true if n1 is less than n2 (closer to 21)
-function closerTo21(n1, n2) {
-    const diff1 = Math.abs(n1 - 21)
-    const diff2 = Math.abs(n2 - 21)
-    return diff1 < diff2
-}
-
-function result() {
+function compareResult() {
+    // returns true if n1 is less than n2 (closer to 21)
+    const closerTo21 = (n1, n2) => {
+        const diff1 = Math.abs(n1 - 21)
+        const diff2 = Math.abs(n2 - 21)
+        return diff1 < diff2
+    }
     const playerIsWinner = closerTo21(playerTotal, dealerTotal)
+
     if (playerTotal === dealerTotal) {
         wallet += bet
         displayFunds()
@@ -240,7 +250,6 @@ function result() {
     else {
         displayResult.innerText = `You Lose 😓`
     }
-    resultDiv.style.display = 'flex'  // if result, show resultDiv
     removeActionBar()
 }
 
@@ -279,6 +288,7 @@ function reset() {
 function removeActionBar() {
     playAgain.style.display = 'flex'
     playButtons.style.display = 'flex'
+    resultDiv.style.display = 'flex' 
     actionsBar.style.display = 'none'
 }
 

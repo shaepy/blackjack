@@ -13,8 +13,7 @@ body {
   }
 
 h1 {
-    font-size: 34px;
-    margin-bottom: 4px;
+    font-size: 40px;
 }
 
 h2 {
@@ -36,7 +35,7 @@ h3 {
 button {
     font-size: 14px;
     font-family: system-ui, sans-serif;
-    padding: 9px 12px;
+    padding: 8px 12px;
     letter-spacing: .06rem;
     border-radius: 3px;
     background-color: rgba(228, 228, 228, 0.868);
@@ -103,21 +102,61 @@ button:hover {
 }
 
 #buttons {
-    margin: 4px 0;
+    margin: 6px 0;
 }
 
 #bank {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 12px;
     justify-content: space-around;
     align-items: center;
     margin: 5px;
     border: 1px solid black;
-    padding: 10px 14px;
+    padding: 11px 20px;
     font-size: 1.1rem;
 }
 
 #bank .number {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+}
+
+#logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+}
+
+#logo img {
+    width: 69px;
+}
+
+#wallet-icon {
+    width: 50px;
+}
+
+#chip-icon {
+    width: 45px;
+}
+
+#bet-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 12px 0 18px 0;
+}
+
+#bet-selectors {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#bet-selectors button {
+    font-size: 1.1rem;
+    padding: 8px 15px;
 }

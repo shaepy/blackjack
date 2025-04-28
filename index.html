@@ -10,7 +10,10 @@
 </head>
 <body>
     <div id="main-content">
-        <h1>blackjack</h1>
+        
+        <div id="logo">
+        <img src="/img/assets/3-cards-logo.png"><h1>blackjack</h1>
+        </div>
 
         <div id="buttons">
             <button id="playAgain">play again</button>
@@ -53,10 +56,19 @@
             <button id="stand">stand</button>
         </div>
 
+        <div id="bet-selection">
+            <h2>choose your bet</h2>
+            <div id="bet-selectors">
+                <button class="bet" data-bet="10">10</button>
+                <button class="bet" data-bet="25">25</button>
+                <button class="bet" data-bet="50">50</button>
+            </div>
+        </div>
+
         <div id="bank">
-            <div>bet amount</div>
+            <div><img id="chip-icon" src="/img/assets/single-chip.png"></div>
             <div id="bet" class="number"></div>
-            <div>wallet</div>
+            <div><img id="wallet-icon" src="/img/assets/wallet-chips.png"></div>
             <div id="wallet" class="number"></div>
         </div>
     </div>

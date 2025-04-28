@@ -15,17 +15,37 @@ displayFunds()
 
 
 /* --------------------------------------- Constants -------------------------------------- */
-// Player Actions
+// Actions
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const startGame = document.querySelector('#play')
 const playAgain = document.querySelector('#playAgain')
+const infoButton = document.querySelector('#info-button')
+const betSelectors = document.querySelectorAll('.bet')
+console.log(betSelectors)
+
+// Displays
 const actionsBar = document.querySelector('#actions')
 const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
-const infoButton = document.querySelector('#info-button')
 const instructions = document.querySelector('#instructions')
 const resultDiv = document.querySelector('#result')
+
+betSelectors.forEach(bet => bet.addEventListener('click', changeBet));
+console.log(bet)
+
+function changeBet(event) {
+    //this changes the bet when clicked
+    const button = event.target
+    console.log(event.target)
+
+    const betAmnt = button.dataset.bet
+    console.log(event.target.dataset.bet)
+
+    bet = betAmnt
+    console.log(`bet is now: ${bet}`)
+    displayFunds()
+}
 
 // Display cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -212,25 +232,28 @@ function reset() {
     table.player = []
     dealerTotal = 0
     playerTotal = 0
-    displayDealerCards.innerText = ''
-    displayDealerTotal.innerText = ''
-    displayPlayerCards.innerText = ''
-    displayPlayerTotal.innerText = ''
-    displayResult.innerText = ''
+    const resetDivs = [
+        displayResult,
+        displayDealerCards, 
+        displayDealerTotal, 
+        displayPlayerCards,
+        displayPlayerTotal
+    ]
+    const resetStyleDisplay = [
+        playAgain,
+        actionsBar,
+        resultDiv,
+        dealerElement,
+        playerElement
+    ]
+    resetDivs.forEach(div => div.innerText = '')
+    resetStyleDisplay.forEach(element => element.style.display = 'none')
     startGame.style.display = 'inline'
-    playAgain.style.display = 'none'
-    actionsBar.style.display = 'none'
-    dealerElement.style.display = 'none'
-    playerElement.style.display = 'none'
-    resultDiv.style.display = 'none'
-
+    // if wallet is below bet, add funds
     if (wallet < bet) {
-        console.log('you are out of money, wallet is:', wallet)
         wallet += 50
-        console.log('added free money. wallet is now:', wallet)
         displayFunds()
     }
-    console.log('wallet currently at', wallet)
 }
 
 // removes the actionBar from view and displays playAgain button
@@ -258,9 +281,6 @@ function showInstructions() {
         instructions.style.display = 'none'
     } else {instructions.style.display = 'flex'}
 }
-
-
-
 
 
 
@@ -313,28 +333,28 @@ function showInstructions() {
 
 // edge case: when two aces are in the hand, it will default both to 1.
 
-// * As a user, I should see the result of the round.
+// // * As a user, I should see the result of the round.
 // //	- compare the result between my hand and the dealer's
 // //		- if myresult is closer to 21 than the dealer's, i win
-// 			- add betAmount + betAmount to my wallet
+// //		- add betAmount + betAmount to my wallet
 // //		- if dealer's result is closer to 21 than myresult, i lose
-// 			- add 0 to my wallet
+// //			- add 0 to my wallet
 // //		- else, we draw (push)
-// 			- add betAmount to my wallet
-// 	- display new wallet total
+// //			- add betAmount to my wallet
+// //	- display new wallet total
 
-// * As a user, I should have the option to play again. 
-// 	- save the wallet total
-// 	- button to tap to play again
-// 	- bring player to bet selector with new wallet total
+// // * As a user, I should have the option to play again. 
+// // 	- save the wallet total
+// // 	- button to tap to play again
+// //	- bring player to bet selector with new wallet total
 // 	- optional: have option to play again with same bet
 
-// * As a user, I should be able to place a bet to start the game.
-// 	- we need a starting amount
-// 	- store the value of the bet
-// 		- OK to have a single bet amount available to begin (ex. 100)
-// 	- deduct from starting amount
+// // * As a user, I should be able to place a bet to start the game.
+// //	- we need a starting amount
+// //	- store the value of the bet
+// // 		- OK to have a single bet amount available to begin (ex. 100)
+// //	- deduct from starting amount
 
-// * As a user, I want to reset my game status when I run out of chips.
-// 	- reset game button when pressed,
-// 	- resets everything back to starting wallet total
+// // * As a user, I want to reset my game status when I run out of chips.
+// //	- reset game button when pressed,
+// //	- resets everything back to starting wallet total

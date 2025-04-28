@@ -4,15 +4,8 @@
 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
-const hitButton = document.querySelector('#hit')
-const standButton = document.querySelector('#stand')
 const startGame = document.querySelector('#play')
 const playAgain = document.querySelector('#play-again')
-
-const playButtons = document.querySelector('#buttons')
-
-const infoButton = document.querySelector('#info-button')
-const betSelectors = document.querySelectorAll('.bet')
 const resetWallet = document.querySelector('#reset-wallet')
 
 // Displays
@@ -22,6 +15,7 @@ const playerElement = document.querySelector('#player')
 const instructions = document.querySelector('#instructions')
 const resultDiv = document.querySelector('#result')
 const betSelectDiv = document.querySelector('#bet-selection')
+const playButtonsDiv = document.querySelector('#buttons')
 
 // Cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -36,32 +30,29 @@ let table = {
     dealer: [],
     player: []
 }
-
-// Save positions to cards, totals, and dealt card indexes
-let dealerCard1, dealerCard2, playerCard1, playerCard2
+// Save totals, and dealt card indexes
 let dealerTotal, playerTotal
 let playerNewCardIdx, dealerNewCardIdx
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 startGame.addEventListener('click', play)
-hitButton.addEventListener('click', hit)
-standButton.addEventListener('click', stand)
-playAgain.addEventListener('click', reset)
-infoButton.addEventListener('click', showInstructions)
+playAgain.addEventListener('click', resetGame)
+
+document.querySelector('#hit').addEventListener('click', hit)
+document.querySelector('#stand').addEventListener('click', stand)
+document.querySelector('#info-button').addEventListener('click', showInstructions)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
-const displayBet = document.querySelector('#bet')
-const displayWallet = document.querySelector('#wallet')
-betSelectors.forEach(bet => bet.addEventListener('click', changeBet));
+document.querySelectorAll('.bet').forEach(bet => bet.addEventListener('click', changeBet));
 
 let bet = 10
 let wallet = 200
 
 function displayFunds() {
-    displayBet.textContent = bet
-    displayWallet.textContent = wallet
+    document.querySelector('#bet').textContent = bet
+    document.querySelector('#wallet').textContent = wallet
 }
 
 function changeBet(event) {
@@ -98,8 +89,9 @@ function checkHighScore() {
 displayFunds()
 
 function play() {
-    const hideDivs = [startGame, betSelectDiv, resetWallet, playButtons]
+    const hideDivs = [startGame, betSelectDiv, resetWallet, playButtonsDiv]
     hideDivs.forEach(d => d.style.display = 'none')
+    
     const showGameDivs = [actionsBar, dealerElement, playerElement]
     showGameDivs.forEach(d => d.style.display = 'flex')
 
@@ -120,10 +112,10 @@ function getCard() {
 }
 
 function dealCards() {
-    dealerCard1 = table.dealer[0] = getCard()
-    dealerCard2 = table.dealer[1] = getCard()
-    playerCard1 = table.player[0] = getCard()
-    playerCard2 = table.player[1] = getCard()
+    table.dealer[0] = getCard()
+    table.dealer[1] = getCard()
+    table.player[0] = getCard()
+    table.player[1] = getCard()
 }
 
 function addCardTotal() {
@@ -155,7 +147,7 @@ function checkForBlackjack() {
         wallet += bet + (bet * (3/2))
         displayFunds()
         revealHiddenCard()
-        removeActionBar()
+        displayPlayAgain()
     } else if (playerTotal === 21 && dealerTotal === 21) {
         revealHiddenCard()
         compareResult()
@@ -164,12 +156,12 @@ function checkForBlackjack() {
 
 function displayCards() {
     if (displayPlayerCards.innerText === '' && displayDealerCards.innerText === '') {
-        displayDealerCards.innerHTML = `<img src=${dealerCard1.src}>`
+        displayDealerCards.innerHTML = `<img src=${table.dealer[0].src}>`
         displayDealerCards.innerHTML +=  ` <img src='./img/back-red-1.png' id="hidden-card">`
-        displayDealerTotal.innerText = dealerCard1.value
+        displayDealerTotal.innerText = table.dealer[0].value
 
-        displayPlayerCards.innerHTML = `<img src=${playerCard1.src}>`
-        displayPlayerCards.innerHTML +=  ` <img src=${playerCard2.src}>`
+        displayPlayerCards.innerHTML = `<img src=${table.player[0].src}>`
+        displayPlayerCards.innerHTML +=  ` <img src=${table.player[1].src}>`
         displayPlayerTotal.innerText = playerTotal
     }
     else {
@@ -196,13 +188,13 @@ function checkForBust(pTotal, dTotal) {
     if (pTotal > 21) {
         displayResult.innerText = `BUST! You Lose 😭`
         revealHiddenCard()
-        removeActionBar()
+        displayPlayAgain()
     } 
     else if (dTotal > 21) {
         displayResult.innerText = '🎊 You Win! Dealer BUST'
         wallet += bet * 2
         displayFunds()
-        removeActionBar()
+        displayPlayAgain()
         return 1
     } else {
         return
@@ -213,13 +205,11 @@ function stand() {
     // dealer's turn
     revealHiddenCard()
     while (dealerTotal <= 16) dealerHit()
-        
     const checkDealerBust = checkForBust(playerTotal, dealerTotal)
-
     if (!checkDealerBust) compareResult()
 }
 
-function dealerHit () {
+function dealerHit() {
     const newCard = getCard()
     table.dealer.push(newCard)
     dealerNewCardIdx = table.dealer.findIndex((card) => card === newCard)
@@ -250,10 +240,10 @@ function compareResult() {
     else {
         displayResult.innerText = `You Lose 😓`
     }
-    removeActionBar()
+    displayPlayAgain()
 }
 
-function reset() {    
+function resetGame() {    
     shuffle()
     checkHighScore()
     table.dealer = []
@@ -277,7 +267,7 @@ function reset() {
     ]
     resetStyleDisplay.forEach(element => element.style.display = 'none')
 
-    const turnDisplayOn = [playButtons, startGame, betSelectDiv]
+    const turnDisplayOn = [playButtonsDiv, startGame, betSelectDiv]
     turnDisplayOn.forEach(d => d.style.display = 'flex')
 
     // show reset wallet when wallet is less than bet
@@ -285,9 +275,9 @@ function reset() {
 }
 
 // removes the actionBar from view and displays playAgain button
-function removeActionBar() {
+function displayPlayAgain() {
     playAgain.style.display = 'flex'
-    playButtons.style.display = 'flex'
+    playButtonsDiv.style.display = 'flex'
     resultDiv.style.display = 'flex' 
     actionsBar.style.display = 'none'
 }
@@ -295,7 +285,7 @@ function removeActionBar() {
 // reveals the dealer hiddenCard
 function revealHiddenCard() {
     const hiddenCard = document.querySelector('#hidden-card')
-    if (hiddenCard) hiddenCard.src = dealerCard2.src
+    if (hiddenCard) hiddenCard.src = table.dealer[1].src
     displayDealerTotal.innerText = dealerTotal
 }
 

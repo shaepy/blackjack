@@ -29,7 +29,6 @@ h3 {
 #main-content {
     display: flex;
     flex-direction: column;
-    padding: 2% 5%;
     align-items: center;
     gap: 4px;
 }

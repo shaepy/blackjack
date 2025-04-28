@@ -1,12 +1,19 @@
+// reset wallet option when reaching 0 or below 10
+// how to play move to top above header
+// make a top score counter 
 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const startGame = document.querySelector('#play')
-const playAgain = document.querySelector('#playAgain')
+const playAgain = document.querySelector('#play-again')
+
+const playButtons = document.querySelector('#buttons')
+
 const infoButton = document.querySelector('#info-button')
 const betSelectors = document.querySelectorAll('.bet')
+const resetWallet = document.querySelector('#reset-wallet')
 
 // Displays
 const actionsBar = document.querySelector('#actions')
@@ -62,12 +69,36 @@ function changeBet(event) {
     displayFunds()
 }
 
+/* --------------------------------------- Reset Wallet -------------------------------------- */
+
+resetWallet.addEventListener('click', resetWalletAmnt)
+
+function resetWalletAmnt() {
+    // pressing the reset button will reset the wallet back to default
+    wallet = 200
+    displayFunds()
+}
+
+/* --------------------------------------- High Score -------------------------------------- */
+
+const highScoreDiv = document.querySelector('#high-score')
+
+let score = 0
+
+function checkHighScore() {
+    console.log(`the wallet is ${wallet} and the score is currently ${score}`)
+    if (wallet > score) {score = wallet}
+    console.log(`the score is now ${score}`)
+    highScoreDiv.textContent = score
+}
+
+
 /* --------------------------------------- Functions --------------------------------------- */
 
 displayFunds()
 
 function play() {
-    const hideDivs = [startGame, betSelectDiv]
+    const hideDivs = [startGame, betSelectDiv, resetWallet, playButtons]
     hideDivs.forEach(d => d.style.display = 'none')
     const showGameDivs = [actionsBar, dealerElement, playerElement]
     showGameDivs.forEach(d => d.style.display = 'flex')
@@ -206,7 +237,7 @@ function result() {
         displayFunds()
         displayResult.innerText = `🎉 Congrats! You Win`
     }
-    else if (!playerIsWinner) {
+    else {
         displayResult.innerText = `You Lose 😓`
     }
     resultDiv.style.display = 'flex'  // if result, show resultDiv
@@ -215,6 +246,7 @@ function result() {
 
 function reset() {    
     shuffle()
+    checkHighScore()
     table.dealer = []
     table.player = []
     dealerTotal = 0
@@ -235,18 +267,18 @@ function reset() {
         playerElement
     ]
     resetStyleDisplay.forEach(element => element.style.display = 'none')
-    startGame.style.display = betSelectDiv.style.display = 'flex'
 
-    // if wallet is less than bet, give 100
-    if (wallet < bet) {
-        wallet += 100
-        displayFunds()
-    }
+    const turnDisplayOn = [playButtons, startGame, betSelectDiv]
+    turnDisplayOn.forEach(d => d.style.display = 'flex')
+
+    // show reset wallet when wallet is less than bet
+    if (wallet < bet) resetWallet.style.display = 'flex'
 }
 
 // removes the actionBar from view and displays playAgain button
 function removeActionBar() {
     playAgain.style.display = 'flex'
+    playButtons.style.display = 'flex'
     actionsBar.style.display = 'none'
 }
 

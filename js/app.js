@@ -1,6 +1,5 @@
-// reset wallet option when reaching 0 or below 10
-// how to play move to top above header
-// make a top score counter 
+// reconsider the display set to none vs flex method of hiding and showing
+// look into using utility classes of .hidden or .flex with display:none/flex and .addClass or .removeClass
 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
@@ -12,7 +11,6 @@ const resetWallet = document.querySelector('#reset-wallet')
 const actionsBar = document.querySelector('#actions')
 const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
-const instructions = document.querySelector('#instructions')
 const resultDiv = document.querySelector('#result')
 const betSelectDiv = document.querySelector('#bet-selection')
 const playButtonsDiv = document.querySelector('#buttons')
@@ -41,7 +39,7 @@ playAgain.addEventListener('click', resetGame)
 
 document.querySelector('#hit').addEventListener('click', hit)
 document.querySelector('#stand').addEventListener('click', stand)
-document.querySelector('#info-button').addEventListener('click', showInstructions)
+document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
@@ -72,6 +70,7 @@ function resetWalletAmnt() {
 
 /* --------------------------------------- High Score -------------------------------------- */
 
+// IN PROGRESS
 const highScoreDiv = document.querySelector('#high-score')
 
 let score = 0
@@ -89,6 +88,14 @@ function checkHighScore() {
 displayFunds()
 
 function play() {
+    // prevents game from starting if wallet is less than bet. 
+    // need user facing message.
+    if (wallet < bet) {
+        console.log('not enough moneys')
+        resetWallet.style.display = 'flex'
+        return
+    }
+
     const hideDivs = [startGame, betSelectDiv, resetWallet, playButtonsDiv]
     hideDivs.forEach(d => d.style.display = 'none')
     
@@ -176,7 +183,7 @@ function hit() {
     playerNewCardIdx = table.player.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
-
+    // if 21, autostand
     if (playerTotal === 21) stand()
     // check for bust
     checkForBust(playerTotal, dealerTotal)
@@ -205,8 +212,7 @@ function stand() {
     // dealer's turn
     revealHiddenCard()
     while (dealerTotal <= 16) dealerHit()
-    const checkDealerBust = checkForBust(playerTotal, dealerTotal)
-    if (!checkDealerBust) compareResult()
+    if (!checkForBust(playerTotal, dealerTotal)) compareResult()
 }
 
 function dealerHit() {
@@ -214,6 +220,7 @@ function dealerHit() {
     table.dealer.push(newCard)
     dealerNewCardIdx = table.dealer.findIndex((card) => card === newCard)
     addCardTotal()
+    // display dealer card
     displayDealerCards.innerHTML += ` <img src=${table.dealer[dealerNewCardIdx].src}>`
     displayDealerTotal.innerText = dealerTotal
 }
@@ -229,17 +236,16 @@ function compareResult() {
 
     if (playerTotal === dealerTotal) {
         wallet += bet
-        displayFunds()
         displayResult.innerText = `Push. It's a tie`
     } 
     else if (playerIsWinner) {
         wallet += bet * 2
-        displayFunds()
         displayResult.innerText = `🎉 Congrats! You Win`
     }
     else {
         displayResult.innerText = `You Lose 😓`
     }
+    displayFunds()
     displayPlayAgain()
 }
 
@@ -296,7 +302,8 @@ function shuffle() {
     })
 }
 
-function showInstructions() {
+function toggleHelp() {
+    const instructions = document.querySelector('#instructions')
     if (window.getComputedStyle(instructions).display === 'flex') {
         instructions.style.display = 'none'
     } else {instructions.style.display = 'flex'}

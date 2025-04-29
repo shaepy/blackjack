@@ -24,62 +24,52 @@ const displayPlayerTotal = document.querySelector('#player-total')
 
 /* --------------------------------------- Variables -------------------------------------- */
 
-let table = {
-    dealer: [],
-    player: []
-}
+let table = {dealer: [], player: []}
+
 // Save totals, and dealt card indexes
-let dealerTotal, playerTotal
-let playerNewCardIdx, dealerNewCardIdx
+let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
 
-/* ------------------------------------ Event Listeners ------------------------------------ */
-
-startGame.addEventListener('click', play)
-playAgain.addEventListener('click', resetGame)
-
-document.querySelector('#hit').addEventListener('click', hit)
-document.querySelector('#stand').addEventListener('click', stand)
-document.querySelector('#info-button').addEventListener('click', toggleHelp)
-
-/* --------------------------------------- Bet Mechanic -------------------------------------- */
-
-document.querySelectorAll('.bet').forEach(bet => bet.addEventListener('click', changeBet));
-
+// default bet and wallet
 let bet = 10
 let wallet = 200
+/* ------------------------------------ Event Listeners ------------------------------------ */
 
-function displayFunds() {
-    document.querySelector('#bet').textContent = bet
-    document.querySelector('#wallet').textContent = wallet
-}
+startGame.addEventListener('click', play)       
+playAgain.addEventListener('click', resetGame)     
+document.querySelector('#hit').addEventListener('click', hit)       
+document.querySelector('#stand').addEventListener('click', stand)   
+document.querySelector('#info-button').addEventListener('click', toggleHelp)      
 
-function changeBet(event) {
-    bet = Number(event.target.dataset.bet)
-    displayFunds()
-}
-
-/* --------------------------------------- Reset Wallet -------------------------------------- */
-
-resetWallet.addEventListener('click', resetWalletAmnt)
-
-function resetWalletAmnt() {
-    // pressing the reset button will reset the wallet back to default
+resetWallet.addEventListener('click', () => {
     wallet = 200
     displayFunds()
+})
+
+/* --------------------------------------- Bet Mechanic -------------------------------------- */
+const betAmount = document.querySelector('#bet-amnt')
+
+// each bet selector button will save the number to bet and display it
+document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (event) => {
+    bet = Number(event.target.innerText)
+    displayFunds()
+}))
+
+function displayFunds() {
+    betAmount.innerText = bet
+    document.querySelector('#wallet-amnt').innerText = wallet
 }
 
 /* --------------------------------------- High Score -------------------------------------- */
 
 // IN PROGRESS
 const highScoreDiv = document.querySelector('#high-score')
+const scoreSection = document.querySelector('#score-section')
 
 let score = 0
 
-function checkHighScore() {
-    console.log(`the wallet is ${wallet} and the score is currently ${score}`)
+function updateHighScore() {
     if (wallet > score) {score = wallet}
-    console.log(`the score is now ${score}`)
-    highScoreDiv.textContent = score
+    highScoreDiv.innerText = score
 }
 
 
@@ -88,21 +78,15 @@ function checkHighScore() {
 displayFunds()
 
 function play() {
-    // prevents game from starting if wallet is less than bet. 
-    // need user facing message.
+    // prevents game from starting if wallet is less than bet. need user facing message.
     if (wallet < bet) {
-        console.log('not enough moneys')
         resetWallet.style.display = 'flex'
         return
     }
 
-    const hideDivs = [startGame, betSelectDiv, resetWallet, playButtonsDiv]
-    hideDivs.forEach(d => d.style.display = 'none')
-    
-    const showGameDivs = [actionsBar, dealerElement, playerElement]
-    showGameDivs.forEach(d => d.style.display = 'flex')
-
     wallet -= bet
+    turnDisplayToNone([startGame, betSelectDiv, resetWallet, playButtonsDiv])
+    turnDisplayToFlex([actionsBar, dealerElement, playerElement])
     displayFunds()
     dealCards()
     addCardTotal()
@@ -128,21 +112,30 @@ function dealCards() {
 function addCardTotal() {
     dealerTotal = table.dealer.reduce((acc, card) => acc + card.value, 0)
     playerTotal = table.player.reduce((acc, card) => acc + card.value, 0)
+
     if (dealerTotal > 21) {
+        console.log('this is going to bust. player total:', dealerTotal)
         table.dealer.forEach(card => {
             if (card.rank === 'ace' && card.aceValueChanged === false) {
+                console.log('this is an ace and false:', card)
                 card.value = 1
                 card.aceValueChanged = true
                 dealerTotal -= 10
+                console.log('card value:', card.value, 'card acevaluechanged:', 
+                    card.aceValueChanged, 'player total:', dealerTotal)
             }
         })
     }
     if (playerTotal > 21) {
+        console.log('this is going to bust. player total:', playerTotal)
         table.player.forEach(card => {
             if (card.rank === 'ace' && card.aceValueChanged === false) {
+                console.log('this is an ace and false:', card)
                 card.value = 1
                 card.aceValueChanged = true
                 playerTotal -= 10
+                console.log('card value:', card.value, 'card acevaluechanged:', 
+                    card.aceValueChanged, 'player total:', playerTotal)
             }
         })
     }
@@ -150,14 +143,13 @@ function addCardTotal() {
 
 function checkForBlackjack() {
     if (playerTotal === 21 && dealerTotal < 21) {
-        displayResult.innerText = '♠️♥️ Blackjack! You Win ♣️♦️'
-        wallet += bet + (bet * (3/2))
+        displayResult.innerText = 'Blackjack! You Win'
+        wallet += bet + (bet * 1.5)
         displayFunds()
         revealHiddenCard()
-        displayPlayAgain()
+        showResultScreen()
     } else if (playerTotal === 21 && dealerTotal === 21) {
-        revealHiddenCard()
-        compareResult()
+        stand()
     }
 }
 
@@ -187,24 +179,21 @@ function hit() {
     if (playerTotal === 21) stand()
     // check for bust
     checkForBust(playerTotal, dealerTotal)
-
 }
 
 // this takes a player total and a dealer total to check for bust
 function checkForBust(pTotal, dTotal) {
     if (pTotal > 21) {
-        displayResult.innerText = `BUST! You Lose 😭`
         revealHiddenCard()
-        displayPlayAgain()
+        showResultScreen()
+        displayResult.innerText = `BUST! You Lose`
     } 
     else if (dTotal > 21) {
-        displayResult.innerText = '🎊 You Win! Dealer BUST'
         wallet += bet * 2
         displayFunds()
-        displayPlayAgain()
+        showResultScreen()
+        displayResult.innerText = 'Dealer BUST! You Win'
         return 1
-    } else {
-        return
     }
 }
 
@@ -240,52 +229,45 @@ function compareResult() {
     } 
     else if (playerIsWinner) {
         wallet += bet * 2
-        displayResult.innerText = `🎉 Congrats! You Win`
+        displayResult.innerText = `You Win`
     }
     else {
-        displayResult.innerText = `You Lose 😓`
+        displayResult.innerText = `You Lose`
     }
     displayFunds()
-    displayPlayAgain()
+    showResultScreen()
 }
 
 function resetGame() {    
     shuffle()
-    checkHighScore()
     table.dealer = []
     table.player = []
     dealerTotal = 0
     playerTotal = 0
-    const resetDivs = [
-        displayResult,
+
+    const resetDisplays = [
+        displayResult, 
         displayDealerCards, 
         displayDealerTotal, 
-        displayPlayerCards,
+        displayPlayerCards, 
         displayPlayerTotal
     ]
-    resetDivs.forEach(div => div.innerText = '')
-    const resetStyleDisplay = [
-        playAgain,
-        actionsBar,
-        resultDiv,
-        dealerElement,
-        playerElement
-    ]
-    resetStyleDisplay.forEach(element => element.style.display = 'none')
+    resetDisplays.forEach(div => div.innerText = '')
 
-    const turnDisplayOn = [playButtonsDiv, startGame, betSelectDiv]
-    turnDisplayOn.forEach(d => d.style.display = 'flex')
+    turnDisplayToNone([playAgain, actionsBar, resultDiv, dealerElement, playerElement])
+    turnDisplayToFlex([playButtonsDiv, startGame, betSelectDiv])
 
+    betAmount.innerText = bet
     // show reset wallet when wallet is less than bet
     if (wallet < bet) resetWallet.style.display = 'flex'
 }
 
-// removes the actionBar from view and displays playAgain button
-function displayPlayAgain() {
-    playAgain.style.display = 'flex'
-    playButtonsDiv.style.display = 'flex'
-    resultDiv.style.display = 'flex' 
+function showResultScreen() {
+    turnDisplayToFlex([scoreSection, playAgain, playButtonsDiv, resultDiv])
     actionsBar.style.display = 'none'
+    // this changes the bet display to 0
+    betAmount.innerText = '0'
+    updateHighScore()
 }
 
 // reveals the dealer hiddenCard
@@ -309,6 +291,9 @@ function toggleHelp() {
     } else {instructions.style.display = 'flex'}
 }
 
+// these functions take an array, turn the display of each element to either flex or none
+const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
+const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 
 
 /* --------------------------------------- Comments -------------------------------------- */

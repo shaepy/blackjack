@@ -11,10 +11,6 @@
 <body>
 
     <div id="top-bar">
-        <div id="score-section">
-            <div>high score</div>
-            <div id="high-score"></div>
-        </div>
         <div id="top-buttons">
             <button id="info-button">help</button>
             <button id="reset-wallet">reset</button>
@@ -69,17 +65,22 @@
         <div id="bet-selection">
             <h2>choose your bet</h2>
             <div id="bet-selectors">
-                <button class="bet" data-bet="10">10</button>
-                <button class="bet" data-bet="25">25</button>
-                <button class="bet" data-bet="50">50</button>
+                <button class="bet">10</button>
+                <button class="bet">25</button>
+                <button class="bet">50</button>
             </div>
         </div>
 
         <div id="bank">
             <div><img id="chip-icon" src="/img/assets/single-chip.png"></div>
-            <div id="bet" class="number"></div>
+            <div id="bet-amnt"></div>
             <div><img id="wallet-icon" src="/img/assets/wallet-chips.png"></div>
-            <div id="wallet" class="number"></div>
+            <div id="wallet-amnt"></div>
+        </div>
+
+        <div id="score-section">
+            <div>high score</div>
+            <div id="high-score"></div>
         </div>
     </div>
 </body>

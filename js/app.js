@@ -190,7 +190,7 @@ function displayCards() {
     if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
         displayDealerCards.innerHTML = `<img src=${table.dealer[0].src} class="card">`
-        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-grey-1.png' id="hidden-card" class="card">`
+        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-red-1.png' id="hidden-card" class="card">`
         displayDealerTotal.innerText = table.dealer[0].value
 
         displayPlayerCards.innerHTML = `<img src=${table.player[0].src} class="card">`

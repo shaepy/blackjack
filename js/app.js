@@ -16,6 +16,7 @@ const playerElement = document.querySelector('#player')
 const resultDiv = document.querySelector('#result')
 const betSelectDiv = document.querySelector('#bet-selection')
 const playButtonsDiv = document.querySelector('#play-buttons')
+const aceChangeMsg = document.querySelector('#ace-change-msg')
 
 // Logos
 const largeLogo = document.querySelector('#large-logo')
@@ -37,7 +38,7 @@ let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
 
 // default bet and wallet
 let bet = 0
-let wallet = 50
+let wallet = 100
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 startGame.addEventListener('click', play)       
@@ -61,6 +62,7 @@ document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (even
 }))
 
 function displayFunds() {
+    // betAmount.forEach(bank => bank.innerText = bet)
     betAmount.innerText = bet
     document.querySelector('#wallet-amnt').innerText = wallet
 }
@@ -78,7 +80,6 @@ function updateHighScore() {
     highScoreDiv.innerText = score
 }
 
-
 /* --------------------------------------- Functions --------------------------------------- */
 
 displayFunds()
@@ -91,7 +92,7 @@ function play() {
         resetWallet.style.display = 'flex'
         return
     }
-    
+    // TODO: needs user facing message, bet is below min. amnt
     if (bet < 10) {
         return
     }
@@ -156,6 +157,9 @@ function addCardTotal() {
                 playerTotal -= 10
                 console.log('~PLAYER~ updated cardValue:', card.value, 'valueChanged:', 
                     card.aceValueChanged, 'handTotal:', playerTotal)
+
+                // player facing image
+                aceChangeMsg.style.display = 'flex'
             }
         })
     }
@@ -180,7 +184,7 @@ function displayCards() {
     if (displayPlayerCards.innerText === '' && displayDealerCards.innerText === '') {
         console.log('displayCards() for the dealt cards')
         displayDealerCards.innerHTML = `<img src=${table.dealer[0].src}>`
-        displayDealerCards.innerHTML +=  ` <img src='./img/back-red-1.png' id="hidden-card">`
+        displayDealerCards.innerHTML +=  ` <img src='./img/cards/back-grey-1.png' id="hidden-card">`
         displayDealerTotal.innerText = table.dealer[0].value
 
         displayPlayerCards.innerHTML = `<img src=${table.player[0].src}>`
@@ -301,7 +305,8 @@ function resetGame() {
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
     turnDisplayToFlex([scoreSection, playAgain, playButtonsDiv, resultDiv])
-    actionsBar.style.display = 'none'
+    turnDisplayToNone([actionsBar, aceChangeMsg])
+
     // this changes the bet display to 0
     betAmount.innerText = '0'
     updateHighScore()

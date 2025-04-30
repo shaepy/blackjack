@@ -85,7 +85,7 @@ h3 {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 24px;
+    gap: 28px;
     margin: 3px;
 }
 
@@ -181,9 +181,9 @@ h3 {
     display: none;
 }
 
-/* Home Bank Section (bet, wallet) */
+/* Bank Section (bet, wallet) */
 
-#home-bank {
+#bank {
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -195,7 +195,7 @@ h3 {
     font-size: 1.1rem;
 }
 
-#home-bank .number {
+#bank .number {
     font-size: 2rem;
     color: #fff;
 }
@@ -261,10 +261,4 @@ h3 {
 
 #reset-wallet:hover {
     transform: scale(1.1);
-}
-
-/* Ace change message */
-
-#ace-change-msg {
-    display: none
 }

@@ -43,8 +43,6 @@
             <p>Once you’re done, the dealer flips their hidden card and plays. They have to keep hitting until they reach at least 17.</p>
             <p>Whoever is closer to 21 without going over wins.</p>
         </div>
-        
-        <div id="result"><h2></h2></div>
 
         <div id="dealer">
             <h3>dealer</h3>
@@ -52,10 +50,16 @@
             <div id="dealer-total"></div>
         </div>
 
+        <div id="result"><h2></h2></div>
+
         <div id="player">
             <h3>player</h3>
             <div id="player-cards"></div>
             <div id="player-total"></div>
+        </div>
+
+        <div id="ace-change-msg">
+            <p>Your Ace value has changed from 11 to 1.</p>
         </div>
 
         <div id="actions">
@@ -74,7 +78,7 @@
             </div>
         </div>
 
-        <div id="bank">
+        <div id="home-bank">
             <div><img id="chip-icon" src="/img/assets/single-chip-white.png"></div>
             <div id="bet-amnt" class="number"></div>
             <div><img id="wallet-icon" src="/img/assets/wallet-chips-white.png"></div>

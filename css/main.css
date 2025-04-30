@@ -18,17 +18,17 @@ body {
   }
 
 h1 {
-    font-size: 40px;
+    font-size: 3.8rem;
+    letter-spacing: .16rem;
 }
 
 h2 {
-    font-size: 21px;
-    font-weight: 300;
+    font-size: 2rem;
 }
 
 h3 {
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 1.6rem;
+    letter-spacing: .1rem;
 }
 
 #main-content {
@@ -38,81 +38,11 @@ h3 {
     gap: 4px;
 }
 
-button {
-    font-size: 14px;
-    font-family: system-ui, sans-serif;
-    padding: 8px 12px;
-    letter-spacing: .06rem;
-    border-radius: 3px;
-    background-color: rgba(255, 255, 255);
-    border: 1px solid rgb(129, 129, 129);
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-}  
-
-#bet-selection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin: 8px 0 18px 0;
-}
-
-#bet-selectors {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-}
-
-#bet-selectors button {
-    font-size: 1.1rem;
-    padding: 8px 15px;
-}
-
-#top-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-}
-
-#info-button {
-    cursor: pointer;
-    margin: 5px;
-    width: 22px;
-}
-
-#info-button:hover {
-    width: 24px;
-}
-
 #score-section {
     display: none;
     flex-direction: row;
     gap: 8px;
-}
-
-#top-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    align-items: center;
-    margin: 8px;
-    padding: 8px;
-    background-color: black;
-    min-height: 60px;
-}
-
-#reset-wallet {
-    display: none;
-}
-
-button:hover {
-    background-color: rgb(211, 211, 211);
-    border: 1px solid rgb(133, 133, 133);
-    color: rgb(45, 45, 45);
-    cursor: pointer;
+    padding: 2px 0 10px 0;
 }
 
 #dealer, #player {
@@ -132,14 +62,6 @@ button:hover {
     padding: 4px 7.5px;
 }
 
-#actions {
-    display: none;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    margin: 12px 0;
-}
-
 #result {
     color: rgb(255, 255, 255);
     display: none;
@@ -148,13 +70,61 @@ button:hover {
     background-color: rgb(200, 23, 23);
 }
 
-#play-again {
-    display: none;
+/* Bet Selection and Selectors */
+
+#bet-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 16px;
 }
 
-#play {
-    display: inline;
+#bet-selectors {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 28px;
+    margin: 3px;
 }
+
+#bet-selectors img {
+    width: 65px;
+    cursor: pointer;
+}
+
+#bet-selectors img:hover {
+    transform: scale(1.2)
+}
+
+/* Player Actions like Hit or Stand */
+
+#actions {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    margin: 12px 0;
+}
+
+#actions button {
+    background-color: #000;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: "Cal Sans", system-ui, sans-serif;
+    padding: 10px 16px;
+    letter-spacing: .06rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+}
+
+#actions button:hover {
+    transform: scale(1.1)
+}
+
+/* Instructions and help icon */
 
 #instructions {
     display: none;
@@ -171,7 +141,19 @@ button:hover {
     padding: 7px 30px;
 }
 
-#buttons {
+#info-button {
+    cursor: pointer;
+    margin: 5px;
+    width: 22px;
+}
+
+#info-button:hover {
+    transform: scale(1.2);
+}
+
+/* Play Buttons Div, play and play again */
+
+#play-buttons {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -179,24 +161,52 @@ button:hover {
     margin: 6px 0;
 }
 
+#play-buttons button {
+    background-color: #cb2222;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: "Cal Sans", system-ui, sans-serif;
+    padding: 10px 16px;
+    letter-spacing: .06rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+}
+
+#play-buttons button:hover {
+    transform: scale(1.1)
+}
+
+#play-again {
+    display: none;
+}
+
+/* Bank Section (bet, wallet) */
+
 #bank {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 16px;
     justify-content: space-around;
     align-items: center;
-    margin: 6px 0 10px 0;
+    margin: 12px 0;
     border: 1px solid #fff;
-    padding: 11px 20px;
+    padding: 18px 22px;
     font-size: 1.1rem;
 }
 
 #bank .number {
-    font-size: 1.4rem;
+    font-size: 2rem;
     color: #fff;
 }
 
-#logo {
+#wallet-icon, #chip-icon {
+    width: 40px;
+}
+
+/* Main Logos */
+
+#large-logo {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -204,14 +214,51 @@ button:hover {
     margin: 5px 0;
 }
 
-#logo img {
+#large-logo img {
     width: 65px;
 }
 
-#wallet-icon {
-    width: 40px;
+#small-logo img {
+    width: 35px;
 }
 
-#chip-icon {
-    width: 35px;
+#small-logo {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+}
+
+/* Top Bar and Top bar buttons */
+
+#top-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px;
+    padding: 8px;
+    background-color: black;
+    min-height: 50px;
+}
+
+/* Reset Wallet CTA */
+
+#reset-wallet {
+    display: none;
+    background-color: #000;
+    cursor: pointer;
+}
+
+#reset-wallet:hover {
+    transform: scale(1.1);
 }

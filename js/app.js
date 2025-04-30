@@ -15,7 +15,11 @@ const dealerElement = document.querySelector('#dealer')
 const playerElement = document.querySelector('#player')
 const resultDiv = document.querySelector('#result')
 const betSelectDiv = document.querySelector('#bet-selection')
-const playButtonsDiv = document.querySelector('#buttons')
+const playButtonsDiv = document.querySelector('#play-buttons')
+
+// Logos
+const largeLogo = document.querySelector('#large-logo')
+const smallLogo = document.querySelector('#small-logo')
 
 // Cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -32,8 +36,8 @@ let table = {dealer: [], player: []}
 let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
 
 // default bet and wallet
-let bet = 10
-let wallet = 100
+let bet = 0
+let wallet = 50
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 startGame.addEventListener('click', play)       
@@ -51,7 +55,7 @@ const betAmount = document.querySelector('#bet-amnt')
 
 // each bet selector button will save the number to bet and display it
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (event) => {
-    bet = Number(event.target.innerText)
+    bet = Number(event.target.dataset.bet)
     console.log('changing bet to:', bet)
     displayFunds()
 }))
@@ -87,13 +91,18 @@ function play() {
         resetWallet.style.display = 'flex'
         return
     }
+    
+    if (bet < 10) {
+        return
+    }
+
     console.log('subtracting bet of:', bet, 'from wallet:', wallet)
     wallet -= bet
     console.log('wallet is now:', wallet)
 
     console.log('turning displays to none and showing game table')
-    turnDisplayToNone([startGame, betSelectDiv, resetWallet, playButtonsDiv])
-    turnDisplayToFlex([actionsBar, dealerElement, playerElement])
+    turnDisplayToNone([startGame, betSelectDiv, resetWallet, playButtonsDiv, largeLogo])
+    turnDisplayToFlex([actionsBar, dealerElement, playerElement, smallLogo])
 
     displayFunds()
     dealCards()
@@ -281,8 +290,8 @@ function resetGame() {
     ]
     resetDisplays.forEach(div => div.innerText = '')
     console.log('resetting displays, gameTable to none, betScreen to flex')
-    turnDisplayToNone([playAgain, actionsBar, resultDiv, dealerElement, playerElement])
-    turnDisplayToFlex([playButtonsDiv, startGame, betSelectDiv])
+    turnDisplayToNone([playAgain, actionsBar, resultDiv, dealerElement, playerElement, smallLogo])
+    turnDisplayToFlex([playButtonsDiv, startGame, betSelectDiv, largeLogo])
 
     betAmount.innerText = bet
     // show reset wallet when wallet is less than bet

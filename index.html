@@ -11,21 +11,23 @@
 <body>
 
     <div id="top-bar">
+
+        <div>
+            <div id="small-logo">
+                <img src="/img/assets/cards-logo-icon-white.png"><h3>blackjack</h3>
+            </div>
+        </div>
+
         <div id="top-buttons">
+            <p id="reset-wallet">reset funds</p>
             <a><img id="info-button" src="/img/assets/help-icon.png"></a>
-            <button id="reset-wallet">reset</button>
         </div>
     </div>
 
     <div id="main-content">
         
-        <div id="logo">
+        <div id="large-logo">
         <img src="/img/assets/cards-logo-icon-white.png"><h1>blackjack</h1>
-        </div>
-
-        <div id="buttons">
-            <button id="play-again">play again</button>
-            <button id="play">start game</button>
         </div>
 
         <div id="instructions">
@@ -63,11 +65,12 @@
         </div>
 
         <div id="bet-selection">
-            <h2>choose your bet</h2>
+            <h3>Select a bet to play a game</h3>
             <div id="bet-selectors">
-                <button class="bet">10</button>
-                <button class="bet">25</button>
-                <button class="bet">50</button>
+                <img src="/img/assets/bet-10.png" class="bet" data-bet="10">
+                <img src="/img/assets/bet-25.png" class="bet" data-bet="25">
+                <img src="/img/assets/bet-50.png" class="bet" data-bet="50">
+                <img src="/img/assets/bet-100.png" class="bet" data-bet="100">
             </div>
         </div>
 
@@ -82,6 +85,12 @@
             <div>high score</div>
             <div id="high-score"></div>
         </div>
+
+        <div id="play-buttons">
+            <button id="play-again">play again</button>
+            <button id="play">play</button>
+        </div>
+
     </div>
 </body>
 </html>

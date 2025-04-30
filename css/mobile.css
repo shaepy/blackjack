@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #5F7A71;
+    background-color: #be6464;
     font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -286,30 +286,18 @@ h3 {
 
 /* Game screen rows */
 
-#column-1 {
+#column-1, #column-2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px;
     gap: 10px;
-}
-
-#column-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    gap: 18px;
 }
 
 #game-table {
     display: none;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    gap: 20px;
 }
 
 /* Card images */

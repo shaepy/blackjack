@@ -1,21 +1,25 @@
-// TODO reconsider the display set to none vs flex method of hiding and showing
-    // look into using utility classes of .hidden or .flex with display:none/flex and .addClass or .removeClass
 // TODO animation when revealing card. slow down actions when adding a card to hand 
 // TODO edge case: when two aces are in the hand, it will default both to 1.
 
+// TODO mobile view below 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
-const startGame = document.querySelector('#play')
+const startGame = document.querySelector('#start-game')
 const playAgain = document.querySelector('#play-again')
 const resetWallet = document.querySelector('#reset-wallet')
 
 // Displays
 const actionsBar = document.querySelector('#actions')
-const dealerElement = document.querySelector('#dealer')
-const playerElement = document.querySelector('#player')
 const resultDiv = document.querySelector('#result')
-const betSelectDiv = document.querySelector('#bet-selection')
-const playButtonsDiv = document.querySelector('#buttons')
+const gameTable = document.querySelector('#game-table')
+const homeScreen = document.querySelector('#home-screen')
+
+// Messages
+const aceChangeMsg = document.querySelector('#ace-change-msg')
+
+// Logos
+const largeLogo = document.querySelector('#large-logo')
+const smallLogo = document.querySelector('#small-logo')
 
 // Cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -32,11 +36,11 @@ let table = {dealer: [], player: []}
 let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
 
 // default bet and wallet
-let bet = 10
+let bet = 0
 let wallet = 100
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
-startGame.addEventListener('click', play)       
+startGame.addEventListener('click', play)
 playAgain.addEventListener('click', resetGame)
 
 // when pressing reset button, refill wallet & displayFunds
@@ -47,18 +51,24 @@ document.querySelector('#stand').addEventListener('click', stand)
 document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
-const betAmount = document.querySelector('#bet-amnt')
+const betAmount = document.querySelectorAll('.bet-amnt h3')
+const walletAmount = document.querySelectorAll('.wallet-amnt h3')
+
+// banks
+const homeBank = document.querySelector('#home-bank')
+const gameBank = document.querySelector('#game-bank')
 
 // each bet selector button will save the number to bet and display it
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (event) => {
-    bet = Number(event.target.innerText)
+    bet = Number(event.target.dataset.bet)
     console.log('changing bet to:', bet)
     displayFunds()
 }))
 
 function displayFunds() {
-    betAmount.innerText = bet
-    document.querySelector('#wallet-amnt').innerText = wallet
+    betAmount.forEach(bank => bank.innerText = bet)
+    // betAmount.innerText = bet
+    walletAmount.forEach(bank => bank.innerText = wallet)
 }
 
 /* --------------------------------------- High Score -------------------------------------- */
@@ -74,26 +84,30 @@ function updateHighScore() {
     highScoreDiv.innerText = score
 }
 
-
 /* --------------------------------------- Functions --------------------------------------- */
 
 displayFunds()
 
 function play() {
     console.log('game START')
+
     // TODO: prevents game from starting if wallet is less than bet. need user facing message.
     if (wallet < bet) {
-        console.log('not enough money in wallet:', wallet, 'to play bet of:', bet)
         resetWallet.style.display = 'flex'
         return
     }
+    // TODO: needs user facing message, bet is below min. amnt
+    if (bet < 10) {
+        return
+    }
+
     console.log('subtracting bet of:', bet, 'from wallet:', wallet)
     wallet -= bet
     console.log('wallet is now:', wallet)
 
     console.log('turning displays to none and showing game table')
-    turnDisplayToNone([startGame, betSelectDiv, resetWallet, playButtonsDiv])
-    turnDisplayToFlex([actionsBar, dealerElement, playerElement])
+    turnDisplayToNone([homeScreen, largeLogo, playAgain])
+    turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
 
     displayFunds()
     dealCards()
@@ -147,6 +161,9 @@ function addCardTotal() {
                 playerTotal -= 10
                 console.log('~PLAYER~ updated cardValue:', card.value, 'valueChanged:', 
                     card.aceValueChanged, 'handTotal:', playerTotal)
+
+                // player facing image
+                aceChangeMsg.style.display = 'flex'
             }
         })
     }
@@ -167,20 +184,22 @@ function checkForBlackjack() {
     }
 }
 
+console.log(typeof displayPlayerCards.innerText)
+
 function displayCards() {
-    if (displayPlayerCards.innerText === '' && displayDealerCards.innerText === '') {
+    if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
-        displayDealerCards.innerHTML = `<img src=${table.dealer[0].src}>`
-        displayDealerCards.innerHTML +=  ` <img src='./img/back-red-1.png' id="hidden-card">`
+        displayDealerCards.innerHTML = `<img src=${table.dealer[0].src} class="card">`
+        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-grey-1.png' id="hidden-card" class="card">`
         displayDealerTotal.innerText = table.dealer[0].value
 
-        displayPlayerCards.innerHTML = `<img src=${table.player[0].src}>`
-        displayPlayerCards.innerHTML +=  ` <img src=${table.player[1].src}>`
+        displayPlayerCards.innerHTML = `<img src=${table.player[0].src} class="card">`
+        displayPlayerCards.innerHTML += `<img src=${table.player[1].src} class="card">`
         displayPlayerTotal.innerText = playerTotal
     }
     else {
         console.log('displayCards() for a player hit card')
-        displayPlayerCards.innerHTML += ` <img src=${table.player[playerNewCardIdx].src}>`
+        displayPlayerCards.innerHTML += `<img src=${table.player[playerNewCardIdx].src} class="card">`
         displayPlayerTotal.innerText = playerTotal
     }
 }
@@ -212,7 +231,7 @@ function checkForBust(pTotal, dTotal) {
         wallet += bet * 2
         displayFunds()
         showResultScreen()
-        displayResult.innerText = 'Dealer BUST! You Win'
+        displayResult.innerText = 'You Win'
         return 1
     }
 }
@@ -232,7 +251,7 @@ function dealerHit() {
     dealerNewCardIdx = table.dealer.findIndex((card) => card === newCard)
     addCardTotal()
     // display dealer card
-    displayDealerCards.innerHTML += ` <img src=${table.dealer[dealerNewCardIdx].src}>`
+    displayDealerCards.innerHTML += `<img src=${table.dealer[dealerNewCardIdx].src} class="card">`
     displayDealerTotal.innerText = dealerTotal
 }
 
@@ -248,7 +267,7 @@ function compareResult() {
 
     if (playerTotal === dealerTotal) {
         wallet += bet
-        displayResult.innerText = `Push. It's a tie`
+        displayResult.innerText = `Push (Tie)`
         console.log('playerTotal === dealerTotal. Push')
     } 
     else if (playerIsWinner) {
@@ -281,20 +300,20 @@ function resetGame() {
     ]
     resetDisplays.forEach(div => div.innerText = '')
     console.log('resetting displays, gameTable to none, betScreen to flex')
-    turnDisplayToNone([playAgain, actionsBar, resultDiv, dealerElement, playerElement])
-    turnDisplayToFlex([playButtonsDiv, startGame, betSelectDiv])
+    turnDisplayToNone([gameTable, resultDiv, smallLogo])
+    turnDisplayToFlex([homeScreen, largeLogo])
 
-    betAmount.innerText = bet
     // show reset wallet when wallet is less than bet
     if (wallet < bet) resetWallet.style.display = 'flex'
 }
 
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
-    turnDisplayToFlex([scoreSection, playAgain, playButtonsDiv, resultDiv])
-    actionsBar.style.display = 'none'
+    turnDisplayToFlex([scoreSection, playAgain, resultDiv])
+    turnDisplayToNone([actionsBar, aceChangeMsg])
+
     // this changes the bet display to 0
-    betAmount.innerText = '0'
+    betAmount[0].innerText = '0'
     updateHighScore()
 }
 

@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #5F7A71;
+    background-color: #be6464;
     font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -31,43 +31,11 @@ h3 {
     letter-spacing: .1rem;
 }
 
-#main-content {
+#main-content, #home-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-}
-
-#score-section {
-    display: none;
-    flex-direction: row;
-    gap: 8px;
-    padding: 2px 0 10px 0;
-}
-
-#dealer, #player {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 11px;
-    padding: 5px;
-    margin: 2px;
-}
-
-#player-total, #dealer-total {
-    font-size: 1rem;
-    font-weight: 400;
-    background-color: black;
-    color: white;
-    padding: 4px 7.5px;
-}
-
-#result {
-    color: rgb(255, 255, 255);
-    display: none;
-    margin-top: 6px;
-    padding: 11px 15px;
-    background-color: rgb(200, 23, 23);
 }
 
 /* Bet Selection and Selectors */
@@ -85,7 +53,7 @@ h3 {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 28px;
+    gap: 24px;
     margin: 3px;
 }
 
@@ -101,7 +69,7 @@ h3 {
 /* Player Actions like Hit or Stand */
 
 #actions {
-    display: none;
+    display: flex;
     flex-direction: row;
     align-items: center;
     gap: 14px;
@@ -113,7 +81,7 @@ h3 {
     color: #fff;
     font-size: 1.1rem;
     font-family: "Cal Sans", system-ui, sans-serif;
-    padding: 10px 16px;
+    padding: 12px 20px;
     letter-spacing: .06rem;
     border-radius: 3px;
     cursor: pointer;
@@ -153,55 +121,24 @@ h3 {
 
 /* Play Buttons Div, play and play again */
 
-#play-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 6px 0;
-}
-
-#play-buttons button {
+.play {
     background-color: #cb2222;
     color: #fff;
     font-size: 1.1rem;
     font-family: "Cal Sans", system-ui, sans-serif;
-    padding: 10px 16px;
+    padding: 12px 20px;
     letter-spacing: .06rem;
     border-radius: 3px;
     cursor: pointer;
     border: none;
 }
 
-#play-buttons button:hover {
+.play:hover {
     transform: scale(1.1)
 }
 
 #play-again {
     display: none;
-}
-
-/* Bank Section (bet, wallet) */
-
-#bank {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    justify-content: space-around;
-    align-items: center;
-    margin: 12px 0;
-    border: 1px solid #fff;
-    padding: 18px 22px;
-    font-size: 1.1rem;
-}
-
-#bank .number {
-    font-size: 2rem;
-    color: #fff;
-}
-
-#wallet-icon, #chip-icon {
-    width: 40px;
 }
 
 /* Main Logos */
@@ -261,4 +198,115 @@ h3 {
 
 #reset-wallet:hover {
     transform: scale(1.1);
+}
+
+/* Ace change message */
+
+#ace-change-msg {
+    display: none
+}
+
+/* Home Bank and Game Bank Sections (bet, wallet) */
+
+#home-bank {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 12px 0;
+    border: 1px solid #fff;
+    padding: 18px 22px;
+}
+
+#game-bank {
+    display: none;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 12px 0;
+    border: 1px solid #fff;
+    padding: 18px 22px;
+}
+
+#home-bank h3, #game-bank h3 {
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.wallet-icon, .chip-icon {
+    width: 40px;
+}
+
+/* Game Table - Dealer vs Player */
+
+#score-section {
+    display: none;
+    flex-direction: row;
+    gap: 8px;
+    padding: 2px 0 10px 0;
+}
+
+#dealer, #player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 5px;
+    margin: 2px;
+}
+
+#player-total, #dealer-total {
+    font-size: 1.2rem;
+    background-color: black;
+    color: white;
+    padding: 4px 7.5px;
+}
+
+#dealer-cards, #player-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    padding: 6px;
+}
+
+#result {
+    color: rgb(255, 255, 255);
+    display: none;
+    margin-top: 6px;
+    padding: 11px 15px;
+    background-color: rgb(0, 0, 0);
+}
+
+#result h2 {
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+/* Game screen rows */
+
+#column-1, #column-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#game-table {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Card images */
+
+.card {
+    width: 72px;
+    padding: 1px 0;
+}
+
+.card:hover {
+    transform: scale(1.3);
 }

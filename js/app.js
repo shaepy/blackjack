@@ -1,7 +1,7 @@
 // TODO animation when revealing card. slow down actions when adding a card to hand 
 // TODO edge case: when two aces are in the hand, it will default both to 1.
+// nice to have: play again with same bet, OR take me to select a new bet (back to home)
 
-// TODO mobile view below 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
 const startGame = document.querySelector('#start-game')
@@ -37,14 +37,14 @@ let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
 
 // default bet and wallet
 let bet = 0
-let wallet = 100
+let wallet = 300
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 startGame.addEventListener('click', play)
 playAgain.addEventListener('click', resetGame)
 
 // when pressing reset button, refill wallet & displayFunds
-resetWallet.addEventListener('click', () => {wallet = 200, displayFunds()})
+resetWallet.addEventListener('click', () => {wallet = 150, displayFunds()})
 
 document.querySelector('#hit').addEventListener('click', hit)       
 document.querySelector('#stand').addEventListener('click', stand)   
@@ -90,23 +90,21 @@ displayFunds()
 
 function play() {
     console.log('game START')
-
-    // TODO: prevents game from starting if wallet is less than bet. need user facing message.
+    // TODO prevents game from starting if wallet is less than bet. need user facing message.
     if (wallet < bet) {
+        console.log('wallet is too low. reset funds cta set to show')
         resetWallet.style.display = 'flex'
         return
     }
-    // TODO: needs user facing message, bet is below min. amnt
+    // TODO needs user facing message, bet is below min. amnt
     if (bet < 10) {
+        console.log('bet is 0. cannot start game')
         return
     }
 
-    console.log('subtracting bet of:', bet, 'from wallet:', wallet)
     wallet -= bet
-    console.log('wallet is now:', wallet)
-
-    console.log('turning displays to none and showing game table')
-    turnDisplayToNone([homeScreen, largeLogo, playAgain])
+    console.log('turning homescreen divs to none and showing game table')
+    turnDisplayToNone([homeScreen, largeLogo, playAgain, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
 
     displayFunds()
@@ -126,11 +124,9 @@ function getCard() {
 }
 
 function dealCards() {
-    table.dealer.push(getCard())
-    table.dealer.push(getCard())
-    table.player.push(getCard())
-    table.player.push(getCard())
-    console.log('Deal 4 cards to table:', table)
+    table.dealer.push(getCard(), getCard())
+    table.player.push(getCard(), getCard())
+    console.log('Dealt 4 cards to table:', table)
 }
 
 function addCardTotal() {
@@ -170,7 +166,7 @@ function addCardTotal() {
 }
 
 function checkForBlackjack() {
-    console.log('checking for player blackjack')
+    console.log('calling checkForBlackjack()')
     if (playerTotal === 21 && dealerTotal < 21) {
         console.log('this is player blackjack, auto win')
         displayResult.innerText = 'Blackjack! You Win'
@@ -299,7 +295,7 @@ function resetGame() {
         displayPlayerTotal
     ]
     resetDisplays.forEach(div => div.innerText = '')
-    console.log('resetting displays, gameTable to none, betScreen to flex')
+    console.log('resetting displays, game table to none, bet screen divs to flex')
     turnDisplayToNone([gameTable, resultDiv, smallLogo])
     turnDisplayToFlex([homeScreen, largeLogo])
 

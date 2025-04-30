@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #63768e;
+    background-color: #5F7A71;
     font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -18,16 +18,16 @@ body {
   }
 
 h1 {
-    font-size: 3.8rem;
+    font-size: 3.3rem;
     letter-spacing: .16rem;
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 h3 {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     letter-spacing: .1rem;
 }
 
@@ -81,7 +81,9 @@ h3 {
     color: #fff;
     font-size: 1.1rem;
     font-family: "Cal Sans", system-ui, sans-serif;
-    padding: 12px 20px;
+    min-width: 80px;
+    min-height: 45px;
+    padding: 8px 15px;
     letter-spacing: .06rem;
     border-radius: 3px;
     cursor: pointer;
@@ -137,6 +139,10 @@ h3 {
     transform: scale(1.1)
 }
 
+#start-game {
+    margin-top: 10px;
+}
+
 #play-again {
     display: none;
 }
@@ -148,7 +154,7 @@ h3 {
     flex-direction: row;
     align-items: center;
     gap: 10px;
-    margin: 5px 0;
+    margin: 30px 18px 8px;
 }
 
 #large-logo img {
@@ -182,7 +188,6 @@ h3 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: 8px;
     padding: 8px;
     background-color: black;
     min-height: 50px;
@@ -227,16 +232,16 @@ h3 {
     align-items: center;
     margin: 12px 0;
     border: 1px solid #fff;
-    padding: 18px 22px;
+    padding: 12px 18px;
 }
 
 #home-bank h3, #game-bank h3 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: #fff;
 }
 
 .wallet-icon, .chip-icon {
-    width: 40px;
+    width: 30px;
 }
 
 /* Game Table - Dealer vs Player */
@@ -253,7 +258,6 @@ h3 {
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 5px;
     margin: 2px;
 }
 
@@ -267,8 +271,10 @@ h3 {
 #dealer-cards, #player-cards {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 3px;
-    padding: 6px;
+    max-width: 300px;
 }
 
 #result {
@@ -281,7 +287,7 @@ h3 {
 
 #result h2 {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
 }
 
 /* Game screen rows */
@@ -291,19 +297,33 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#column-2 {
     gap: 10px;
+}
+
+#column-1 {
+    gap: 10px;
+    margin-top: 30px;
+}
+
+#column-1 p {
+    margin: 10px 0 0 0;
+    font-size: 1rem;
 }
 
 #game-table {
     display: none;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
 }
 
 /* Card images */
 
 .card {
-    width: 72px;
+    width: 68px;
     padding: 1px 0;
 }
 

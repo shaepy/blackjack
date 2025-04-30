@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,13 +7,14 @@
 }
 
 body {
-    background-color: rgb(255, 255, 255);
-    font-family: system-ui, sans-serif;
+    background-color: #5F7A71;
+    font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
-    letter-spacing: .05rem;
+    letter-spacing: .09rem;
     display: flex;
     flex-direction: column;
+    color: #fff;
   }
 
 h1 {
@@ -41,7 +44,7 @@ button {
     padding: 8px 12px;
     letter-spacing: .06rem;
     border-radius: 3px;
-    background-color: rgba(228, 228, 228, 0.868);
+    background-color: rgba(255, 255, 255);
     border: 1px solid rgb(129, 129, 129);
     color: rgb(0, 0, 0);
     cursor: pointer;
@@ -74,6 +77,16 @@ button {
     gap: 8px;
 }
 
+#info-button {
+    cursor: pointer;
+    margin: 5px;
+    width: 22px;
+}
+
+#info-button:hover {
+    width: 24px;
+}
+
 #score-section {
     display: none;
     flex-direction: row;
@@ -85,8 +98,10 @@ button {
     flex-direction: row;
     justify-content: right;
     align-items: center;
-    margin: 8px 8px 0 8px;
-    padding: 8px 8px 0 8px;
+    margin: 8px;
+    padding: 8px;
+    background-color: black;
+    min-height: 60px;
 }
 
 #reset-wallet {
@@ -149,7 +164,7 @@ button:hover {
     margin: 4px 0;
     gap: 8px;
     align-items: center;
-    background-color: rgb(227, 227, 227);
+    background-color: rgb(0, 0, 0);
 }
 
 #instructions ul {
@@ -171,13 +186,14 @@ button:hover {
     justify-content: space-around;
     align-items: center;
     margin: 6px 0 10px 0;
-    border: 1px solid black;
+    border: 1px solid #fff;
     padding: 11px 20px;
     font-size: 1.1rem;
 }
 
 #bank .number {
     font-size: 1.4rem;
+    color: #fff;
 }
 
 #logo {

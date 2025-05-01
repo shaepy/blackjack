@@ -85,7 +85,7 @@ function updateHighScore() {
     document.querySelector('#high-score').innerText = score
 }
 
-/* --------------------------------------- Functions --------------------------------------- */
+/* --------------------------------------- Start/End Game --------------------------------------- */
 
 displayFunds()
 
@@ -93,23 +93,8 @@ displayFunds()
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
 const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 
-function play() {
-    console.log('game START')
-    // TODO need user facing message. wallet is too low, reset funds
-    if (wallet < bet) {
-        console.log('wallet is too low. reset funds cta set to show')
-        resetWallet.style.display = 'flex'
-        return
-    }
-    // TODO needs user facing message, bet is below min. amnt
-    if (bet < 10) {
-        console.log('bet is 0. cannot start game')
-        return
-    }
+function startGame() {
     wallet -= bet
-    console.log('turning homescreen divs to none and showing game table')
-    turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
-    turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
     displayFunds()
     dealCards()
     addCardTotal()
@@ -117,18 +102,44 @@ function play() {
     checkForBlackjack()
 }
 
-function goBetScreen() {
-    console.log('player pressed changeBet. goBetScreen() called')
-    updateHighScore()
+function resetGame() {
+    console.log('resetting the game')
     shuffle()
     table.dealer = []
     table.player = []
     dealerTotal = playerTotal = 0
     resetDisplays.forEach(div => div.innerText = '')
+}
 
+function shuffle() {
+    console.log('shuffle() is running...')
+    cardDeck.forEach(card => {
+        card.hasBeenPlayed = false
+        if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
+    })
+}
+
+function play() {
+    console.log('player pressed play. START')
+    // TODO need user facing message. wallet is too low, reset funds
+    if (wallet < bet) {
+        resetWallet.style.display = 'flex'
+        return
+    }
+    // TODO user facing message, bet is below min. amnt
+    if (bet < 10) return
+    startGame()
+    console.log('turning homescreen divs to none and showing game table')
+    turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
+    turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
+}
+
+function goBetScreen() {
+    console.log('player pressed changeBet. goBetScreen() called')
+    updateHighScore()
+    resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo])
     turnDisplayToFlex([homeScreen, largeLogo])
-
     // show reset wallet when wallet is less than bet
     if (wallet < bet) resetWallet.style.display = 'flex'
 }
@@ -137,32 +148,19 @@ function playAgain() {
     console.log('this will start a quick play game')
     // TODO need user facing message. wallet is too low, reset funds
     if (wallet < bet) {
-        console.log('wallet is too low. reset funds cta set to show')
         resetWallet.style.display = 'flex'
         return
     }
-    // TODO needs user facing message, bet is below min. amnt
-    if (bet < 10) {
-        console.log('bet is 0. cannot start game')
-        return
-    }
-    shuffle()
-    table.dealer = []
-    table.player = []
-    dealerTotal = playerTotal = 0
-    resetDisplays.forEach(div => div.innerText = '')
+    // TODO user facing message, bet is below min. amnt
+    if (bet < 10) return
+    resetGame()
     turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
     turnDisplayToFlex([actionsBar])
-
     if (wallet < bet) resetWallet.style.display = 'flex'
-
-    wallet -= bet
-    displayFunds()
-    dealCards()
-    addCardTotal()
-    displayCards()
-    checkForBlackjack()
+    startGame()
 }
+
+/* --------------------------------------- Gameplay --------------------------------------- */
 
 function getCard() {
     console.log('RUN getCard()')
@@ -177,7 +175,7 @@ function dealCards() {
     table.dealer.push(getCard(), getCard())
     table.player.push(getCard(), getCard())
 
-    // ace edge case:
+    // * ace edge case:
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
     // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
     // table.player.push(ace1, ace2)
@@ -209,7 +207,6 @@ function changeAceValues(plyrOrDlr) {
         console.log('there is no ace that qualifies')
     }
 }
-
 
 function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
@@ -347,14 +344,6 @@ function showResultScreen() {
     // this changes the bet display to 0
     betAmount[0].innerText = '0'
     updateHighScore()
-}
-
-function shuffle() {
-    console.log('shuffle() is running...')
-    cardDeck.forEach(card => {
-        card.hasBeenPlayed = false
-        if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
-    })
 }
 
 function toggleHelp() {

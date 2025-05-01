@@ -1,5 +1,5 @@
 // TODO animation when revealing card. slow down actions when adding a card to hand 
-// TODO edge case: when two aces are in the hand, it will default both to 1.
+// // FIXED edge case: when two aces are in the hand, it will default both to 1.
 
 /* --------------------------------------- Constants -------------------------------------- */
 // Actions
@@ -180,8 +180,40 @@ function getCard() {
 function dealCards() {
     table.dealer.push(getCard(), getCard())
     table.player.push(getCard(), getCard())
+
+    // ace edge case:
+    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    // table.player.push(ace1, ace2)
+
     console.log('Dealt 4 cards to table:', table)
 }
+
+function changeAceValues(plyrOrDlr) {
+    console.log('running changeAceValues()')
+    const foundAce = plyrOrDlr.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
+    // foundAce is -1 if no ace is returned
+    if (foundAce !== -1) {
+        console.log('there is an ace we can change:', plyrOrDlr[foundAce])
+        plyrOrDlr[foundAce].value = 1
+        plyrOrDlr[foundAce].aceValueChanged = true
+        console.log('changed!', plyrOrDlr[foundAce])
+
+        if (plyrOrDlr === table.player) {
+            console.log('this is a player')
+            playerTotal -= 10
+            aceChangeMsg.style.display = 'flex'
+        } else {
+            console.log('this is dealer')
+            dealerTotal -= 10
+        }
+
+        console.log('ace changed:', plyrOrDlr[foundAce], dealerTotal, playerTotal)
+    } else {
+        console.log('there is no ace that qualifies')
+    }
+}
+
 
 function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
@@ -189,78 +221,24 @@ function addCardTotal() {
     playerTotal = table.player.reduce((acc, card) => acc + card.value, 0)
 
     if (dealerTotal > 21) {
-        console.log('checking.. this is over 21. dealer total:', dealerTotal)
-
-        const foundAce = table.dealer.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
-        // foundAce is -1 if no ace is returned
-        if (foundAce !== -1) {
-            console.log('there is an ace we can change')
-            console.log(foundAce)
-            table.dealer[foundAce].value = 1
-            table.dealer[foundAce].aceValueChanged = true
-            dealerTotal -= 10
-            console.log('dealer ace changed:', table.dealer[foundAce], dealerTotal)
-        } else {
-            console.log('there is no ace that qualifies')
-        }
-
-        // table.dealer.forEach(card => {
-        //     if (card.rank === 'ace' && card.aceValueChanged === false) {
-        //         console.log('change this ace, it qualifies:', card)
-        //         card.value = 1
-        //         card.aceValueChanged = true
-        //         dealerTotal -= 10
-        //         console.log('~DEALER~ updated cardValue:', card.value, 'valueChanged:', 
-        //             card.aceValueChanged, 'handTotal:', dealerTotal)
-        //     }
-        // })
-    }
+        console.log('this is over 21. dealer total:', dealerTotal)
+        changeAceValues(table.dealer)
+    } 
     if (playerTotal > 21) {
-        console.log('checking.. this is over 21. player total:', playerTotal)
-
-        const foundAce = table.player.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
-        // foundAce is -1 if no ace is returned
-        if (foundAce !== -1) {
-            console.log('there is an ace we can change')
-            console.log(foundAce)
-            table.player[foundAce].value = 1
-            table.player[foundAce].aceValueChanged = true
-            playerTotal -= 10
-            console.log('player ace changed:', table.player[foundAce], playerTotal)
-            aceChangeMsg.style.display = 'flex'
-        } else {
-            console.log('there is no ace that qualifies')
-        }
-
-        // table.player.forEach(card => {
-        //     if (card.rank === 'ace' && card.aceValueChanged === false) {
-        //         console.log('change this ace, it qualifies:', card)
-        //         card.value = 1
-        //         card.aceValueChanged = true
-        //         playerTotal -= 10
-        //         console.log('~PLAYER~ updated cardValue:', card.value, 'valueChanged:', 
-        //             card.aceValueChanged, 'handTotal:', playerTotal)
-
-        //         // player facing image
-        //         aceChangeMsg.style.display = 'flex'
-        //     }
-        // })
+        console.log('this is over 21. player total:', playerTotal)
+        changeAceValues(table.player)
     }
 }
 
 function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (playerTotal === 21 && dealerTotal < 21) {
-        console.log('this is player blackjack, auto win')
         displayResult.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
         displayFunds()
         revealHiddenCard()
         showResultScreen()
-    } else if (playerTotal === 21 && dealerTotal === 21) {
-        console.log('player has 21 but dealer too. auto stand()')
-        stand()
-    }
+    } else if (playerTotal === 21 && dealerTotal === 21) stand()
 }
 
 function displayCards() {
@@ -289,7 +267,7 @@ function hit() {
     addCardTotal()
     displayCards()
     // if 21, autostand
-    if (playerTotal === 21) stand(), console.log('player 21, auto stand()')
+    if (playerTotal === 21) stand()
     // check for bust
     checkForBust(playerTotal, dealerTotal)
 }
@@ -298,13 +276,11 @@ function hit() {
 function checkForBust(pTotal, dTotal) {
     console.log('checking for bust (pTotal, dTotal)')
     if (pTotal > 21) {
-        console.log('player went over 21. you lose')
         revealHiddenCard()
         showResultScreen()
         displayResult.innerText = `You Bust`
     } 
     else if (dTotal > 21) {
-        console.log('dealer went over 21. you win')
         wallet += bet * 2
         displayFunds()
         showResultScreen()
@@ -380,10 +356,7 @@ function shuffle() {
     console.log('shuffle() is running...')
     cardDeck.forEach(card => {
         card.hasBeenPlayed = false
-        if (card.rank === 'ace') {
-            card.value = 11
-            card.aceValueChanged = false
-        }
+        if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
     })
 }
 

@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #5F7A71;
+    background-image: linear-gradient(to bottom right, #19342B, #68867c);
     font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -147,6 +147,7 @@ h3 {
     display: none;
     flex-direction: row;
     gap: 12px;
+    margin: 10px;
     align-items: center;
     justify-content: center;
 }

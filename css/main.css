@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #5F7A71;
+    background-image: linear-gradient(to bottom right, #19342B, #68867c);
     font-family: "Cal Sans", system-ui, sans-serif;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -276,7 +276,7 @@ h3 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 3px;
-    max-width: 380px;
+    max-width: 375px;
 }
 
 #result {
@@ -322,7 +322,8 @@ h3 {
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-    gap: 18px;
+    gap: 22px;
+    margin: 0 20px;
 }
 
 /* Card images */

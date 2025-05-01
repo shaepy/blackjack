@@ -264,7 +264,7 @@ function checkForBust(pTotal, dTotal) {
         console.log('player went over 21. you lose')
         revealHiddenCard()
         showResultScreen()
-        displayResult.innerText = `BUST! You Lose`
+        displayResult.innerText = `You Bust`
     } 
     else if (dTotal > 21) {
         console.log('dealer went over 21. you win')

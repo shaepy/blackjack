@@ -37,9 +37,9 @@
                 <li>Face (J, Q, K) cards are worth 10</li>
                 <li>Aces are flexible and can count as 11 or 1</li>
             </ul>
-            <p>On your turn, you can <strong>Hit</strong> to draw another card, or <strong>Stand</strong> to hold your hand and end your turn.</p>
-            <p>Once you’re done, the dealer flips their hidden card and plays. They have to keep hitting until they reach at least 17.</p>
-            <p>Whoever is closer to 21 without going over wins.</p>
+            <p>You can HIT to draw another card, or STAND to hold your hand and end your turn.</p>
+            <p>The dealer then flips their hidden card and plays. They have to keep hitting until they reach at least 17.</p>
+            <p>Getting over 21 is a BUST. A tie is known as a PUSH. Whoever is closer to 21 wins!</p>
         </div>
 
         <div id="game-table">
@@ -72,13 +72,14 @@
                     <button id="hit">hit</button>
                     <button id="stand">stand</button>
                 </div>
-                <div id="play-again-buttons">
-                    <button id="play-again" class="play">play again</button>
-                    <button id="change-bet">change bet</button>
-                </div>
+                <!-- add score section to home screen below bank, change to classes and update functions/querySelectors -->
                 <div id="score-section">
                     <div>high score</div>
                     <div id="high-score"></div>
+                </div>
+                <div id="play-again-buttons">
+                    <button id="play-again" class="play">play again</button>
+                    <button id="change-bet">change bet</button>
                 </div>
             </div>
         </div>

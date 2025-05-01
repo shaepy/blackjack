@@ -2,10 +2,6 @@
 // // FIXED edge case: when two aces are in the hand, it will default both to 1.
 
 /* --------------------------------------- Constants -------------------------------------- */
-// Actions
-const playButton = document.querySelector('#start-game')
-const resetWallet = document.querySelector('#reset-wallet')
-const playAgainButtons = document.querySelector('#play-again-buttons')
 
 // Messages
 const aceChangeMsg = document.querySelector('#ace-change-msg')
@@ -18,7 +14,9 @@ const smallLogo = document.querySelector('#small-logo')
 const actionsBar = document.querySelector('#actions')
 const resultDiv = document.querySelector('#result')
 const gameTable = document.querySelector('#game-table')
+const gameBank = document.querySelector('#game-bank')
 const homeScreen = document.querySelector('#home-screen')
+const playAgainButtons = document.querySelector('#play-again-buttons')
 
 // Cards, result, totals
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -48,27 +46,24 @@ let wallet = 100
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
-playButton.addEventListener('click', play)
-document.querySelector('#change-bet').addEventListener('click', resetGame)
-document.querySelector('#play-again').addEventListener('click', playSameBet)
-
-// when pressing reset button, refill wallet & displayFunds
-resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()})
-
+document.querySelector('#start-game').addEventListener('click', play)
+document.querySelector('#change-bet').addEventListener('click', goBetScreen)
+document.querySelector('#play-again').addEventListener('click', playAgain)
 document.querySelector('#hit').addEventListener('click', hit)       
-document.querySelector('#stand').addEventListener('click', stand)   
+document.querySelector('#stand').addEventListener('click', stand)
 document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
+const resetWallet = document.querySelector('#reset-wallet')
+resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()}) // refill wallet & displayFunds
+
 const betAmount = document.querySelectorAll('.bet-amnt h3')
 const walletAmount = document.querySelectorAll('.wallet-amnt h3')
-const gameBank = document.querySelector('#game-bank')
 
 // each bet selector button will save the number to bet and display it
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (event) => {
     bet = Number(event.target.dataset.bet)
-    console.log('changing bet to:', bet)
     displayFunds()
 }))
 
@@ -80,14 +75,13 @@ function displayFunds() {
 /* --------------------------------------- High Score -------------------------------------- */
 
 // TODO IN PROGRESS
-const highScoreDiv = document.querySelector('#high-score')
 const scoreSection = document.querySelector('#score-section')
 
 let score = 0
 
 function updateHighScore() {
     if (wallet > score) score = wallet, console.log('update to new high score:', score)
-    highScoreDiv.innerText = score
+    document.querySelector('#high-score').innerText = score
 }
 
 /* --------------------------------------- Functions --------------------------------------- */
@@ -122,8 +116,9 @@ function play() {
     checkForBlackjack()
 }
 
-function resetGame() {    
-    console.log('player pressed play again. resetGame() called')
+function goBetScreen() {
+    console.log('player pressed changeBet. goBetScreen() called')
+    updateHighScore()
     shuffle()
     table.dealer = []
     table.player = []
@@ -137,7 +132,7 @@ function resetGame() {
     if (wallet < bet) resetWallet.style.display = 'flex'
 }
 
-function playSameBet() {
+function playAgain() {
     console.log('this will start a quick play game')
     // TODO need user facing message. wallet is too low, reset funds
     if (wallet < bet) {
@@ -191,13 +186,13 @@ function dealCards() {
 
 function changeAceValues(plyrOrDlr) {
     console.log('running changeAceValues()')
-    const foundAce = plyrOrDlr.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
-    // foundAce is -1 if no ace is returned
-    if (foundAce !== -1) {
-        console.log('there is an ace we can change:', plyrOrDlr[foundAce])
-        plyrOrDlr[foundAce].value = 1
-        plyrOrDlr[foundAce].aceValueChanged = true
-        console.log('changed!', plyrOrDlr[foundAce])
+    const aceIdx = plyrOrDlr.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
+    // aceIdx is -1 if no ace is returned
+    if (aceIdx !== -1) {
+        console.log('there is an ace we can change:', plyrOrDlr[aceIdx])
+        plyrOrDlr[aceIdx].value = 1
+        plyrOrDlr[aceIdx].aceValueChanged = true
+        console.log('changed!', plyrOrDlr[aceIdx])
 
         if (plyrOrDlr === table.player) {
             console.log('this is a player')
@@ -208,7 +203,7 @@ function changeAceValues(plyrOrDlr) {
             dealerTotal -= 10
         }
 
-        console.log('ace changed:', plyrOrDlr[foundAce], dealerTotal, playerTotal)
+        console.log('ace changed:', plyrOrDlr[aceIdx], playerTotal, dealerTotal)
     } else {
         console.log('there is no ace that qualifies')
     }
@@ -245,7 +240,7 @@ function displayCards() {
     if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
         displayDealerCards.innerHTML = `<img src=${table.dealer[0].src} class="card">`
-        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-red-1.png' id="hidden-card" class="card">`
+        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-blue-1.png' id="hidden-card" class="card">`
         displayDealerTotal.innerText = table.dealer[0].value
 
         displayPlayerCards.innerHTML = `<img src=${table.player[0].src} class="card">`
@@ -320,7 +315,7 @@ function compareResult() {
 
     if (playerTotal === dealerTotal) {
         wallet += bet
-        displayResult.innerText = `Push (Tie)`
+        displayResult.innerText = `Push`
         console.log('playerTotal === dealerTotal. Push')
     } 
     else if (playerIsWinner) {
@@ -336,6 +331,13 @@ function compareResult() {
     showResultScreen()
 }
 
+function revealHiddenCard() {
+    console.log('revealHiddenCard(), showing dealers 2nd card')
+    const hiddenCard = document.querySelector('#hidden-card')
+    if (hiddenCard) hiddenCard.src = table.dealer[1].src
+    displayDealerTotal.innerText = dealerTotal
+}
+
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
     turnDisplayToFlex([scoreSection, resultDiv, playAgainButtons])
@@ -343,13 +345,6 @@ function showResultScreen() {
     // this changes the bet display to 0
     betAmount[0].innerText = '0'
     updateHighScore()
-}
-
-function revealHiddenCard() {
-    console.log('revealHiddenCard(), showing dealers 2nd card')
-    const hiddenCard = document.querySelector('#hidden-card')
-    if (hiddenCard) hiddenCard.src = table.dealer[1].src
-    displayDealerTotal.innerText = dealerTotal
 }
 
 function shuffle() {

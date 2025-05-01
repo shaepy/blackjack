@@ -237,32 +237,27 @@ h3 {
 #home-bank {
     display: flex;
     flex-direction: row;
-    gap: 16px;
+    gap: 20px;
     justify-content: space-around;
     align-items: center;
-    margin: 12px 0;
-    border: 1px solid #fff;
-    padding: 18px 22px;
+    margin: 14px;
 }
 
 #game-bank {
     display: none;
     flex-direction: row;
-    gap: 16px;
+    gap: 20px;
     justify-content: space-around;
     align-items: center;
     margin: 12px 0;
-    border: 1px solid #fff;
-    padding: 12px 18px;
 }
 
 #home-bank h3, #game-bank h3 {
-    font-size: 1.5rem;
-    color: #fff;
+    font-size: 2.3rem;
 }
 
 .wallet-icon, .chip-icon {
-    width: 30px;
+    width: 50px;
 }
 
 /* Game Table - Dealer vs Player */

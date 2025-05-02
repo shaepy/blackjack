@@ -32,10 +32,10 @@ const resetDisplays = [
 
 /* --------------------------------------- Variables -------------------------------------- */
 
-let table = {dealer: [], player: []}
+let cards = {dealer: [], player: []}
 
 // Save totals, and dealt card indexes
-let dealerTotal, playerTotal, playerNewCardIdx, dealerNewCardIdx
+let dealerTotal, playerTotal, playerHitIdx, dealerHitIdx
 
 // default bet and wallet
 let bet = 0
@@ -87,6 +87,10 @@ function updateHighScore() {
 
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
+[1,2,3,4].forEach(num => {
+    console.log(num)
+})
+
 displayFunds()
 
 // these functions take an array, turn the display of each element to either flex or none
@@ -105,8 +109,8 @@ function startGame() {
 function resetGame() {
     console.log('resetting the game')
     shuffle()
-    table.dealer = []
-    table.player = []
+    cards.dealer = []
+    cards.player = []
     dealerTotal = playerTotal = 0
     resetDisplays.forEach(div => div.innerText = '')
 }
@@ -129,7 +133,7 @@ function play() {
     // TODO user facing message, bet is below min. amnt
     if (bet < 10) return
     startGame()
-    console.log('turning homescreen divs to none and showing game table')
+    console.log('turning homescreen divs to none and showing game cards')
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
 }
@@ -172,15 +176,15 @@ function getCard() {
 }
 
 function dealCards() {
-    table.dealer.push(getCard(), getCard())
-    table.player.push(getCard(), getCard())
+    cards.dealer.push(getCard(), getCard())
+    cards.player.push(getCard(), getCard())
 
     // * ace edge case:
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
     // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // table.player.push(ace1, ace2)
+    // cards.player.push(ace1, ace2)
 
-    console.log('Dealt 4 cards to table:', table)
+    console.log('Dealt 4 cards to cards:', cards)
 }
 
 function changeAceValues(plyrOrDlr) {
@@ -193,7 +197,7 @@ function changeAceValues(plyrOrDlr) {
         plyrOrDlr[aceIdx].aceValueChanged = true
         console.log('changed!', plyrOrDlr[aceIdx])
 
-        if (plyrOrDlr === table.player) {
+        if (plyrOrDlr === cards.player) {
             console.log('this is a player')
             playerTotal -= 10
             aceChangeMsg.style.display = 'flex'
@@ -210,16 +214,16 @@ function changeAceValues(plyrOrDlr) {
 
 function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
-    dealerTotal = table.dealer.reduce((acc, card) => acc + card.value, 0)
-    playerTotal = table.player.reduce((acc, card) => acc + card.value, 0)
+    dealerTotal = cards.dealer.reduce((acc, card) => acc + card.value, 0)
+    playerTotal = cards.player.reduce((acc, card) => acc + card.value, 0)
 
     if (dealerTotal > 21) {
         console.log('this is over 21. dealer total:', dealerTotal)
-        changeAceValues(table.dealer)
+        changeAceValues(cards.dealer)
     } 
     if (playerTotal > 21) {
         console.log('this is over 21. player total:', playerTotal)
-        changeAceValues(table.player)
+        changeAceValues(cards.player)
     }
 }
 
@@ -234,21 +238,45 @@ function checkForBlackjack() {
     } else if (playerTotal === 21 && dealerTotal === 21) stand()
 }
 
+// this creates a card image to display
+function constructCardImg(cardObject) {
+    const cardImage = document.createElement('img')
+    cardImage.classList.add('card')
+    cardImage.alt = `${cardObject.suit} ${cardObject.rank}`
+    cardImage.src = cardObject.src
+    return cardImage
+}
+
 function displayCards() {
     // * update to having the img there and then changing the image src
     if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
-        displayDealerCards.innerHTML = `<img src=${table.dealer[0].src} class="card">`
-        displayDealerCards.innerHTML +=  `<img src='./img/cards/back-blue-1.png' id="hidden-card" class="card">`
-        displayDealerTotal.innerText = table.dealer[0].value
 
-        displayPlayerCards.innerHTML = `<img src=${table.player[0].src} class="card">`
-        displayPlayerCards.innerHTML += `<img src=${table.player[1].src} class="card">`
+        // create dealer back card img element
+        const hiddenCard = document.createElement('img')
+        hiddenCard.classList.add('card')
+        hiddenCard.id = 'hidden-card'
+        hiddenCard.src = './img/cards/back-blue-1.png'
+
+        // dealer 1st card image
+        const dealer1stCard = constructCardImg(cards.dealer[0])
+
+        // create player card images
+        const player1stCard = constructCardImg(cards.player[0])
+        const player2ndCard = constructCardImg(cards.player[1])
+
+        // DISPLAY HERE
+        displayDealerCards.append(dealer1stCard, hiddenCard)
+        displayDealerTotal.innerText = cards.dealer[0].value
+
+        displayPlayerCards.append(player1stCard, player2ndCard)
         displayPlayerTotal.innerText = playerTotal
     }
     else {
         console.log('displayCards() for a player hit card')
-        displayPlayerCards.innerHTML += `<img src=${table.player[playerNewCardIdx].src} class="card">`
+        const playerHitCard = constructCardImg(cards.player[playerHitIdx])
+        
+        displayPlayerCards.append(playerHitCard)
         displayPlayerTotal.innerText = playerTotal
     }
 }
@@ -256,8 +284,8 @@ function displayCards() {
 function hit() {
     console.log('player pressed hit()')
     const newCard = getCard()
-    table.player.push(newCard)
-    playerNewCardIdx = table.player.findIndex((card) => card === newCard)
+    cards.player.push(newCard)
+    playerHitIdx = cards.player.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
     // if 21, autostand
@@ -294,11 +322,17 @@ function stand() {
 function dealerHit() {
     console.log('total is <=16. dealerHit')
     const newCard = getCard()
-    table.dealer.push(newCard)
-    dealerNewCardIdx = table.dealer.findIndex((card) => card === newCard)
+    cards.dealer.push(newCard)
+    dealerHitIdx = cards.dealer.findIndex((card) => card === newCard)
     addCardTotal()
+
     // display dealer card
-    displayDealerCards.innerHTML += `<img src=${table.dealer[dealerNewCardIdx].src} class="card">`
+    const dealerHitCard = document.createElement('img')
+    dealerHitCard.classList.add('card')
+    dealerHitCard.src = cards.dealer[dealerHitIdx].src
+    dealerHitCard.alt = `${cards.dealer[dealerHitIdx].suit} ${cards.dealer[dealerHitIdx].rank}`
+
+    displayDealerCards.append(dealerHitCard)
     displayDealerTotal.innerText = dealerTotal
 }
 
@@ -333,7 +367,7 @@ function compareResult() {
 function revealHiddenCard() {
     console.log('revealHiddenCard(), showing dealers 2nd card')
     const hiddenCard = document.querySelector('#hidden-card')
-    if (hiddenCard) hiddenCard.src = table.dealer[1].src
+    if (hiddenCard) hiddenCard.src = cards.dealer[1].src
     displayDealerTotal.innerText = dealerTotal
 }
 

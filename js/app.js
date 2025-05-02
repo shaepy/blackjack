@@ -39,7 +39,7 @@ let dealerTotal, playerTotal, playerHitIdx, dealerHitIdx
 
 // default bet and wallet
 let bet = 0
-let wallet = 100
+let wallet = 25
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
@@ -92,39 +92,39 @@ displayFunds()
 
 // messaging when bet is too low
 // messaging when wallet is too low
-// const lowBetDiv = document.querySelector('#low-bet')
-// const lowWalletDiv = document.querySelector('#low-wallet')
+const lowBetDiv = document.querySelector('#low-bet')
+const lowWalletDiv = document.querySelector('#low-wallet')
 
-// function betIsLow() {
-//     // usually set to none
-//     console.log('betIsLow() called')
-//     lowBetDiv.style.display = 'flex'
-//     requestAnimationFrame(() => lowBetDiv.classList.add('fade-in'))
+function betIsLow() {
+    // usually set to none
+    console.log('betIsLow() called')
+    lowBetDiv.style.display = 'flex'
+    requestAnimationFrame(() => lowBetDiv.classList.add('fade-in'))
 
-//     setTimeout(() => {
-//         lowBetDiv.classList.remove('fade-in')
-//         lowBetDiv.classList.add('fade-out')
-//         setTimeout(() => {
-//             lowBetDiv.style.display = 'none'
-//             lowBetDiv.classList.remove('fade-out')
-//         }, 1000)
-//     }, 2500)
-// }
+    setTimeout(() => {
+        lowBetDiv.classList.remove('fade-in')
+        lowBetDiv.classList.add('fade-out')
+        setTimeout(() => {
+            lowBetDiv.style.display = 'none'
+            lowBetDiv.classList.remove('fade-out')
+        }, 1000)
+    }, 2000)
+}
 
-// function walletIsLow() {
-//     console.log('walletIsLow() called')
-//     lowWalletDiv.style.display = 'flex'
-//     requestAnimationFrame(() => lowWalletDiv.classList.add('fade-in'))
+function walletIsLow() {
+    console.log('walletIsLow() called')
+    lowWalletDiv.style.display = 'flex'
+    requestAnimationFrame(() => lowWalletDiv.classList.add('fade-in'))
 
-//     setTimeout(() => {
-//         lowWalletDiv.classList.remove('fade-in')
-//         lowWalletDiv.classList.add('fade-out')
-//         setTimeout(() => {
-//             lowWalletDiv.style.display = 'none'
-//             lowWalletDiv.classList.remove('fade-out')
-//         }, 1000)
-//     }, 2500)
-// }
+    setTimeout(() => {
+        lowWalletDiv.classList.remove('fade-in')
+        lowWalletDiv.classList.add('fade-out')
+        setTimeout(() => {
+            lowWalletDiv.style.display = 'none'
+            lowWalletDiv.classList.remove('fade-out')
+        }, 1000)
+    }, 2000)
+}
 
 // these functions take an array, turn the display of each element to either flex or none
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
@@ -161,8 +161,10 @@ function play() {
 
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
+        walletIsLow()
         return
     } else if (bet < 10) {
+        betIsLow()
         return
     }
 
@@ -187,8 +189,10 @@ function playAgain() {
 
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
+        walletIsLow()
         return
     } else if (bet < 10) {
+        betIsLow()
         return
     }
 
@@ -244,7 +248,7 @@ function changeAceValues(plyrOrDlr) {
                     aceMsgElement.style.display = 'none'
                     aceMsgElement.classList.remove('fade-out')
                 }, 1000)
-            }, 2500)
+            }, 2000)
 
         } else {
             console.log('this is dealer')

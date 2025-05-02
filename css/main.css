@@ -350,7 +350,7 @@ h3 {
     }
 
 
-/* #low-bet, #low-wallet {
+#low-bet, #low-wallet {
     display: none;
     opacity: 0;
     transition: opacity 0.8s ease;
@@ -362,7 +362,7 @@ h3 {
 
     #low-bet.fade-out, #low-wallet.fade-out {
         opacity: 0;
-    } */
+    }
 
 @media screen and (max-width: 960px) {
     #dealer-cards, #player-cards {

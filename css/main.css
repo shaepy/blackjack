@@ -163,13 +163,9 @@ h3 {
     margin: 35px 0 8px 0;
 }
 
-#large-logo img {
-    width: 70px;
-}
-
-#small-logo img {
-    width: 35px;
-}
+    #large-logo img {
+        width: 70px;
+    }
 
 #small-logo {
     display: none;
@@ -179,15 +175,11 @@ h3 {
     padding: 5px;
 }
 
-/* Top Bar and Top bar buttons */
+    #small-logo img {
+        width: 35px;
+    }
 
-#top-buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
+/* Top Bar and Top bar buttons */
 
 #top-bar {
     display: flex;
@@ -199,18 +191,20 @@ h3 {
     min-height: 50px;
 }
 
+#top-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
 /* Reset Wallet CTA */
 
 #reset-wallet {
     display: none;
     background-color: #000;
     cursor: pointer;
-}
-
-/* Ace change message */
-
-#ace-change-msg {
-    display: none
 }
 
 /* Home Bank and Game Bank Sections (bet, wallet) */
@@ -259,21 +253,21 @@ h3 {
     margin: 2px;
 }
 
-#player-total, #dealer-total {
-    font-size: 1.2rem;
-    background-color: black;
-    color: white;
-    padding: 4px 7.5px;
-}
+    #player-total, #dealer-total {
+        font-size: 1.2rem;
+        background-color: black;
+        color: white;
+        padding: 4px 7.5px;
+    }
 
-#dealer-cards, #player-cards {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 3px;
-    max-width: 450px;
-}
+    #dealer-cards, #player-cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3px;
+        min-width: 400px;
+    }
 
 #result {
     color: rgb(255, 255, 255);
@@ -283,10 +277,10 @@ h3 {
     background-color: rgb(0, 0, 0);
 }
 
-#result h2 {
-    text-align: center;
-    font-size: 1.8rem;
-}
+    #result h2 {
+        text-align: center;
+        font-size: 1.8rem;
+    }
 
 /* Game screen rows */
 
@@ -295,22 +289,23 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 25px;
+    padding: 20px 0 20px 20px;
     gap: 10px;
 }
 
-#column-1 p {
-    text-align: center;
-    font-size: .85rem;
-}
+    #column-1 p {
+        text-align: center;
+        font-size: .85rem;
+    }
 
 #column-2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 25px;
+    padding: 20px 20px 20px 0;
     gap: 18px;
+    min-width: 380px;
 }
 
 #game-table {
@@ -318,7 +313,6 @@ h3 {
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-    gap: 32px;
     margin: 0 20px;
 }
 
@@ -329,12 +323,59 @@ h3 {
     padding: 1px 0;
 }
 
-.card:hover {
-    transform: scale(1.37);
-}
+    .card:hover {
+        transform: scale(1.37);
+    }
 
 /* Button transforms */
 
 .play:hover, #change-bet:hover, #reset-wallet:hover, #actions button:hover {
     transform: scale(1.1)
+}
+
+/* Ace change msg fades */
+
+#ace-change-msg {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+    #ace-change-msg.fade-in {
+        opacity: 1;
+    }
+
+    #ace-change-msg.fade-out {
+        opacity: 0;
+    }
+
+
+@media screen and (max-width: 960px) {
+    #dealer-cards, #player-cards {
+        min-width: 320px;
+    }
+
+    #column-1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 10px 20px 20px;
+        gap: 10px;
+    }
+    
+        #column-1 p {
+            text-align: center;
+            font-size: .85rem;
+        }
+    
+    #column-2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 20px 20px 10px;
+        gap: 18px;
+        min-width: 200px
+    }
 }

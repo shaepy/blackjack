@@ -1,7 +1,7 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
 // Messages
-const aceChangeMsg = document.querySelector('#ace-change-msg')
+const aceChangeMsgDiv = document.querySelector('#ace-change-msg')
 
 // Logos
 const largeLogo = document.querySelector('#large-logo')
@@ -200,12 +200,27 @@ function changeAceValues(plyrOrDlr) {
         if (plyrOrDlr === cards.player) {
             console.log('this is a player')
             playerTotal -= 10
-            aceChangeMsg.style.display = 'flex'
+
+            // display ace change message
+            aceChangeMsgDiv.style.display = 'flex'
+            const aceMsg = document.createElement('p')
+            aceMsg.innerText = 'Your Ace value has changed from 11 to 1.'
+            aceChangeMsgDiv.append(aceMsg)
+            requestAnimationFrame(() => aceChangeMsgDiv.classList.add('fade-in'))
+            setTimeout(() => {
+                aceChangeMsgDiv.classList.remove('fade-in')
+                aceChangeMsgDiv.classList.add('fade-out')
+                setTimeout(() => {
+                    aceChangeMsgDiv.style.display = 'none'
+                    aceChangeMsgDiv.classList.remove('fade-out')
+                    aceChangeMsgDiv.innerHTML = '';
+                }, 1000)
+            }, 3000)
+
         } else {
             console.log('this is dealer')
             dealerTotal -= 10
         }
-
         console.log('ace changed:', plyrOrDlr[aceIdx], playerTotal, dealerTotal)
     } else {
         console.log('there is no ace that qualifies')
@@ -230,6 +245,7 @@ function addCardTotal() {
 function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (playerTotal === 21 && dealerTotal < 21) {
+        console.log('this is a blackjack! yay')
         displayResult.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
         displayFunds()
@@ -239,16 +255,15 @@ function checkForBlackjack() {
 }
 
 // this creates a card image to display
-function constructCardImg(cardObject) {
+function createCardImg(card) {
     const cardImage = document.createElement('img')
     cardImage.classList.add('card')
-    cardImage.alt = `${cardObject.suit} ${cardObject.rank}`
-    cardImage.src = cardObject.src
+    cardImage.alt = `${card.suit} ${card.rank}`
+    cardImage.src = card.src
     return cardImage
 }
 
 function displayCards() {
-    // * update to having the img there and then changing the image src
     if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
 
@@ -259,11 +274,11 @@ function displayCards() {
         hiddenCard.src = './img/cards/back-blue-1.png'
 
         // dealer 1st card image
-        const dealer1stCard = constructCardImg(cards.dealer[0])
+        const dealer1stCard = createCardImg(cards.dealer[0])
 
         // create player card images
-        const player1stCard = constructCardImg(cards.player[0])
-        const player2ndCard = constructCardImg(cards.player[1])
+        const player1stCard = createCardImg(cards.player[0])
+        const player2ndCard = createCardImg(cards.player[1])
 
         // DISPLAY HERE
         displayDealerCards.append(dealer1stCard, hiddenCard)
@@ -274,7 +289,7 @@ function displayCards() {
     }
     else {
         console.log('displayCards() for a player hit card')
-        const playerHitCard = constructCardImg(cards.player[playerHitIdx])
+        const playerHitCard = createCardImg(cards.player[playerHitIdx])
         
         displayPlayerCards.append(playerHitCard)
         displayPlayerTotal.innerText = playerTotal
@@ -327,11 +342,7 @@ function dealerHit() {
     addCardTotal()
 
     // display dealer card
-    const dealerHitCard = document.createElement('img')
-    dealerHitCard.classList.add('card')
-    dealerHitCard.src = cards.dealer[dealerHitIdx].src
-    dealerHitCard.alt = `${cards.dealer[dealerHitIdx].suit} ${cards.dealer[dealerHitIdx].rank}`
-
+    const dealerHitCard = createCardImg(cards.dealer[dealerHitIdx])
     displayDealerCards.append(dealerHitCard)
     displayDealerTotal.innerText = dealerTotal
 }
@@ -374,7 +385,7 @@ function revealHiddenCard() {
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
     turnDisplayToFlex([scoreSection, resultDiv, playAgainButtons])
-    turnDisplayToNone([actionsBar, aceChangeMsg])
+    turnDisplayToNone([actionsBar])
     // this changes the bet display to 0
     betAmount[0].innerText = '0'
     updateHighScore()

@@ -346,3 +346,20 @@ h3 {
 .card:hover {
     transform: scale(1.3);
 }
+
+/* Ace change msg fades */
+
+#ace-change-msg {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    margin: 20px;
+}
+
+    #ace-change-msg.fade-in {
+        opacity: 1;
+    }
+
+    #ace-change-msg.fade-out {
+        opacity: 0;
+    }

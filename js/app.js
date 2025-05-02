@@ -1,7 +1,7 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
 // Messages
-const aceChangeMsgDiv = document.querySelector('#ace-change-msg')
+const aceMsgElement = document.querySelector('#ace-change-msg')
 
 // Logos
 const largeLogo = document.querySelector('#large-logo')
@@ -69,6 +69,7 @@ function displayFunds() {
     walletAmount.forEach(bank => bank.innerText = wallet)
 }
 
+
 /* --------------------------------------- High Score -------------------------------------- */
 
 // TODO IN PROGRESS 
@@ -87,11 +88,43 @@ function updateHighScore() {
 
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
-[1,2,3,4].forEach(num => {
-    console.log(num)
-})
-
 displayFunds()
+
+// messaging when bet is too low
+// messaging when wallet is too low
+// const lowBetDiv = document.querySelector('#low-bet')
+// const lowWalletDiv = document.querySelector('#low-wallet')
+
+// function betIsLow() {
+//     // usually set to none
+//     console.log('betIsLow() called')
+//     lowBetDiv.style.display = 'flex'
+//     requestAnimationFrame(() => lowBetDiv.classList.add('fade-in'))
+
+//     setTimeout(() => {
+//         lowBetDiv.classList.remove('fade-in')
+//         lowBetDiv.classList.add('fade-out')
+//         setTimeout(() => {
+//             lowBetDiv.style.display = 'none'
+//             lowBetDiv.classList.remove('fade-out')
+//         }, 1000)
+//     }, 2500)
+// }
+
+// function walletIsLow() {
+//     console.log('walletIsLow() called')
+//     lowWalletDiv.style.display = 'flex'
+//     requestAnimationFrame(() => lowWalletDiv.classList.add('fade-in'))
+
+//     setTimeout(() => {
+//         lowWalletDiv.classList.remove('fade-in')
+//         lowWalletDiv.classList.add('fade-out')
+//         setTimeout(() => {
+//             lowWalletDiv.style.display = 'none'
+//             lowWalletDiv.classList.remove('fade-out')
+//         }, 1000)
+//     }, 2500)
+// }
 
 // these functions take an array, turn the display of each element to either flex or none
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
@@ -125,13 +158,14 @@ function shuffle() {
 
 function play() {
     console.log('player pressed play. START')
-    // TODO need user facing message. wallet is too low, reset funds
+
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
         return
+    } else if (bet < 10) {
+        return
     }
-    // TODO user facing message, bet is below min. amnt
-    if (bet < 10) return
+
     startGame()
     console.log('turning homescreen divs to none and showing game cards')
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
@@ -150,13 +184,14 @@ function goBetScreen() {
 
 function playAgain() {
     console.log('this will start a quick play game')
-    // TODO need user facing message. wallet is too low, reset funds
+
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
         return
+    } else if (bet < 10) {
+        return
     }
-    // TODO user facing message, bet is below min. amnt
-    if (bet < 10) return
+
     resetGame()
     turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
     turnDisplayToFlex([actionsBar])
@@ -177,12 +212,10 @@ function getCard() {
 
 function dealCards() {
     cards.dealer.push(getCard(), getCard())
-    cards.player.push(getCard(), getCard())
-
-    // * ace edge case:
-    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // cards.player.push(ace1, ace2)
+    // cards.player.push(getCard(), getCard())
+    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    cards.player.push(ace1, ace2)
 
     console.log('Dealt 4 cards to cards:', cards)
 }
@@ -200,22 +233,18 @@ function changeAceValues(plyrOrDlr) {
         if (plyrOrDlr === cards.player) {
             console.log('this is a player')
             playerTotal -= 10
-
             // display ace change message
-            aceChangeMsgDiv.style.display = 'flex'
-            const aceMsg = document.createElement('p')
-            aceMsg.innerText = 'Your Ace value has changed from 11 to 1.'
-            aceChangeMsgDiv.append(aceMsg)
-            requestAnimationFrame(() => aceChangeMsgDiv.classList.add('fade-in'))
+            console.log(aceMsgElement)
+            aceMsgElement.style.display = 'flex'
+            requestAnimationFrame(() => aceMsgElement.classList.add('fade-in'))
             setTimeout(() => {
-                aceChangeMsgDiv.classList.remove('fade-in')
-                aceChangeMsgDiv.classList.add('fade-out')
+                aceMsgElement.classList.remove('fade-in')
+                aceMsgElement.classList.add('fade-out')
                 setTimeout(() => {
-                    aceChangeMsgDiv.style.display = 'none'
-                    aceChangeMsgDiv.classList.remove('fade-out')
-                    aceChangeMsgDiv.innerHTML = '';
+                    aceMsgElement.style.display = 'none'
+                    aceMsgElement.classList.remove('fade-out')
                 }, 1000)
-            }, 3000)
+            }, 2500)
 
         } else {
             console.log('this is dealer')

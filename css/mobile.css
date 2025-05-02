@@ -308,23 +308,23 @@ h3 {
 
 /* Game screen rows */
 
-#column-1, #column-2 {
+#game-table-column-1, #game-table-column-2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#column-2 {
+#game-table-column-2 {
     gap: 10px;
 }
 
-#column-1 {
+#game-table-column-1 {
     gap: 10px;
     margin-top: 25px;
 }
 
-#column-1 p {
+#game-table-column-1 p {
     margin: 10px 0 0 0;
     font-size: 1rem;
 }
@@ -356,10 +356,10 @@ h3 {
     margin: 20px;
 }
 
-    #ace-change-msg.fade-in {
-        opacity: 1;
-    }
+#ace-change-msg.fade-in {
+    opacity: 1;
+}
 
-    #ace-change-msg.fade-out {
-        opacity: 0;
-    }
+#ace-change-msg.fade-out {
+    opacity: 0;
+}

@@ -267,6 +267,7 @@ h3 {
         justify-content: center;
         gap: 3px;
         min-width: 400px;
+        max-width: 410px;
     }
 
 #result {
@@ -284,28 +285,27 @@ h3 {
 
 /* Game screen rows */
 
-#column-1 {
+#game-table-column-1 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 0 20px 20px;
+    padding: 20px 0;
     gap: 10px;
 }
 
-    #column-1 p {
+    #game-table-column-1 p {
         text-align: center;
         font-size: .85rem;
     }
 
-#column-2 {
+#game-table-column-2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px 20px 0;
     gap: 18px;
-    min-width: 380px;
+    min-width: 340px;
 }
 
 #game-table {
@@ -333,7 +333,7 @@ h3 {
     transform: scale(1.1)
 }
 
-/* Ace change msg fades */
+/* Ace change msg, bet too low msg, wallet too low msg - fades */
 
 #ace-change-msg {
     display: none;
@@ -350,32 +350,47 @@ h3 {
     }
 
 
-@media screen and (max-width: 960px) {
-    #dealer-cards, #player-cards {
-        min-width: 320px;
+/* #low-bet, #low-wallet {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+    #low-bet.fade-in, #low-wallet.fade-in {
+        opacity: 1;
     }
 
-    #column-1 {
+    #low-bet.fade-out, #low-wallet.fade-out {
+        opacity: 0;
+    } */
+
+@media screen and (max-width: 960px) {
+    #dealer-cards, #player-cards {
+        min-width: 280px;
+        max-width: 315px;
+    }
+
+    #game-table-column-1 {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 10px 20px 20px;
+        padding: 20px 10px;
         gap: 10px;
     }
     
-        #column-1 p {
+        #game-table-column-1 p {
             text-align: center;
             font-size: .85rem;
         }
     
-    #column-2 {
+    #game-table-column-2 {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 20px 20px 10px;
+        padding: 20px 10px;
         gap: 18px;
-        min-width: 200px
+        max-width: 200px;
     }
 }

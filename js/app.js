@@ -133,10 +133,10 @@ function play() {
         handleFadeMsg(lowBetDiv)
         return
     }
-    startGame()
     console.log('turning homescreen divs to none and showing game cards')
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
+    startGame()
 }
 
 function goBetScreen() {
@@ -159,6 +159,7 @@ function playAgain() {
         return
     }
     resetGame()
+    console.log('turning result divs, play again buttons to none. showing actions bar')
     turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
     turnDisplayToFlex([actionsBar])
     startGame()
@@ -177,12 +178,17 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    player.cards.push(getCard(), getCard())
+    // player.cards.push(getCard(), getCard())
 
     // * ace edge case
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
     // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
     // player.cards.push(ace1, ace2)
+
+    // * blackjack edge case
+    const testcard10 = cardDeck.find(c => c.value === 10)
+    const testace11 = cardDeck.find(c => c.rank === 'ace')
+    player.cards.push(testcard10, testace11)
 
     console.log('player hand:', player, 'dealer hand:', dealer)
 }
@@ -259,8 +265,8 @@ function displayCards() {
 
         // Use createCardImg to append here
         displayDealerCards.append(createCardImg(dealer.cards[0]), hiddenCard)
-        displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
         displayDealerTotal.innerText = dealer.cards[0].value
+        displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
         displayPlayerTotal.innerText = player.total
     }
     else {

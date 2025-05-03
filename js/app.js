@@ -178,7 +178,7 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    // player.cards.push(getCard(), getCard())
+    player.cards.push(getCard(), getCard())
 
     // * ace edge case
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
@@ -186,9 +186,9 @@ function dealCards() {
     // player.cards.push(ace1, ace2)
 
     // * blackjack edge case
-    const testcard10 = cardDeck.find(c => c.value === 10)
-    const testace11 = cardDeck.find(c => c.rank === 'ace')
-    player.cards.push(testcard10, testace11)
+    // const testcard10 = cardDeck.find(c => c.value === 10)
+    // const testace11 = cardDeck.find(c => c.rank === 'ace')
+    // player.cards.push(testcard10, testace11)
 
     console.log('player hand:', player, 'dealer hand:', dealer)
 }
@@ -239,9 +239,9 @@ function checkForBlackjack() {
         console.log('this is a blackjack! yay')
         displayResult.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
-        displayFunds()
-        revealHiddenCard()
-        showResultScreen()
+        setTimeout(revealHiddenCard, 400)
+        setTimeout(displayFunds, 700)
+        setTimeout(showResultScreen, 700)
     } else if (player.total === 21 && dealer.total === 21) stand()
 }
 
@@ -294,14 +294,14 @@ function hit() {
 function checkForBust(pTotal, dTotal) {
     console.log('checking for bust (pTotal, dTotal)')
     if (pTotal > 21) {
-        revealHiddenCard()
-        showResultScreen()
+        setTimeout(revealHiddenCard, 400)
+        setTimeout(showResultScreen, 700)
         displayResult.innerText = `You Bust`
     } 
     else if (dTotal > 21) {
         wallet += bet * 2
-        displayFunds()
-        showResultScreen()
+        setTimeout(displayFunds, 700)
+        setTimeout(showResultScreen, 700)
         displayResult.innerText = 'You Win'
         return 1
     }
@@ -310,7 +310,7 @@ function checkForBust(pTotal, dTotal) {
 function stand() {
     console.log('stand() is called')
     // dealer's turn
-    revealHiddenCard()
+    setTimeout(revealHiddenCard, 400)
     while (dealer.total <= 16) dealerHit()
     if (!checkForBust(player.total, dealer.total)) compareResult()
 }
@@ -321,11 +321,12 @@ function dealerHit() {
     dealer.cards.push(newCard)
     dealer.hitCardIdx = dealer.cards.findIndex((card) => card === newCard)
     addCardTotal()
-
     // display dealer card
     const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
-    displayDealerCards.append(dealerHitCard)
-    displayDealerTotal.innerText = dealer.total
+    setTimeout(() => {
+        displayDealerCards.append(dealerHitCard)
+        displayDealerTotal.innerText = dealer.total
+    }, 400)
 }
 
 function compareResult() {
@@ -349,8 +350,8 @@ function compareResult() {
     else {
         displayResult.innerText = `You Lose`
     }
-    displayFunds()
-    showResultScreen()
+    setTimeout(displayFunds, 700)
+    setTimeout(showResultScreen, 700)
 }
 
 function revealHiddenCard() {

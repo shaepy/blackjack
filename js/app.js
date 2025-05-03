@@ -39,17 +39,11 @@ const highScoreDisplays = document.querySelectorAll('.high-score')
 
 /* --------------------------------------- Variables -------------------------------------- */
 
-let cards = {dealer: [], player: []}
+let dealer = {cards: [], total: 0, hitCardIdx: 0}
+let player = {cards: [], total: 0, hitCardIdx: 0}
 
-// let dealer = {cards: [], total: 0, dealerHitIdx: 0}
-// let player = {cards: [], total: 0, playerHitIdx: 0}
-
-// Save totals, and dealt card indexes
-let dealerTotal, playerTotal, playerHitIdx, dealerHitIdx
-
-let bet = 0
-let wallet = 50
-let score = 0
+let bet = score = 0
+let wallet = 100
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
@@ -115,9 +109,9 @@ function startGame() {
 function resetGame() {
     console.log('resetting the game')
     shuffle()
-    cards.dealer = []
-    cards.player = []
-    dealerTotal = playerTotal = 0
+    dealer.cards = []
+    player.cards = []
+    dealer.total = player.total = 0
     resetDisplays.forEach(div => div.innerText = '')
 }
 
@@ -182,13 +176,15 @@ function getCard() {
 }
 
 function dealCards() {
-    cards.dealer.push(getCard(), getCard())
-    // cards.player.push(getCard(), getCard())
-    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    cards.player.push(ace1, ace2)
+    dealer.cards.push(getCard(), getCard())
+    player.cards.push(getCard(), getCard())
 
-    console.log('Dealt 4 cards to cards:', cards)
+    // * ace edge case
+    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    // player.cards.push(ace1, ace2)
+
+    console.log('player hand:', player, 'dealer hand:', dealer)
 }
 
 function changeAceValues(plyrOrDlr) {
@@ -201,16 +197,16 @@ function changeAceValues(plyrOrDlr) {
         plyrOrDlr[aceIdx].aceValueChanged = true
         console.log('changed!', plyrOrDlr[aceIdx])
 
-        if (plyrOrDlr === cards.player) {
+        if (plyrOrDlr === player.cards) {
             console.log('this is a player')
-            playerTotal -= 10
+            player.total -= 10
             // display ace change message with fade
             handleFadeMsg(aceMsgElement)
         } else {
             console.log('this is dealer')
-            dealerTotal -= 10
+            dealer.total -= 10
         }
-        console.log('ace changed:', plyrOrDlr[aceIdx], playerTotal, dealerTotal)
+        console.log('ace changed:', plyrOrDlr[aceIdx], player.total, dealer.total)
     } else {
         console.log('there is no ace that qualifies')
     }
@@ -218,29 +214,29 @@ function changeAceValues(plyrOrDlr) {
 
 function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
-    dealerTotal = cards.dealer.reduce((acc, card) => acc + card.value, 0)
-    playerTotal = cards.player.reduce((acc, card) => acc + card.value, 0)
+    dealer.total = dealer.cards.reduce((acc, card) => acc + card.value, 0)
+    player.total = player.cards.reduce((acc, card) => acc + card.value, 0)
 
-    if (dealerTotal > 21) {
-        console.log('this is over 21. dealer total:', dealerTotal)
-        changeAceValues(cards.dealer)
+    if (dealer.total > 21) {
+        console.log('this is over 21. dealer total:', dealer.total)
+        changeAceValues(dealer.cards)
     } 
-    if (playerTotal > 21) {
-        console.log('this is over 21. player total:', playerTotal)
-        changeAceValues(cards.player)
+    if (player.total > 21) {
+        console.log('this is over 21. player total:', player.total)
+        changeAceValues(player.cards)
     }
 }
 
 function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
-    if (playerTotal === 21 && dealerTotal < 21) {
+    if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
         displayResult.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
         displayFunds()
         revealHiddenCard()
         showResultScreen()
-    } else if (playerTotal === 21 && dealerTotal === 21) stand()
+    } else if (player.total === 21 && dealer.total === 21) stand()
 }
 
 // This takes a card object and creates a card image HTML element to display
@@ -262,29 +258,30 @@ function displayCards() {
         hiddenCard.src = './img/cards/back-blue-1.png'
 
         // Use createCardImg to append here
-        displayDealerCards.append(createCardImg(cards.dealer[0]), hiddenCard)
-        displayPlayerCards.append(createCardImg(cards.player[0]), createCardImg(cards.player[1]))
-        displayDealerTotal.innerText = cards.dealer[0].value
-        displayPlayerTotal.innerText = playerTotal
+        displayDealerCards.append(createCardImg(dealer.cards[0]), hiddenCard)
+        displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
+        displayDealerTotal.innerText = dealer.cards[0].value
+        displayPlayerTotal.innerText = player.total
     }
     else {
         console.log('displayCards() for a player hit card')
-        displayPlayerCards.append(createCardImg(cards.player[playerHitIdx]))
-        displayPlayerTotal.innerText = playerTotal
+        displayPlayerCards.append(createCardImg(player.cards[player.hitCardIdx]))
+        displayPlayerTotal.innerText = player.total
     }
 }
 
 function hit() {
     console.log('player pressed hit()')
     const newCard = getCard()
-    cards.player.push(newCard)
-    playerHitIdx = cards.player.findIndex((card) => card === newCard)
+    player.cards.push(newCard)
+    player.hitCardIdx = player.cards.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
+    console.log(player)
     // if 21, autostand
-    if (playerTotal === 21) stand()
+    if (player.total === 21) stand()
     // check for bust
-    checkForBust(playerTotal, dealerTotal)
+    checkForBust(player.total, dealer.total)
 }
 
 // this takes a player total and a dealer total to check for bust
@@ -308,21 +305,21 @@ function stand() {
     console.log('stand() is called')
     // dealer's turn
     revealHiddenCard()
-    while (dealerTotal <= 16) dealerHit()
-    if (!checkForBust(playerTotal, dealerTotal)) compareResult()
+    while (dealer.total <= 16) dealerHit()
+    if (!checkForBust(player.total, dealer.total)) compareResult()
 }
 
 function dealerHit() {
     console.log('total is <=16. dealerHit')
     const newCard = getCard()
-    cards.dealer.push(newCard)
-    dealerHitIdx = cards.dealer.findIndex((card) => card === newCard)
+    dealer.cards.push(newCard)
+    dealer.hitCardIdx = dealer.cards.findIndex((card) => card === newCard)
     addCardTotal()
 
     // display dealer card
-    const dealerHitCard = createCardImg(cards.dealer[dealerHitIdx])
+    const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
     displayDealerCards.append(dealerHitCard)
-    displayDealerTotal.innerText = dealerTotal
+    displayDealerTotal.innerText = dealer.total
 }
 
 function compareResult() {
@@ -333,21 +330,18 @@ function compareResult() {
         const diff2 = Math.abs(n2 - 21)
         return diff1 < diff2
     }
-    const playerIsWinner = closerTo21(playerTotal, dealerTotal)
+    const playerIsWinner = closerTo21(player.total, dealer.total)
 
-    if (playerTotal === dealerTotal) {
+    if (player.total === dealer.total) {
         wallet += bet
         displayResult.innerText = `Push`
-        console.log('playerTotal === dealerTotal. Push')
     } 
     else if (playerIsWinner) {
         wallet += bet * 2
         displayResult.innerText = `You Win`
-        console.log('playerIsWinner is true. Player wins')
     }
     else {
         displayResult.innerText = `You Lose`
-        console.log('else, Player loses')
     }
     displayFunds()
     showResultScreen()
@@ -356,17 +350,19 @@ function compareResult() {
 function revealHiddenCard() {
     console.log('revealHiddenCard(), showing dealers 2nd card')
     const hiddenCard = document.querySelector('#hidden-card')
-    if (hiddenCard) hiddenCard.src = cards.dealer[1].src
-    displayDealerTotal.innerText = dealerTotal
+    if (hiddenCard) hiddenCard.src = dealer.cards[1].src
+    displayDealerTotal.innerText = dealer.total
 }
 
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
+
     // this changes the bet display to 0
     betAmount[0].innerText = '0'
 
+    // check for high score
     if (wallet > score) {
         score = wallet
         console.log('wallet is greater than 0, so score is now:', score)
@@ -382,8 +378,3 @@ function toggleHelp() {
         instructions.style.display = 'none'
     } else {instructions.style.display = 'flex'}
 }
-
-
-/* --------------------------------------- Comments -------------------------------------- */
-
-// FIXED. edge case: when two aces are in the hand, it will default both to 1.

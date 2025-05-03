@@ -1,13 +1,15 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
-// Messages
+// Message elements
 const aceMsgElement = document.querySelector('#ace-change-msg')
+const lowBetDiv = document.querySelector('#low-bet')
+const lowWalletDiv = document.querySelector('#low-wallet')
 
-// Logos
+// Logo elemenets
 const largeLogo = document.querySelector('#large-logo')
 const smallLogo = document.querySelector('#small-logo')
 
-// Displays
+// Display elements
 const actionsBar = document.querySelector('#actions')
 const resultDiv = document.querySelector('#result')
 const gameTable = document.querySelector('#game-table')
@@ -15,7 +17,7 @@ const gameBank = document.querySelector('#game-bank')
 const homeScreen = document.querySelector('#home-screen')
 const playAgainButtons = document.querySelector('#play-again-buttons')
 
-// Cards, result, totals
+// Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
 const displayResult = document.querySelector('#result h2')
@@ -30,16 +32,24 @@ const resetDisplays = [
     displayPlayerTotal
 ]
 
+// High score displays
+const gameScoreDiv = document.querySelector('#game-score')
+const homeScoreDiv = document.querySelector('#home-score')
+const highScoreDisplays = document.querySelectorAll('.high-score')
+
 /* --------------------------------------- Variables -------------------------------------- */
 
 let cards = {dealer: [], player: []}
 
+// let dealer = {cards: [], total: 0, dealerHitIdx: 0}
+// let player = {cards: [], total: 0, playerHitIdx: 0}
+
 // Save totals, and dealt card indexes
 let dealerTotal, playerTotal, playerHitIdx, dealerHitIdx
 
-// default bet and wallet
 let bet = 0
-let wallet = 25
+let wallet = 50
+let score = 0
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
@@ -53,7 +63,8 @@ document.querySelector('#info-button').addEventListener('click', toggleHelp)
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
 const resetWallet = document.querySelector('#reset-wallet')
-resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()}) // refill wallet & displayFunds
+// refill wallet & displayFunds
+resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()})
 
 const betAmount = document.querySelectorAll('.bet-amnt h3')
 const walletAmount = document.querySelectorAll('.wallet-amnt h3')
@@ -69,59 +80,21 @@ function displayFunds() {
     walletAmount.forEach(bank => bank.innerText = wallet)
 }
 
-
-/* --------------------------------------- High Score -------------------------------------- */
-
-// TODO IN PROGRESS 
-// !show high score in bet screen 
-// high score is updated and shown in gamescreen, but needs one in home screen. 
-// do something similar like gamebank and homebank
-
-const scoreSection = document.querySelector('#score-section')
-
-let score = 0
-
-function updateHighScore() {
-    if (wallet > score) score = wallet, console.log('update to new high score:', score)
-    document.querySelector('#high-score').innerText = score
-}
-
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
 displayFunds()
 
-// messaging when bet is too low
-// messaging when wallet is too low
-const lowBetDiv = document.querySelector('#low-bet')
-const lowWalletDiv = document.querySelector('#low-wallet')
-
-function betIsLow() {
-    // usually set to none
-    console.log('betIsLow() called')
-    lowBetDiv.style.display = 'flex'
-    requestAnimationFrame(() => lowBetDiv.classList.add('fade-in'))
-
+// this takes an element and applies the fade in/fade out transition
+function handleFadeMsg(element) {
+    console.log('handling temporary message')
+    element.style.display = 'flex'
+    requestAnimationFrame(() => element.classList.add('fade-in'))
     setTimeout(() => {
-        lowBetDiv.classList.remove('fade-in')
-        lowBetDiv.classList.add('fade-out')
+        element.classList.remove('fade-in')
+        element.classList.add('fade-out')
         setTimeout(() => {
-            lowBetDiv.style.display = 'none'
-            lowBetDiv.classList.remove('fade-out')
-        }, 1000)
-    }, 2000)
-}
-
-function walletIsLow() {
-    console.log('walletIsLow() called')
-    lowWalletDiv.style.display = 'flex'
-    requestAnimationFrame(() => lowWalletDiv.classList.add('fade-in'))
-
-    setTimeout(() => {
-        lowWalletDiv.classList.remove('fade-in')
-        lowWalletDiv.classList.add('fade-out')
-        setTimeout(() => {
-            lowWalletDiv.style.display = 'none'
-            lowWalletDiv.classList.remove('fade-out')
+            element.style.display = 'none'
+            element.classList.remove('fade-out')
         }, 1000)
     }, 2000)
 }
@@ -157,17 +130,15 @@ function shuffle() {
 }
 
 function play() {
-    console.log('player pressed play. START')
-
+    console.log('player pressed play from bet screen. START')
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        walletIsLow()
+        handleFadeMsg(lowWalletDiv)
         return
     } else if (bet < 10) {
-        betIsLow()
+        handleFadeMsg(lowBetDiv)
         return
     }
-
     startGame()
     console.log('turning homescreen divs to none and showing game cards')
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
@@ -176,7 +147,6 @@ function play() {
 
 function goBetScreen() {
     console.log('player pressed changeBet. goBetScreen() called')
-    updateHighScore()
     resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo])
     turnDisplayToFlex([homeScreen, largeLogo])
@@ -186,20 +156,17 @@ function goBetScreen() {
 
 function playAgain() {
     console.log('this will start a quick play game')
-
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        walletIsLow()
+        handleFadeMsg(lowWalletDiv)
         return
     } else if (bet < 10) {
-        betIsLow()
+        handleFadeMsg(lowBetDiv)
         return
     }
-
     resetGame()
     turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
     turnDisplayToFlex([actionsBar])
-    if (wallet < bet) resetWallet.style.display = 'flex'
     startGame()
 }
 
@@ -237,19 +204,8 @@ function changeAceValues(plyrOrDlr) {
         if (plyrOrDlr === cards.player) {
             console.log('this is a player')
             playerTotal -= 10
-            // display ace change message
-            console.log(aceMsgElement)
-            aceMsgElement.style.display = 'flex'
-            requestAnimationFrame(() => aceMsgElement.classList.add('fade-in'))
-            setTimeout(() => {
-                aceMsgElement.classList.remove('fade-in')
-                aceMsgElement.classList.add('fade-out')
-                setTimeout(() => {
-                    aceMsgElement.style.display = 'none'
-                    aceMsgElement.classList.remove('fade-out')
-                }, 1000)
-            }, 2000)
-
+            // display ace change message with fade
+            handleFadeMsg(aceMsgElement)
         } else {
             console.log('this is dealer')
             dealerTotal -= 10
@@ -287,7 +243,7 @@ function checkForBlackjack() {
     } else if (playerTotal === 21 && dealerTotal === 21) stand()
 }
 
-// this creates a card image to display
+// This takes a card object and creates a card image HTML element to display
 function createCardImg(card) {
     const cardImage = document.createElement('img')
     cardImage.classList.add('card')
@@ -299,32 +255,21 @@ function createCardImg(card) {
 function displayCards() {
     if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
-
         // create dealer back card img element
         const hiddenCard = document.createElement('img')
         hiddenCard.classList.add('card')
         hiddenCard.id = 'hidden-card'
         hiddenCard.src = './img/cards/back-blue-1.png'
 
-        // dealer 1st card image
-        const dealer1stCard = createCardImg(cards.dealer[0])
-
-        // create player card images
-        const player1stCard = createCardImg(cards.player[0])
-        const player2ndCard = createCardImg(cards.player[1])
-
-        // DISPLAY HERE
-        displayDealerCards.append(dealer1stCard, hiddenCard)
+        // Use createCardImg to append here
+        displayDealerCards.append(createCardImg(cards.dealer[0]), hiddenCard)
+        displayPlayerCards.append(createCardImg(cards.player[0]), createCardImg(cards.player[1]))
         displayDealerTotal.innerText = cards.dealer[0].value
-
-        displayPlayerCards.append(player1stCard, player2ndCard)
         displayPlayerTotal.innerText = playerTotal
     }
     else {
         console.log('displayCards() for a player hit card')
-        const playerHitCard = createCardImg(cards.player[playerHitIdx])
-        
-        displayPlayerCards.append(playerHitCard)
+        displayPlayerCards.append(createCardImg(cards.player[playerHitIdx]))
         displayPlayerTotal.innerText = playerTotal
     }
 }
@@ -417,11 +362,17 @@ function revealHiddenCard() {
 
 function showResultScreen() {
     console.log('showResultScreen(), showing elements')
-    turnDisplayToFlex([scoreSection, resultDiv, playAgainButtons])
+    turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
     // this changes the bet display to 0
     betAmount[0].innerText = '0'
-    updateHighScore()
+
+    if (wallet > score) {
+        score = wallet
+        console.log('wallet is greater than 0, so score is now:', score)
+        turnDisplayToFlex([gameScoreDiv, homeScoreDiv])
+        highScoreDisplays.forEach(display => display.innerText = score)
+    }
 }
 
 function toggleHelp() {

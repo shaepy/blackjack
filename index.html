@@ -70,9 +70,9 @@
                     <button id="stand">stand</button>
                 </div>
                 <!-- add score section to home screen below bank, change to classes and update functions/querySelectors -->
-                <div id="score-section">
-                    <div>high score</div>
-                    <div id="high-score"></div>
+                <div class="score-section" id="game-score">
+                    <p>high score</p>
+                    <span class="high-score"></span>
                 </div>
                 <div id="play-again-buttons">
                     <button id="play-again" class="play">play again</button>
@@ -101,10 +101,15 @@
             </div>
 
             <button id="start-game" class="play">play</button>
+
+            <div class="score-section" id="home-score">
+                <p>high score</p>
+                <span class="high-score"></span>
+            </div>
         </div>
 
-        <div id="low-bet"><p>Select a bet before pressing play</p></div>
-        <div id="low-wallet"><p>You do not have enough funds. Reset your wallet</p></div>
+        <div id="low-bet"><p>Choose a bet amount to start a game</p></div>
+        <div id="low-wallet"><p>Your wallet is too low. Reset to add funds</p></div>
     </div>
 </body>
 </html>

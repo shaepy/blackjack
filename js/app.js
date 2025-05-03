@@ -239,9 +239,9 @@ function checkForBlackjack() {
         console.log('this is a blackjack! yay')
         displayResult.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
-        setTimeout(revealHiddenCard, 400)
-        setTimeout(displayFunds, 700)
-        setTimeout(showResultScreen, 700)
+        setTimeout(revealHiddenCard, 410)
+        setTimeout(displayFunds, 600)
+        setTimeout(showResultScreen, 600)
     } else if (player.total === 21 && dealer.total === 21) stand()
 }
 
@@ -294,14 +294,14 @@ function hit() {
 function checkForBust(pTotal, dTotal) {
     console.log('checking for bust (pTotal, dTotal)')
     if (pTotal > 21) {
-        setTimeout(revealHiddenCard, 400)
-        setTimeout(showResultScreen, 700)
+        setTimeout(revealHiddenCard, 410)
+        setTimeout(showResultScreen, 600)
         displayResult.innerText = `You Bust`
     } 
     else if (dTotal > 21) {
         wallet += bet * 2
-        setTimeout(displayFunds, 700)
-        setTimeout(showResultScreen, 700)
+        setTimeout(displayFunds, 600)
+        setTimeout(showResultScreen, 600)
         displayResult.innerText = 'You Win'
         return 1
     }
@@ -310,7 +310,7 @@ function checkForBust(pTotal, dTotal) {
 function stand() {
     console.log('stand() is called')
     // dealer's turn
-    setTimeout(revealHiddenCard, 400)
+    setTimeout(revealHiddenCard, 410)
     while (dealer.total <= 16) dealerHit()
     if (!checkForBust(player.total, dealer.total)) compareResult()
 }
@@ -326,7 +326,7 @@ function dealerHit() {
     setTimeout(() => {
         displayDealerCards.append(dealerHitCard)
         displayDealerTotal.innerText = dealer.total
-    }, 400)
+    }, 410)
 }
 
 function compareResult() {
@@ -350,8 +350,8 @@ function compareResult() {
     else {
         displayResult.innerText = `You Lose`
     }
-    setTimeout(displayFunds, 700)
-    setTimeout(showResultScreen, 700)
+    setTimeout(displayFunds, 600)
+    setTimeout(showResultScreen, 600)
 }
 
 function revealHiddenCard() {

@@ -319,7 +319,7 @@ h3 {
 
 #result h2 {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
 }
 
 /* Game screen rows */
@@ -355,7 +355,7 @@ h3 {
 /* Card images */
 
 .card {
-    width: 55px;
+    width: 68px;
     padding: 1px 0;
 }
 
@@ -381,4 +381,19 @@ h3 {
 
 #low-bet, #low-wallet {
     margin-top: 15px;
+}
+
+@media screen and (max-width: 431px) {
+    .card {
+        width: 55px;
+    }
+
+    .card:hover {
+        transform: scale(1.5);
+    }
+
+    #result h2 {
+        text-align: center;
+        font-size: 1.5rem;
+    }
 }

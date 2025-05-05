@@ -24,14 +24,6 @@ const displayResult = document.querySelector('#result h2')
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
 
-const resetDisplays = [
-    displayResult, 
-    displayDealerCards, 
-    displayDealerTotal, 
-    displayPlayerCards, 
-    displayPlayerTotal
-]
-
 // High score displays
 const gameScoreDiv = document.querySelector('#game-score')
 const homeScoreDiv = document.querySelector('#home-score')
@@ -50,7 +42,7 @@ let wallet = 100
 document.querySelector('#start-game').addEventListener('click', play)
 document.querySelector('#change-bet').addEventListener('click', goBetScreen)
 document.querySelector('#play-again').addEventListener('click', playAgain)
-document.querySelector('#hit').addEventListener('click', hit)       
+document.querySelector('#hit').addEventListener('click', hit)
 document.querySelector('#stand').addEventListener('click', stand)
 document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
@@ -73,6 +65,52 @@ function displayFunds() {
     betAmount.forEach(bank => bank.innerText = bet)
     walletAmount.forEach(bank => bank.innerText = wallet)
 }
+
+/* --------------------------------------- Split Feature -------------------------------------- */
+
+let splitHand = {cards: [], total: 0, hitCardIdx: 0}
+let activeHand = player
+
+const displaySplitCards = document.querySelector('#splitHand-cards')
+const displaySplitTotal = document.querySelector('#splitHand-total')
+const splitCardsViewDiv = document.querySelector('#split-view-2')
+
+document.querySelector('#split').addEventListener('click', splitCards)
+
+function splitCards() {
+    console.log('player presses split button')
+
+    // split the cards
+    turnDisplayToFlex([splitCardsViewDiv])
+    const splitCard = player.cards.pop()
+    splitHand.cards.push(splitCard)
+    console.log('split hand is now:', splitHand.cards)
+
+    // display splitHand
+    displaySplitCards.append(createCardImg(splitHand.cards[0]))
+
+    // show total
+    splitHand.total = splitHand.cards[0].value
+    displaySplitTotal.innerText = splitHand.total
+
+    player.total = player.cards[0].value
+    displayPlayerTotal.innerText = player.total
+
+    // remove from player cards
+    const playerCardsImages = document.querySelectorAll('#player-cards img')
+    console.log(playerCardsImages)
+    playerCardsImages[1].remove()
+}
+
+const resetDisplays = [
+    displayResult, 
+    displayDealerCards, 
+    displayDealerTotal, 
+    displayPlayerCards, 
+    displayPlayerTotal,
+    displaySplitCards,
+    displaySplitTotal
+]
 
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
@@ -111,7 +149,8 @@ function resetGame() {
     shuffle()
     dealer.cards = []
     player.cards = []
-    dealer.total = player.total = 0
+    splitHand.cards = []
+    dealer.total = player.total = splitHand.total = 0
     resetDisplays.forEach(div => div.innerText = '')
 }
 
@@ -142,7 +181,7 @@ function play() {
 function goBetScreen() {
     console.log('player pressed changeBet. goBetScreen() called')
     resetGame()
-    turnDisplayToNone([gameTable, resultDiv, smallLogo])
+    turnDisplayToNone([gameTable, resultDiv, smallLogo, splitCardsViewDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
     // show reset wallet when wallet is less than bet
     if (wallet < bet) resetWallet.style.display = 'flex'
@@ -160,7 +199,7 @@ function playAgain() {
     }
     resetGame()
     console.log('turning result divs, play again buttons to none. showing actions bar')
-    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
+    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet, splitCardsViewDiv])
     turnDisplayToFlex([actionsBar])
     startGame()
 }
@@ -178,17 +217,22 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    player.cards.push(getCard(), getCard())
+    // player.cards.push(getCard(), getCard())
 
     // * ace edge case
-    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // player.cards.push(ace1, ace2)
+    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    player.cards.push(ace1, ace2)
 
     // * blackjack edge case
     // const testcard10 = cardDeck.find(c => c.value === 10)
     // const testace11 = cardDeck.find(c => c.rank === 'ace')
     // player.cards.push(testcard10, testace11)
+
+    // if dealt cards are same rank, show split button
+    if (player.cards[0].rank === player.cards[1].rank) {
+        document.querySelector('#split').style.display = 'flex'
+    }
 
     console.log('player hand:', player, 'dealer hand:', dealer)
 }
@@ -222,6 +266,7 @@ function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
     dealer.total = dealer.cards.reduce((acc, card) => acc + card.value, 0)
     player.total = player.cards.reduce((acc, card) => acc + card.value, 0)
+    splitHand.total = splitHand.cards.reduce((acc, card) => acc + card.value, 0)
 
     if (dealer.total > 21) {
         console.log('this is over 21. dealer total:', dealer.total)
@@ -271,33 +316,62 @@ function displayCards() {
     }
     else {
         console.log('displayCards() for a player hit card')
-        displayPlayerCards.append(createCardImg(player.cards[player.hitCardIdx]))
-        displayPlayerTotal.innerText = player.total
+
+        if (activeHand === player) {
+            displayPlayerCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            displayPlayerTotal.innerText = activeHand.total
+        } else {
+            displaySplitCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            displaySplitTotal.innerText = activeHand.total
+        }
     }
 }
 
 function hit() {
     console.log('player pressed hit()')
+
+    console.log(activeHand)
+
     const newCard = getCard()
-    player.cards.push(newCard)
-    player.hitCardIdx = player.cards.findIndex((card) => card === newCard)
+    activeHand.cards.push(newCard)
+    console.log('new card added:', activeHand)
+
+    activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
-    console.log(player)
+    console.log('total is now:', activeHand)
     // if 21, autostand
-    if (player.total === 21) stand()
+    if (activeHand.total === 21) {
+        stand()
+        return
+    }
     // check for bust
-    checkForBust(player.total, dealer.total)
+    checkForBust(activeHand.total, dealer.total)
 }
 
 // this takes a player total and a dealer total to check for bust
 function checkForBust(pTotal, dTotal) {
     console.log('checking for bust (pTotal, dTotal)')
+
     if (pTotal > 21) {
+        // check if this hand is split
+        if (activeHand === player && splitHand.cards.length > 0) {
+            // this is a bust check for first hand
+            console.log('1st hand is a BUST. standing now')
+            stand()
+            return
+        } else if (activeHand === splitHand) {
+            // this is a bust check for second hand
+            console.log('2nd hand is a BUST. auto compareSplitResult()')
+            compareSplitResult()
+            return
+        }
+        // proceed as normal
         setTimeout(revealHiddenCard, 350)
         setTimeout(showResultScreen, 500)
         displayResult.innerText = `You Bust`
     } 
+    // !doesnt check for split
     else if (dTotal > 21) {
         wallet += bet * 2
         setTimeout(displayFunds, 500)
@@ -309,10 +383,22 @@ function checkForBust(pTotal, dTotal) {
 
 function stand() {
     console.log('stand() is called')
+
+    // check if there's a split hand
+    if (activeHand === player && splitHand.cards.length > 0) {
+        console.log('this is a splitHand stand. change activeHand')
+        // play splitHand
+        activeHand = splitHand // change activeHand
+        console.log(activeHand)
+        return
+    } else if (activeHand === splitHand) {
+        activeHand = player
+    }
+
     // dealer's turn
     setTimeout(revealHiddenCard, 350)
     while (dealer.total <= 16) dealerHit()
-    if (!checkForBust(player.total, dealer.total)) compareResult()
+    if (!checkForBust(activeHand.total, dealer.total)) compareResult()
 }
 
 function dealerHit() {
@@ -329,15 +415,47 @@ function dealerHit() {
     }, 350)
 }
 
+// returns true if n1 is less than n2 (closer to 21)
+const closerTo21 = (n1, n2) => {
+    const diff1 = Math.abs(n1 - 21)
+    const diff2 = Math.abs(n2 - 21)
+    return diff1 < diff2
+}
+
+function compareSplitResult() {
+    //compare first hand
+    const playerStandTotal = closerTo21(player.total, dealer.total)
+    console.log(playerStandTotal)
+    //compare second hand
+    const splitStandTotal = closerTo21(splitHand.total, dealer.total)
+    console.log(splitStandTotal)
+
+    if (!playerStandTotal && !splitStandTotal ) {
+        // you lose both
+        console.log('you LOSE both')
+        displayResult.innerText = `Both Hands Lose`
+    } else if (playerStandTotal && splitStandTotal) {
+        // you win both
+        console.log('you WIN both')
+        displayResult.innerText = `Both Hands Win`
+    } else {
+        // you win one
+        console.log('you WIN one')
+        displayResult.innerText = `One Hand Won`
+    }
+    setTimeout(displayFunds, 500)
+    setTimeout(showResultScreen, 500)
+}
+
 function compareResult() {
     console.log('compareResult() is running...')
-    // returns true if n1 is less than n2 (closer to 21)
-    const closerTo21 = (n1, n2) => {
-        const diff1 = Math.abs(n1 - 21)
-        const diff2 = Math.abs(n2 - 21)
-        return diff1 < diff2
+
+    if (activeHand === splitHand) {
+        compareSplitResult()
+        return
     }
-    const playerIsWinner = closerTo21(player.total, dealer.total)
+
+    const playerIsWinner = closerTo21(activeHand.total, dealer.total)
 
     if (player.total === dealer.total) {
         wallet += bet

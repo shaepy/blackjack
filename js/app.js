@@ -1,5 +1,7 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
+// FIX EDGE CASE: when player does not split and hit() first, split button should not appear
+
 // Message elements
 const aceMsgElement = document.querySelector('#ace-change-msg')
 const lowBetDiv = document.querySelector('#low-bet')
@@ -20,7 +22,7 @@ const playAgainButtons = document.querySelector('#play-again-buttons')
 // Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
-const displayResult = document.querySelector('#result h2')
+const displayH2Result = document.querySelector('#result h2')
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
 
@@ -102,16 +104,6 @@ function splitCards() {
     playerCardsImages[1].remove()
 }
 
-const resetDisplays = [
-    displayResult, 
-    displayDealerCards, 
-    displayDealerTotal, 
-    displayPlayerCards, 
-    displayPlayerTotal,
-    displaySplitCards,
-    displaySplitTotal
-]
-
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
 displayFunds()
@@ -147,7 +139,6 @@ function startGame() {
 function resetGame() {
     console.log('resetting the game')
     shuffle()
-
     // reset activehand
     if (activeHand === splitHand) activeHand = player
 
@@ -155,6 +146,15 @@ function resetGame() {
     player.cards = []
     splitHand.cards = []
     dealer.total = player.total = splitHand.total = 0
+    const resetDisplays = [
+        displayH2Result,
+        displayDealerCards, 
+        displayDealerTotal, 
+        displayPlayerCards, 
+        displayPlayerTotal,
+        displaySplitCards,
+        displaySplitTotal
+    ]
     resetDisplays.forEach(div => div.innerText = '')
 }
 
@@ -291,7 +291,7 @@ function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
-        displayResult.innerText = 'Blackjack! You Win'
+        displayH2Result.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
         setTimeout(revealHiddenCard, 350)
         setTimeout(displayFunds, 500)
@@ -338,12 +338,16 @@ function displayCards() {
 
 function hit() {
     console.log('player pressed hit()')
-
     console.log(activeHand)
 
     const newCard = getCard()
     activeHand.cards.push(newCard)
     console.log('new card added:', activeHand)
+
+    if (player.cards.length > 2) {
+        console.log('REMOVE SPLIT BUTTON')
+        document.querySelector('#split').style.display = 'none'
+    }
 
     activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
@@ -351,6 +355,7 @@ function hit() {
     console.log('total is now:', activeHand)
     // if 21, autostand
     if (activeHand.total === 21) {
+        // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND
         stand()
         return
     }
@@ -368,7 +373,7 @@ function checkForBust(hand) {
         console.log('BOTH HANDS BUST')
         setTimeout(revealHiddenCard, 350)
         setTimeout(showResultScreen, 500)
-        displayResult.innerText = `Both Hands Bust`
+        displayH2Result.innerText = `Both Hands Bust`
         return
     }
 
@@ -378,28 +383,15 @@ function checkForBust(hand) {
         // check if this hand is split
         if (splitHand.cards.length > 0) {
             console.log('this is a SPLIT with a bust. auto standing now')
+            // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND
             stand()
             return
         } 
         // proceed as normal
         setTimeout(revealHiddenCard, 350)
         setTimeout(showResultScreen, 500)
-        displayResult.innerText = `You Bust`
+        displayH2Result.innerText = `You Bust`
     } 
-    // it is dealer
-    else if (hand === dealer && hand.total > 21) {
-        // if dealer has bust while player hand is split, return to compare the result
-        if (splitHand.cards.length > 0) {
-            console.log('dealer BUST while player has split. compare hands')
-            return
-        } 
-        // else player auto wins
-        wallet += bet * 2
-        setTimeout(displayFunds, 500)
-        setTimeout(showResultScreen, 500)
-        displayResult.innerText = 'You Win'
-        return 1
-    }
 }
 
 
@@ -418,7 +410,7 @@ function stand() {
     // dealer's turn
     setTimeout(revealHiddenCard, 350)
     while (dealer.total <= 16) dealerHit()
-    if (!checkForBust(dealer)) compareResult(activeHand.total, dealer.total)
+    compareResult(activeHand.total, dealer.total)
 }
 
 function dealerHit() {
@@ -435,61 +427,63 @@ function dealerHit() {
     }, 350)
 }
 
+// * to get to compareResult() that means player DID NOT BUST
 function compareResult(firstTotal, secondTotal) {
     console.log('compareResult() is running...')
-
     if (activeHand === splitHand) {
-        // this is a splitHand comparison. we need to also check the splitHand 
+        // this is a splitHand comparison
         compareSplitResult()
         return
     }
 
-    if (firstTotal - secondTotal === 0) {
+    const isDealerBust = dealer.total > 21
+
+    if (isDealerBust || firstTotal - secondTotal > 0) {
+        // WIN
+        wallet += bet * 2
+        displayH2Result.innerText = 'You Win'
+    } else if (firstTotal - secondTotal === 0) {
         // TIE
         console.log(`IT'S A TIE`)
         wallet += bet
-        displayResult.innerText = `Push`
-    } else if (firstTotal - secondTotal < 0) {
-        // WIN
-        console.log(`PLAYER WINS`)
-        wallet += bet * 2
-        displayResult.innerText = `You Win`
-    } else { 
-        // LOSE if positive integer
+        displayH2Result.innerText = `Push`
+    } 
+    else { 
+        // LOSE
         console.log(`PLAYER LOSES`)
-        displayResult.innerText = `You Lose`
+        displayH2Result.innerText = `You Lose`
     }
     setTimeout(displayFunds, 500)
     setTimeout(showResultScreen, 500)
 }
 
 function compareSplitResult() {
-    if (playerStandTotal > 21 && splitStandTotal > 21) {
-        console.log('you BUST both')
-        displayResult.innerText = `Both Hands Bust`
-        return
-    }
-    
-    if (playerStandTotal > 21) {
-        console.log('you BUST both')
-        displayResult.innerText = `Both Hands Win`
-    } else if (splitStandTotal > 21) {
+    const isPlayerBust = player.total > 21
+    const isSplitBust = splitHand.total > 21
+    const isDealerBust = dealer.total > 21
 
+    function compareHands(handTotal, label) {
+        // if isDealerBust
+        if (isDealerBust) {
+            // win
+            displayH2Result.innerText += ` ${label} Wins`
+            return
+        } 
+        
+        if (handTotal - dealer.total === 0) {
+            // this is a tie
+            displayH2Result.innerText += ` ${label} Push`
+        } else if (handTotal - dealer.total > 0) {
+            // this hand wins
+            displayH2Result.innerText += ` ${label} Wins`
+        } else {
+            // this hand loses
+            displayH2Result.innerText += ` ${label} Loses`
+        }
     }
 
-    if (!playerStandTotal && !splitStandTotal ) {
-        // you lose both
-        console.log('you LOSE both')
-        displayResult.innerText = `Both Hands Lose`
-    } else if (playerStandTotal && splitStandTotal) {
-        // you win both
-        console.log('you WIN both')
-        displayResult.innerText = `Both Hands Win`
-    } else {
-        // you win one
-        console.log('you WIN one')
-        displayResult.innerText = `One Hand Won`
-    }
+    if (!isPlayerBust) {compareHands(player.total, '1st Hand')}
+    if (!isSplitBust) {compareHands(splitHand.total, '2nd Hand')}
     setTimeout(displayFunds, 500)
     setTimeout(showResultScreen, 500)
 }

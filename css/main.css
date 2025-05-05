@@ -360,28 +360,8 @@ h3 {
     transform: scale(1.1)
 }
 
-/* Ace change msg, bet too low msg, wallet too low msg - fades */
-
-#ace-change-msg, #low-bet, #low-wallet{
-    display: none;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-}
-
-    #ace-change-msg.fade-in, #low-bet.fade-in, #low-wallet.fade-in {
-        opacity: 1;
-    }
-
-    #ace-change-msg.fade-out, #low-bet.fade-out, #low-wallet.fade-out {
-        opacity: 0;
-    }
-
-#low-bet, #low-wallet {
-    margin-top: 24px;
-}
-
 @media screen and (max-width: 989px) {
-    #dealer-cards, #player-cards {
+    #dealer-cards, #player-cards, #splitHand-cards {
         min-width: 280px;
         max-width: 315px;
     }
@@ -391,7 +371,7 @@ h3 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 10px;
+        padding: 10px;
         gap: 10px;
     }
     
@@ -405,9 +385,25 @@ h3 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 10px;
+        padding: 10px;
         gap: 18px;
         max-width: 200px;
     }
 }
+
+#temp-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    margin-top: 18px;
+}
   
+#temp-msg.fade-in {
+    opacity: 1;
+}
+
+#temp-msg.fade-out {
+    opacity: 0;
+}

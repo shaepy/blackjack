@@ -77,7 +77,6 @@
                     <button id="stand">stand</button>
                     <button id="split">split</button>
                 </div>
-                <!-- add score section to home screen below bank, change to classes and update functions/querySelectors -->
                 <div class="score-section" id="game-score">
                     <p>high score</p>
                     <span class="high-score"></span>
@@ -88,7 +87,6 @@
                 </div>
             </div>
         </div>
-        <div id="ace-change-msg"><p>Your Ace value has changed from 11 to 1.</p></div>
 
         <div id="home-screen">
             <div id="bet-selection">
@@ -115,9 +113,8 @@
                 <span class="high-score"></span>
             </div>
         </div>
-
-        <div id="low-bet"><p>Choose a bet amount to start a game</p></div>
-        <div id="low-wallet"><p>Your wallet is too low. Reset to add funds</p></div>
+        <!-- make this element through JS and pass for each type of message -->
+        <div id="temp-msg"></div>
     </div>
 </body>
 </html>

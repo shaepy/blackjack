@@ -322,9 +322,9 @@ function checkForBlackjack() {
         console.log('this is a blackjack! yay')
         displayH2Result.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
-        setTimeout(revealHiddenCard, 350)
-        setTimeout(displayFunds, 500)
-        setTimeout(showResultScreen, 500)
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(displayFunds, 450)
+        setTimeout(showResultScreen, 450)
     } else if (player.total === 21 && dealer.total === 21) stand()
 }
 
@@ -416,8 +416,8 @@ function checkForBust(hand) {
             return
         } 
         // proceed as normal
-        setTimeout(revealHiddenCard, 350)
-        setTimeout(showResultScreen, 500)
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `You Bust`
     } 
 }
@@ -437,7 +437,7 @@ function stand() {
     }
 
     // dealer's turn
-    setTimeout(revealHiddenCard, 350)
+    setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
     compareResult(activeHand.total, dealer.total)
 }
@@ -453,7 +453,7 @@ function dealerHit() {
     setTimeout(() => {
         displayDealerCards.append(dealerHitCard)
         displayDealerTotal.innerText = dealer.total
-    }, 350)
+    }, 300)
 }
 
 // * to get to compareResult() that means player DID NOT BUST
@@ -480,8 +480,8 @@ function compareResult(firstTotal, secondTotal) {
         console.log(`PLAYER LOSES`)
         displayH2Result.innerText = `You Lose`
     }
-    setTimeout(displayFunds, 500)
-    setTimeout(showResultScreen, 500)
+    setTimeout(displayFunds, 450)
+    setTimeout(showResultScreen, 450)
 }
 
 function compareSplitResult() {
@@ -505,8 +505,8 @@ function compareSplitResult() {
     if (!isSplitBust) {compareHands(splitHand.total, '2nd Hand')}
     // set bet back to regular amount before split
     bet = bet / 2
-    setTimeout(displayFunds, 500)
-    setTimeout(showResultScreen, 500)
+    setTimeout(displayFunds, 450)
+    setTimeout(showResultScreen, 450)
 }
 
 function revealHiddenCard() {

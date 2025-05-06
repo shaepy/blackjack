@@ -94,6 +94,15 @@ h3 {
     transform: scale(1.1)
 }
 
+#split {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 12px 0;
+}
+
 /* Instructions and help icon */
 
 #instructions {
@@ -274,11 +283,24 @@ h3 {
     display: none;
     flex-direction: row;
     gap: 8px;
-    padding: 4px 0 5px 0;
 }
 
 #home-score {
     padding: 20px;
+}
+
+#split-view-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#split-view-2 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 #dealer, #player {
@@ -289,23 +311,23 @@ h3 {
     margin: 2px;
 }
 
-#dealer h3, #player h3 {
+#dealer h3 {
     display: none;
 }
 
-#player-total, #dealer-total {
+#player-total, #dealer-total, #splitHand-total {
     font-size: 1.2rem;
     background-color: black;
     color: white;
     padding: 4px 7.5px;
 }
 
-#dealer-cards, #player-cards {
+#dealer-cards, #player-cards, #splitHand-cards {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 3px;
+    gap: 2px;
     max-width: 300px;
 }
 
@@ -319,7 +341,7 @@ h3 {
 
 #result h2 {
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
 }
 
 /* Game screen rows */
@@ -355,7 +377,7 @@ h3 {
 /* Card images */
 
 .card {
-    width: 68px;
+    width: 62px;
     padding: 1px 0;
 }
 
@@ -363,37 +385,52 @@ h3 {
     transform: scale(1.4);
 }
 
-/* Ace change msg fades */
-
-#ace-change-msg, #low-bet, #low-wallet{
-    display: none;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-}
-
-    #ace-change-msg.fade-in, #low-bet.fade-in, #low-wallet.fade-in {
-        opacity: 1;
-    }
-
-    #ace-change-msg.fade-out, #low-bet.fade-out, #low-wallet.fade-out {
-        opacity: 0;
-    }
-
-#low-bet, #low-wallet {
-    margin-top: 15px;
-}
-
 @media screen and (max-width: 431px) {
     .card {
-        width: 55px;
+        width: 45px;
     }
 
     .card:hover {
-        transform: scale(1.5);
+        transform: scale(1.4);
     }
 
     #result h2 {
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
+
+    #player-total, #dealer-total, #splitHand-total {
+        font-size: .95rem
+    }
+
+    #game-bank h3 {
+        font-size: 1.6rem;
+    }
+
+    .wallet-icon, .chip-icon {
+        width: 30px;
+    }
+}
+
+#temp-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    margin-top: 18px;
+}
+  
+#temp-msg.fade-in {
+    opacity: 1;
+}
+
+#temp-msg.fade-out {
+    opacity: 0;
+}
+
+/* this highlights the cards section when splitting cards */
+.cards-border {
+    border: 4px double rgb(222, 222, 222);
+    padding: 6px 15px;
 }

@@ -1,9 +1,7 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
 // Message elements
-const aceMsgElement = document.querySelector('#ace-change-msg')
-const lowBetDiv = document.querySelector('#low-bet')
-const lowWalletDiv = document.querySelector('#low-wallet')
+const tempMessageDiv = document.querySelector('#temp-msg')
 
 // Logo elemenets
 const largeLogo = document.querySelector('#large-logo')
@@ -20,22 +18,13 @@ const playAgainButtons = document.querySelector('#play-again-buttons')
 // Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
-const displayResult = document.querySelector('#result h2')
+const displayH2Result = document.querySelector('#result h2')
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
-
-const resetDisplays = [
-    displayResult, 
-    displayDealerCards, 
-    displayDealerTotal, 
-    displayPlayerCards, 
-    displayPlayerTotal
-]
 
 // High score displays
 const gameScoreDiv = document.querySelector('#game-score')
 const homeScoreDiv = document.querySelector('#home-score')
-const highScoreDisplays = document.querySelectorAll('.high-score')
 
 /* --------------------------------------- Variables -------------------------------------- */
 
@@ -50,7 +39,7 @@ let wallet = 100
 document.querySelector('#start-game').addEventListener('click', play)
 document.querySelector('#change-bet').addEventListener('click', goBetScreen)
 document.querySelector('#play-again').addEventListener('click', playAgain)
-document.querySelector('#hit').addEventListener('click', hit)       
+document.querySelector('#hit').addEventListener('click', hit)
 document.querySelector('#stand').addEventListener('click', stand)
 document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
@@ -74,12 +63,60 @@ function displayFunds() {
     walletAmount.forEach(bank => bank.innerText = wallet)
 }
 
+/* --------------------------------------- Split Feature -------------------------------------- */
+
+let splitHand = {cards: [], total: 0, hitCardIdx: 0}
+let activeHand = player
+
+const displaySplitCards = document.querySelector('#splitHand-cards')
+const displaySplitTotal = document.querySelector('#splitHand-total')
+const splitCardsViewDiv = document.querySelector('#split-view-2')
+const splitButton = document.querySelector('#split')
+
+splitButton.addEventListener('click', splitCards)
+
+const firstHandDiv = document.querySelector('#split-view-1')
+const secondHandDiv = document.querySelector('#split-view-2')
+
+function splitCards() {
+    console.log('player presses split button')
+
+    // deduct bet from wallet
+    console.log('your current bet:', bet, 'your current wallet:', wallet)
+    wallet -= bet
+    bet += bet
+    console.log('your bet now:', bet, 'your wallet now:', wallet)
+    displayFunds()
+
+    createTempMsg('Your cards have been split')
+    turnDisplayToFlex([splitCardsViewDiv])
+    turnDisplayToNone([splitButton])
+
+    splitHand.cards.push(player.cards.pop())
+    document.querySelectorAll('#player-cards img')[1].remove()
+    // reset totals
+    splitHand.total = player.total = 0
+
+    // display border
+    firstHandDiv.classList.add('cards-border')
+
+    // deal cards FOR SPLIT HAND
+    player.cards.push(getCard())
+    splitHand.cards.push(getCard())
+    addCardTotal()
+    displaySplitTotal.innerText = splitHand.total
+    displayPlayerTotal.innerText = player.total
+    displayPlayerCards.append(createCardImg(player.cards[1]))
+    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+    
+}
+
 /* --------------------------------------- Start/End Game --------------------------------------- */
 
 displayFunds()
 
 // this takes an element and applies the fade in/fade out transition
-function handleFadeMsg(element) {
+function handleFadeEffect(element) {
     console.log('handling temporary message')
     element.style.display = 'flex'
     requestAnimationFrame(() => element.classList.add('fade-in'))
@@ -89,8 +126,16 @@ function handleFadeMsg(element) {
         setTimeout(() => {
             element.style.display = 'none'
             element.classList.remove('fade-out')
+            element.innerText = ''
         }, 1000)
     }, 2000)
+}
+
+function createTempMsg(string) {
+    const pElement = document.createElement('p')
+    pElement.innerText = string
+    tempMessageDiv.append(pElement)
+    handleFadeEffect(tempMessageDiv)
 }
 
 // these functions take an array, turn the display of each element to either flex or none
@@ -109,9 +154,21 @@ function startGame() {
 function resetGame() {
     console.log('resetting the game')
     shuffle()
+    // reset activehand
+    if (activeHand === splitHand) activeHand = player
     dealer.cards = []
     player.cards = []
-    dealer.total = player.total = 0
+    splitHand.cards = []
+    dealer.total = player.total = splitHand.total = 0
+    const resetDisplays = [
+        displayH2Result,
+        displayDealerCards, 
+        displayDealerTotal, 
+        displayPlayerCards, 
+        displayPlayerTotal,
+        displaySplitCards,
+        displaySplitTotal
+    ]
     resetDisplays.forEach(div => div.innerText = '')
 }
 
@@ -127,10 +184,10 @@ function play() {
     console.log('player pressed play from bet screen. START')
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        handleFadeMsg(lowWalletDiv)
+        createTempMsg('Your wallet is too low. Reset to add funds')
         return
     } else if (bet < 10) {
-        handleFadeMsg(lowBetDiv)
+        createTempMsg('Choose a bet amount to start a game')
         return
     }
     console.log('turning homescreen divs to none and showing game cards')
@@ -142,7 +199,7 @@ function play() {
 function goBetScreen() {
     console.log('player pressed changeBet. goBetScreen() called')
     resetGame()
-    turnDisplayToNone([gameTable, resultDiv, smallLogo])
+    turnDisplayToNone([gameTable, resultDiv, smallLogo, splitCardsViewDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
     // show reset wallet when wallet is less than bet
     if (wallet < bet) resetWallet.style.display = 'flex'
@@ -152,15 +209,15 @@ function playAgain() {
     console.log('this will start a quick play game')
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        handleFadeMsg(lowWalletDiv)
+        createTempMsg('Your wallet is too low. Reset to add funds')
         return
     } else if (bet < 10) {
-        handleFadeMsg(lowBetDiv)
+        createTempMsg('Choose a bet amount to start a game')
         return
     }
     resetGame()
     console.log('turning result divs, play again buttons to none. showing actions bar')
-    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet])
+    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet, splitCardsViewDiv])
     turnDisplayToFlex([actionsBar])
     startGame()
 }
@@ -180,6 +237,11 @@ function dealCards() {
     dealer.cards.push(getCard(), getCard())
     player.cards.push(getCard(), getCard())
 
+    // * split cards
+    // const splitcard1 = cardDeck.find(c => c.rank === '3' && c.suit === 'spade')
+    // const splitcard2 = cardDeck.find(c => c.rank === '3' && c.suit === 'heart')
+    // player.cards.push(splitcard1, splitcard2)
+
     // * ace edge case
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
     // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
@@ -190,7 +252,15 @@ function dealCards() {
     // const testace11 = cardDeck.find(c => c.rank === 'ace')
     // player.cards.push(testcard10, testace11)
 
-    console.log('player hand:', player, 'dealer hand:', dealer)
+    // if dealt cards are same rank, show split button
+    if (player.cards[0].rank === player.cards[1].rank) {
+        if (wallet < bet) {
+            console.log('not enough in wallet to split cards')
+            createTempMsg('You do not have enough funds to split your cards')
+            return
+        }
+        splitButton.style.display = 'flex'
+    }
 }
 
 function changeAceValues(plyrOrDlr) {
@@ -207,7 +277,7 @@ function changeAceValues(plyrOrDlr) {
             console.log('this is a player')
             player.total -= 10
             // display ace change message with fade
-            handleFadeMsg(aceMsgElement)
+            createTempMsg(`Your Ace value has changed from 11 to 1`)
         } else {
             console.log('this is dealer')
             dealer.total -= 10
@@ -222,6 +292,7 @@ function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
     dealer.total = dealer.cards.reduce((acc, card) => acc + card.value, 0)
     player.total = player.cards.reduce((acc, card) => acc + card.value, 0)
+    splitHand.total = splitHand.cards.reduce((acc, card) => acc + card.value, 0)
 
     if (dealer.total > 21) {
         console.log('this is over 21. dealer total:', dealer.total)
@@ -237,11 +308,11 @@ function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
-        displayResult.innerText = 'Blackjack! You Win'
+        displayH2Result.innerText = 'Blackjack! You Win'
         wallet += bet + (bet * 1.5)
-        setTimeout(revealHiddenCard, 350)
-        setTimeout(displayFunds, 500)
-        setTimeout(showResultScreen, 500)
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(displayFunds, 450)
+        setTimeout(showResultScreen, 450)
     } else if (player.total === 21 && dealer.total === 21) stand()
 }
 
@@ -271,48 +342,89 @@ function displayCards() {
     }
     else {
         console.log('displayCards() for a player hit card')
-        displayPlayerCards.append(createCardImg(player.cards[player.hitCardIdx]))
-        displayPlayerTotal.innerText = player.total
+        if (activeHand === player) {
+            displayPlayerCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            displayPlayerTotal.innerText = activeHand.total
+        } else {
+            displaySplitCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            displaySplitTotal.innerText = activeHand.total
+        }
     }
 }
 
 function hit() {
     console.log('player pressed hit()')
     const newCard = getCard()
-    player.cards.push(newCard)
-    player.hitCardIdx = player.cards.findIndex((card) => card === newCard)
+    activeHand.cards.push(newCard)
+    console.log('new card added:', activeHand)
+
+    if (player.cards.length > 2) splitButton.style.display = 'none'
+
+    activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
-    console.log(player)
+    console.log('total is now:', activeHand)
     // if 21, autostand
-    if (player.total === 21) stand()
+    if (activeHand.total === 21) {
+        // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND. REPLACE MSG STRING
+        createTempMsg('Stand on 21')
+        stand()
+        return
+    }
     // check for bust
-    checkForBust(player.total, dealer.total)
+    checkForBust(activeHand)
 }
 
 // this takes a player total and a dealer total to check for bust
-function checkForBust(pTotal, dTotal) {
-    console.log('checking for bust (pTotal, dTotal)')
-    if (pTotal > 21) {
-        setTimeout(revealHiddenCard, 350)
-        setTimeout(showResultScreen, 500)
-        displayResult.innerText = `You Bust`
-    } 
-    else if (dTotal > 21) {
-        wallet += bet * 2
-        setTimeout(displayFunds, 500)
-        setTimeout(showResultScreen, 500)
-        displayResult.innerText = 'You Win'
-        return 1
+function checkForBust(hand) {
+
+    // BOTH SPLIT HANDS BUST
+    if (player.total > 21 && splitHand.total > 21) {
+        // auto lose, skip dealer turn
+        console.log('BOTH HANDS BUST')
+        bet = bet / 2
+        revealHiddenCard()
+        showResultScreen()
+        displayH2Result.innerText = `Both Hands Bust`
+        return
     }
+
+    // is it player or dealer?
+    if (hand === activeHand && hand.total > 21) {
+        console.log('this hand is a player and a BUST')
+        // check if this hand is split
+        if (splitHand.cards.length > 0) {
+            console.log('this is a SPLIT with a bust. auto standing now')
+            // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND. REPLACE MSG STRING
+            createTempMsg('Bust')
+            stand()
+            return
+        } 
+        // proceed as normal
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(showResultScreen, 450)
+        displayH2Result.innerText = `You Bust`
+    } 
 }
+
 
 function stand() {
     console.log('stand() is called')
+
+    // check if there's a split hand
+    if (activeHand === player && splitHand.cards.length > 0) {
+        console.log('this is a splitHand stand. change activeHand')
+        // play splitHand
+        activeHand = splitHand // change activeHand
+        firstHandDiv.classList.remove('cards-border')
+        secondHandDiv.classList.add('cards-border')
+        return
+    }
+
     // dealer's turn
-    setTimeout(revealHiddenCard, 350)
+    setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
-    if (!checkForBust(player.total, dealer.total)) compareResult()
+    compareResult(activeHand.total, dealer.total)
 }
 
 function dealerHit() {
@@ -326,32 +438,61 @@ function dealerHit() {
     setTimeout(() => {
         displayDealerCards.append(dealerHitCard)
         displayDealerTotal.innerText = dealer.total
-    }, 350)
+    }, 300)
 }
 
-function compareResult() {
+// * to get to compareResult() that means player DID NOT BUST
+function compareResult(firstTotal, secondTotal) {
     console.log('compareResult() is running...')
-    // returns true if n1 is less than n2 (closer to 21)
-    const closerTo21 = (n1, n2) => {
-        const diff1 = Math.abs(n1 - 21)
-        const diff2 = Math.abs(n2 - 21)
-        return diff1 < diff2
+    if (activeHand === splitHand) {
+        // this is a splitHand comparison
+        compareSplitResult()
+        return
     }
-    const playerIsWinner = closerTo21(player.total, dealer.total)
 
-    if (player.total === dealer.total) {
-        wallet += bet
-        displayResult.innerText = `Push`
-    } 
-    else if (playerIsWinner) {
+    const isDealerBust = dealer.total > 21
+    if (isDealerBust || firstTotal - secondTotal > 0) {
+        // WIN
         wallet += bet * 2
-        displayResult.innerText = `You Win`
+        displayH2Result.innerText = 'You Win'
+    } else if (firstTotal - secondTotal === 0) {
+        // TIE
+        console.log(`IT'S A TIE`)
+        wallet += bet
+        displayH2Result.innerText = `Push`
+    } 
+    else { 
+        // LOSE
+        console.log(`PLAYER LOSES`)
+        displayH2Result.innerText = `You Lose`
     }
-    else {
-        displayResult.innerText = `You Lose`
+    setTimeout(displayFunds, 450)
+    setTimeout(showResultScreen, 450)
+}
+
+function compareSplitResult() {
+    const isPlayerBust = player.total > 21
+    const isSplitBust = splitHand.total > 21
+    const isDealerBust = dealer.total > 21
+
+    function compareHands(handTotal, label) {
+        if (isDealerBust || handTotal - dealer.total > 0) {
+            wallet += bet
+            displayH2Result.innerHTML += ` ${label} Wins<br>`
+        } else if (handTotal - dealer.total === 0) {
+            wallet += bet / 2
+            displayH2Result.innerHTML += ` ${label} Push<br>`
+        } else {
+            displayH2Result.innerHTML += ` ${label} Loses<br>`
+        }
     }
-    setTimeout(displayFunds, 500)
-    setTimeout(showResultScreen, 500)
+
+    if (!isPlayerBust) {compareHands(player.total, '1st Hand')}
+    if (!isSplitBust) {compareHands(splitHand.total, '2nd Hand')}
+    // set bet back to regular amount before split
+    bet = bet / 2
+    setTimeout(displayFunds, 450)
+    setTimeout(showResultScreen, 450)
 }
 
 function revealHiddenCard() {
@@ -365,16 +506,18 @@ function showResultScreen() {
     console.log('showResultScreen(), showing elements')
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
+    secondHandDiv.classList.remove('cards-border')
 
-    // this changes the bet display to 0
+    // this changes the game screen bet display to 0
     betAmount[0].innerText = '0'
-
+    
     // check for high score
     if (wallet > score) {
         score = wallet
         console.log('wallet is greater than 0, so score is now:', score)
         turnDisplayToFlex([gameScoreDiv, homeScoreDiv])
-        highScoreDisplays.forEach(display => display.innerText = score)
+        createTempMsg(`Your high score is now ${score}`)
+        document.querySelectorAll('.high-score').forEach(display => display.innerText = score)
     }
 }
 

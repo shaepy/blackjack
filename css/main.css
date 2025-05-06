@@ -76,7 +76,7 @@ h3 {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     margin: 12px 0;
 }
 
@@ -92,6 +92,15 @@ h3 {
     border-radius: 3px;
     cursor: pointer;
     border: none;
+}
+
+#split {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 12px 0;
 }
 
 /* Instructions and help icon */
@@ -244,28 +253,42 @@ h3 {
     padding: 10px;
 }
 
+#split-view-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#split-view-2 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
 #dealer, #player {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     padding: 5px;
     margin: 2px;
 }
 
-    #player-total, #dealer-total {
+    #player-total, #dealer-total, #splitHand-total {
         font-size: 1.2rem;
         background-color: black;
         color: white;
         padding: 4px 7.5px;
     }
 
-    #dealer-cards, #player-cards {
+    #dealer-cards, #player-cards, #splitHand-cards {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 3px;
+        gap: 2px;
         min-width: 400px;
         max-width: 410px;
     }
@@ -273,6 +296,10 @@ h3 {
 #result {
     color: rgb(255, 255, 255);
     display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
     margin-top: 6px;
     padding: 11px 15px;
     background-color: rgb(0, 0, 0);
@@ -280,7 +307,7 @@ h3 {
 
     #result h2 {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
 /* Game screen rows */
@@ -333,28 +360,8 @@ h3 {
     transform: scale(1.1)
 }
 
-/* Ace change msg, bet too low msg, wallet too low msg - fades */
-
-#ace-change-msg, #low-bet, #low-wallet{
-    display: none;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-}
-
-    #ace-change-msg.fade-in, #low-bet.fade-in, #low-wallet.fade-in {
-        opacity: 1;
-    }
-
-    #ace-change-msg.fade-out, #low-bet.fade-out, #low-wallet.fade-out {
-        opacity: 0;
-    }
-
-#low-bet, #low-wallet {
-    margin-top: 24px;
-}
-
 @media screen and (max-width: 989px) {
-    #dealer-cards, #player-cards {
+    #dealer-cards, #player-cards, #splitHand-cards {
         min-width: 280px;
         max-width: 315px;
     }
@@ -364,7 +371,7 @@ h3 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 10px;
+        padding: 10px;
         gap: 10px;
     }
     
@@ -378,9 +385,31 @@ h3 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 20px 10px;
+        padding: 10px;
         gap: 18px;
         max-width: 200px;
     }
 }
+
+#temp-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    margin-top: 18px;
+}
   
+#temp-msg.fade-in {
+    opacity: 1;
+}
+
+#temp-msg.fade-out {
+    opacity: 0;
+}
+
+/* this highlights the cards section when splitting cards */
+.cards-border {
+    border: 4px double rgb(222, 222, 222);
+    padding: 8px;
+}

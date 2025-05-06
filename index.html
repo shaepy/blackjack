@@ -51,13 +51,21 @@
                 </div>
                 <div id="player">
                     <h3>player</h3>
-                    <div id="player-cards"></div>
-                    <div id="player-total"></div>
+                    <div id="split-view-1">
+                        <div id="player-cards"></div>
+                        <div id="player-total"></div>
+                    </div>
+                    <div id="split-view-2">
+                        <div id="splitHand-cards"></div>
+                        <div id="splitHand-total"></div>
+                    </div>
                 </div>
             </div>
 
             <div id="game-table-column-2">
-                <div id="result"><h2></h2></div>
+                <div id="result">
+                    <h2></h2>
+                </div>
                 <div id="game-bank">
                     <div><img class="chip-icon" src="./img/assets/single-chip-white.png"></div>
                     <div class="bet-amnt"><h3></h3></div>
@@ -67,8 +75,8 @@
                 <div id="actions">
                     <button id="hit">hit</button>
                     <button id="stand">stand</button>
+                    <button id="split">split</button>
                 </div>
-                <!-- add score section to home screen below bank, change to classes and update functions/querySelectors -->
                 <div class="score-section" id="game-score">
                     <p>high score</p>
                     <span class="high-score"></span>
@@ -79,7 +87,6 @@
                 </div>
             </div>
         </div>
-        <div id="ace-change-msg"><p>Your Ace value has changed from 11 to 1.</p></div>
 
         <div id="home-screen">
             <div id="bet-selection">
@@ -106,9 +113,8 @@
                 <span class="high-score"></span>
             </div>
         </div>
-
-        <div id="low-bet"><p>Choose a bet amount to start a game</p></div>
-        <div id="low-wallet"><p>Your wallet is too low. Reset to add funds</p></div>
+        <!-- make this element through JS and pass for each type of message -->
+        <div id="temp-msg"></div>
     </div>
 </body>
 </html>

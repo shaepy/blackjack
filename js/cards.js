@@ -1,6 +1,6 @@
 const cardDeck = [
     // spades
-        {suit: 'spade', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/spade-ace.png', aceValueChanged: false},
+        {suit: 'spade', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/spade-a.png', aceValueChanged: false},
         {suit: 'spade', rank: '2', value: 2, hasBeenPlayed: false, src: './img/cards/spade-2.png'},
         {suit: 'spade', rank: '3', value: 3, hasBeenPlayed: false, src: './img/cards/spade-3.png'},
         {suit: 'spade', rank: '4', value: 4, hasBeenPlayed: false, src: './img/cards/spade-4.png'},
@@ -10,11 +10,11 @@ const cardDeck = [
         {suit: 'spade', rank: '8', value: 8, hasBeenPlayed: false, src: './img/cards/spade-8.png'},
         {suit: 'spade', rank: '9', value: 9, hasBeenPlayed: false, src: './img/cards/spade-9.png'},
         {suit: 'spade', rank: '10', value: 10, hasBeenPlayed: false, src: './img/cards/spade-10.png'},
-        {suit: 'spade', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/spade-jack.png'},
-        {suit: 'spade', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/spade-queen.png'},
-        {suit: 'spade', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/spade-king.png'},
+        {suit: 'spade', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/spade-j.png'},
+        {suit: 'spade', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/spade-q.png'},
+        {suit: 'spade', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/spade-k.png'},
     // hearts
-        {suit: 'heart', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/heart-ace.png', aceValueChanged: false},
+        {suit: 'heart', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/heart-a.png', aceValueChanged: false},
         {suit: 'heart', rank: '2', value: 2, hasBeenPlayed: false, src: './img/cards/heart-2.png'},
         {suit: 'heart', rank: '3', value: 3, hasBeenPlayed: false, src: './img/cards/heart-3.png'},
         {suit: 'heart', rank: '4', value: 4, hasBeenPlayed: false, src: './img/cards/heart-4.png'},
@@ -24,11 +24,11 @@ const cardDeck = [
         {suit: 'heart', rank: '8', value: 8, hasBeenPlayed: false, src: './img/cards/heart-8.png'},
         {suit: 'heart', rank: '9', value: 9, hasBeenPlayed: false, src: './img/cards/heart-9.png'},
         {suit: 'heart', rank: '10', value: 10, hasBeenPlayed: false, src: './img/cards/heart-10.png'},
-        {suit: 'heart', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/heart-jack.png'},
-        {suit: 'heart', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/heart-queen.png'},
-        {suit: 'heart', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/heart-king.png'},
+        {suit: 'heart', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/heart-j.png'},
+        {suit: 'heart', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/heart-q.png'},
+        {suit: 'heart', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/heart-k.png'},
     // clubs
-        {suit: 'club', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/club-ace.png', aceValueChanged: false},
+        {suit: 'club', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/club-a.png', aceValueChanged: false},
         {suit: 'club', rank: '2', value: 2, hasBeenPlayed: false, src: './img/cards/club-2.png'},
         {suit: 'club', rank: '3', value: 3, hasBeenPlayed: false, src: './img/cards/club-3.png'},
         {suit: 'club', rank: '4', value: 4, hasBeenPlayed: false, src: './img/cards/club-4.png'},
@@ -38,11 +38,11 @@ const cardDeck = [
         {suit: 'club', rank: '8', value: 8, hasBeenPlayed: false, src: './img/cards/club-8.png'},
         {suit: 'club', rank: '9', value: 9, hasBeenPlayed: false, src: './img/cards/club-9.png'},
         {suit: 'club', rank: '10', value: 10, hasBeenPlayed: false, src: './img/cards/club-10.png'},
-        {suit: 'club', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/club-jack.png'},
-        {suit: 'club', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/club-queen.png'},
-        {suit: 'club', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/club-king.png'},
+        {suit: 'club', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/club-j.png'},
+        {suit: 'club', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/club-q.png'},
+        {suit: 'club', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/club-k.png'},
     // diamonds
-        {suit: 'diamond', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/diamond-ace.png', aceValueChanged: false},
+        {suit: 'diamond', rank: 'ace', value: 11, hasBeenPlayed: false, src: './img/cards/diamond-a.png', aceValueChanged: false},
         {suit: 'diamond', rank: '2', value: 2, hasBeenPlayed: false, src: './img/cards/diamond-2.png'},
         {suit: 'diamond', rank: '3', value: 3, hasBeenPlayed: false, src: './img/cards/diamond-3.png'},
         {suit: 'diamond', rank: '4', value: 4, hasBeenPlayed: false, src: './img/cards/diamond-4.png'},
@@ -52,7 +52,7 @@ const cardDeck = [
         {suit: 'diamond', rank: '8', value: 8, hasBeenPlayed: false, src: './img/cards/diamond-8.png'},
         {suit: 'diamond', rank: '9', value: 9, hasBeenPlayed: false, src: './img/cards/diamond-9.png'},
         {suit: 'diamond', rank: '10', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-10.png'},
-        {suit: 'diamond', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-jack.png'},
-        {suit: 'diamond', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-queen.png'},
-        {suit: 'diamond', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-king.png'}
+        {suit: 'diamond', rank: 'jack', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-j.png'},
+        {suit: 'diamond', rank: 'queen', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-q.png'},
+        {suit: 'diamond', rank: 'king', value: 10, hasBeenPlayed: false, src: './img/cards/diamond-k.png'}
 ]

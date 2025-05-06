@@ -184,7 +184,7 @@ function play() {
     console.log('player pressed play from bet screen. START')
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        createTempMsg('Your wallet is too low. Reset to add funds')
+        createTempMsg('Your wallet is too low. Reset to add gold')
         return
     } else if (bet < 10) {
         createTempMsg('Choose a bet amount to start a game')
@@ -209,7 +209,7 @@ function playAgain() {
     console.log('this will start a quick play game')
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
-        createTempMsg('Your wallet is too low. Reset to add funds')
+        createTempMsg('Your wallet is too low. Reset to add gold')
         return
     } else if (bet < 10) {
         createTempMsg('Choose a bet amount to start a game')
@@ -308,7 +308,7 @@ function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
-        displayH2Result.innerText = 'Blackjack! You Win'
+        displayH2Result.innerText = 'Pixeljack! You Win'
         wallet += bet + (bet * 1.5)
         setTimeout(revealHiddenCard, 300)
         setTimeout(displayFunds, 450)
@@ -332,7 +332,7 @@ function displayCards() {
         const hiddenCard = document.createElement('img')
         hiddenCard.classList.add('card')
         hiddenCard.id = 'hidden-card'
-        hiddenCard.src = './img/cards/back-blue-1.png'
+        hiddenCard.src = './img/cards/space2bigger.png'
 
         // Use createCardImg to append here
         displayDealerCards.append(createCardImg(dealer.cards[0]), hiddenCard)

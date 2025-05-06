@@ -1,17 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: url('./../img/assets/cursor-reg.png'), pointer;
+}
+
+* button:hover {
+    cursor: url('./../img/assets/cursor-button.png'), pointer;
 }
 
 body {
-    background-image: linear-gradient(to bottom right, #19342B, #68867c);
-    font-family: "Cal Sans", system-ui, sans-serif;
+    background-image: linear-gradient(to bottom right, #7ac2f1, #8d5ece);
+    font-family: "Jersey 20", monospace;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
-    letter-spacing: .09rem;
+    letter-spacing: .07rem;
     display: flex;
     flex-direction: column;
     color: #fff;
@@ -63,7 +69,7 @@ h3 {
 
 #bet-selectors img {
     width: 65px;
-    cursor: pointer;
+    cursor: url('./../img/assets/cursor-button.png'), pointer;
 }
 
 #bet-selectors img:hover {
@@ -83,14 +89,13 @@ h3 {
 #actions button {
     background-color: #000;
     color: #fff;
-    font-size: 1.2rem;
-    font-family: "Cal Sans", system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-family: "Jersey 15", monospace;
     min-width: 100px;
     min-height: 60px;
     padding: 10px 18px;
     letter-spacing: .06rem;
-    border-radius: 3px;
-    cursor: pointer;
+    border-radius: 7px;
     border: none;
 }
 
@@ -121,9 +126,9 @@ h3 {
 }
 
 #info-button {
-    cursor: pointer;
+    cursor: url('./../img/assets/cursor-button.png'), pointer;
     margin: 5px;
-    width: 22px;
+    width: 20px;
 }
 
 #info-button:hover {
@@ -135,11 +140,11 @@ h3 {
 .play, #change-bet {
     background-color: #cb2222;
     color: #fff;
-    font-size: 1.1rem;
-    font-family: "Cal Sans", system-ui, sans-serif;
+    font-size: 1.3rem;
+    font-family: "Jersey 15", monospace;
     padding: 17px 20px;
     letter-spacing: .06rem;
-    border-radius: 3px;
+    border-radius: 7px;
     cursor: pointer;
     border: none;
 }
@@ -155,7 +160,7 @@ h3 {
 }
 
 #change-bet {
-    background-color: #2898c4;
+    background-color: #404040;
 }
 
 /* Main Logos */
@@ -164,24 +169,27 @@ h3 {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     margin: 35px 0 8px 0;
 }
 
     #large-logo img {
-        width: 70px;
+        width: 46px;
+        transform: rotate(-10deg);
     }
 
 #small-logo {
     display: none;
     flex-direction: row;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     padding: 5px;
 }
 
     #small-logo img {
-        width: 35px;
+        width: 22px;
+        transform: rotate(-11deg);
     }
 
 /* Top Bar and Top bar buttons */
@@ -209,7 +217,7 @@ h3 {
 #reset-wallet {
     display: none;
     background-color: #000;
-    cursor: pointer;
+    cursor: url('./../img/assets/cursor-button.png'), pointer;
 }
 
 /* Home Bank and Game Bank Sections (bet, wallet) */
@@ -237,7 +245,7 @@ h3 {
 }
 
 #home-bank h3, #game-bank h3 {
-    font-size: 2.7rem;
+    font-size: 3rem;
 }
 
 /* Game Table - Dealer vs Player */
@@ -346,12 +354,12 @@ h3 {
 /* Card images */
 
 .card {
-    width: 74px;
-    padding: 1px 0;
+    width: 72px;
+    padding: 2px;
 }
 
     .card:hover {
-        transform: scale(1.37);
+        transform: scale(1.6);
     }
 
 /* Button transforms */

@@ -24,10 +24,6 @@
     </div>
 
     <div id="main-content">
-        <div id="large-logo">
-            <img src="./img/assets/j1.png" alt="joker card logo"><h1>pixeljack</h1>
-        </div>
-
         <div id="instructions">
             <h3>How to Play</h3>
             <p>It's you versus the Dealer. Your goal is to get as close to 21 as you can without going over. </p>
@@ -42,19 +38,23 @@
             <p>Getting over 21 is a BUST. A tie is known as a PUSH. Whoever is closer to 21 wins!</p>
         </div>
 
+        <div id="large-logo">
+            <img src="./img/assets/j1.png" alt="joker card logo"><h1>pixeljack</h1>
+        </div>
+
         <div id="game-table">
             <div id="game-table-column-1">
                 <div id="dealer">
                     <h3>dealer</h3>
                     <div id="dealer-cards">
 
-                           <div class="flip-card">
+                           <div class="card-container">
                             <div id="flip-animation-here">
                               <div class="flip-card-back">
                                 <img src="./img/cards/space2bigger.png" alt="card-back" class="card">
                               </div>
                               <div class="flip-card-front">
-                                <!-- dealt card image goes here -->
+                                <!-- <img src="dealt card image goes here"> -->
                               </div>
                             </div>
                           </div>
@@ -103,7 +103,7 @@
 
         <div id="home-screen">
             <div id="bet-selection">
-                <h3>Select a bet to play a game</h3>
+                <h3>Pick a coin to place your bet</h3>
                 <div id="bet-selectors">
                     <img src="./img/assets/pixel-bet10.png" class="bet" data-bet="10" alt="pixel coin worth 10">
                     <img src="./img/assets/pixel-bet25.png" class="bet" data-bet="25" alt="pixel coin worth 25">
@@ -126,7 +126,7 @@
                 <span class="high-score"></span>
             </div>
         </div>
-        <!-- make this element through JS and pass for each type of message -->
+
         <div id="temp-msg"></div>
     </div>
 </body>

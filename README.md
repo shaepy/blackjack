@@ -2,7 +2,9 @@
 
 **https://shaepy.github.io/pixeljack/**
 
-Pixeljack is a fun, pixel-style Blackjack game where you try to beat the dealer by getting as close to 21 as possible without going over. Both you and the dealer start with two cards and take turns choosing to 'hit' (get another card) or 'stand' (keep your hand). Whoever gets closer to 21 without going over wins.
+Pixeljack is a fun, pixel-style Blackjack game where you try to beat the dealer by getting as close to 21 as possible without going over. 
+
+Both you and the dealer start with two cards and take turns choosing to 'hit' (get another card) or 'stand' (keep your hand). Whoever gets closer to 21 without going over wins.
 
 //Insert screenshots here when done//
 
@@ -12,12 +14,12 @@ Pixeljack is a fun, pixel-style Blackjack game where you try to beat the dealer 
 - JavaScript
 
 ## ♦️ Requirements
-### General Assembly Reqs
+#### General Assembly Reqs
 - A win/lose condition
 - A theme
 - Submit an initial data structure of your game state along with your pseudocode
 
-### MVP User Stories
+#### MVP User Stories
 **Core Gameplay - As a user,**
 - I can see what cards are dealt to me and only one card of the dealer.
 - I can `hit` to get another card to add to my hand.

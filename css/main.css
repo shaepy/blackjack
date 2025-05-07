@@ -49,7 +49,6 @@ h3 {
 }
 
 /* Bet Selection and Selectors */
-
 #bet-selection {
     display: flex;
     flex-direction: column;
@@ -77,7 +76,6 @@ h3 {
 }
 
 /* Player Actions like Hit or Stand */
-
 #actions {
     display: flex;
     flex-direction: row;
@@ -109,7 +107,6 @@ h3 {
 }
 
 /* Instructions and help icon */
-
 #instructions {
     display: none;
     flex-direction: column;
@@ -128,7 +125,7 @@ h3 {
 #info-button {
     cursor: url('./../img/assets/cursor-button.png'), pointer;
     margin: 5px;
-    width: 20px;
+    width: 18.5px;
 }
 
 #info-button:hover {
@@ -136,7 +133,6 @@ h3 {
 }
 
 /* Play Buttons Div, play and play again */
-
 .play, #change-bet {
     background-color: #cb2222;
     color: #fff;
@@ -164,7 +160,6 @@ h3 {
 }
 
 /* Main Logos */
-
 #large-logo {
     display: flex;
     flex-direction: row;
@@ -193,7 +188,6 @@ h3 {
     }
 
 /* Top Bar and Top bar buttons */
-
 #top-bar {
     display: flex;
     flex-direction: row;
@@ -213,7 +207,6 @@ h3 {
 }
 
 /* Reset Wallet CTA */
-
 #reset-wallet {
     display: none;
     background-color: #000;
@@ -221,7 +214,6 @@ h3 {
 }
 
 /* Home Bank and Game Bank Sections (bet, wallet) */
-
 #home-bank {
     display: flex;
     flex-direction: row;
@@ -249,7 +241,6 @@ h3 {
 }
 
 /* Game Table - Dealer vs Player */
-
 .score-section {
     display: none;
     flex-direction: row;
@@ -258,7 +249,7 @@ h3 {
 }
 
 #home-score {
-    padding: 10px;
+    padding: 15px 10px;
 }
 
 #split-view-1 {
@@ -319,7 +310,6 @@ h3 {
     }
 
 /* Game screen rows */
-
 #game-table-column-1 {
     display: flex;
     flex-direction: column;
@@ -352,7 +342,6 @@ h3 {
 }
 
 /* Card images */
-
 .card {
     width: 74px;
     padding: 2px;
@@ -363,40 +352,8 @@ h3 {
     }
 
 /* Button transforms */
-
 .play:hover, #change-bet:hover, #reset-wallet:hover, #actions button:hover {
     transform: scale(1.1)
-}
-
-@media screen and (max-width: 989px) {
-    #dealer-cards, #player-cards, #splitHand-cards {
-        min-width: 280px;
-        max-width: 315px;
-    }
-
-    #game-table-column-1 {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        gap: 10px;
-    }
-    
-        #game-table-column-1 p {
-            text-align: center;
-            font-size: .85rem;
-        }
-    
-    #game-table-column-2 {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        gap: 18px;
-        max-width: 200px;
-    }
 }
 
 #temp-msg {
@@ -426,22 +383,18 @@ h3 {
 
 /* ! CARD FLIP ANIMATION */
 
-/* flip card container (remove perspective if you don't want the 3D effect */
-.flip-card {
+/* flip card container */
+.card-container {
     background-color: transparent;
     width: 74px;
-    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+    perspective: 1000px; /* 3D effect */
   }
   
-  /* this container is needed to position the front and back side */
-  .flip-card-inner {
+  /* add this class when needing to flip */
+.flip-card-inner {
     position: relative;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-  }
-  
-  /* TODO Do an horizontal flip over the flip box container */
-.flip-card-inner {
     transform: rotateY(180deg);
   }
   
@@ -452,8 +405,38 @@ h3 {
     backface-visibility: hidden;
   }
   
-  /* shows the back side */
+  /* shows the back side by rotating the front card */
   .flip-card-front {
     transform: rotateY(180deg);
   }
 
+  @media screen and (max-width: 989px) {
+    #dealer-cards, #player-cards, #splitHand-cards {
+        min-width: 280px;
+        max-width: 315px;
+    }
+
+    #game-table-column-1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        gap: 10px;
+    }
+    
+        #game-table-column-1 p {
+            text-align: center;
+            font-size: .85rem;
+        }
+    
+    #game-table-column-2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        gap: 18px;
+        max-width: 200px;
+    }
+}

@@ -100,8 +100,8 @@ document.querySelector('#stand').addEventListener('click', stand)
 // reset wallet 
 resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()})
 
-const betAmount = document.querySelectorAll('.bet-amnt h3')
-const walletAmount = document.querySelectorAll('.wallet-amnt h3')
+const betAmounts = document.querySelectorAll('.bet-amnt h3')
+const walletAmounts = document.querySelectorAll('.wallet-amnt h3')
 
 // each bet selector button will save the number to bet and display it
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (event) => {
@@ -110,8 +110,8 @@ document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (even
 }))
 
 function displayFunds() {
-    betAmount.forEach(bank => bank.innerText = bet)
-    walletAmount.forEach(bank => bank.innerText = wallet)
+    betAmounts.forEach(amnt => amnt.innerText = bet)
+    walletAmounts.forEach(amnt => amnt.innerText = wallet)
 }
 
 /* --------------------------------------- Start/Reset Game --------------------------------------- */
@@ -425,7 +425,7 @@ function showResultScreen() {
     turnDisplayToNone([actionsBar])
     secondHandDiv.classList.remove('cards-border')
     // this changes the game screen bet display to 0
-    betAmount[0].innerText = '0'
+    betAmounts[0].innerText = '0'
     // check for high score
     if (wallet > score) {
         score = wallet

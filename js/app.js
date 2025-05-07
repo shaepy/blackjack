@@ -16,6 +16,7 @@ const gameTable = document.querySelector('#game-table')
 const gameBank = document.querySelector('#game-bank')
 const homeScreen = document.querySelector('#home-screen')
 const playAgainButtons = document.querySelector('#play-again-buttons')
+const resetWallet = document.querySelector('#reset-wallet')
 
 // Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
@@ -38,17 +39,65 @@ let wallet = 100
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
-document.querySelector('#start-game').addEventListener('click', play)
-document.querySelector('#change-bet').addEventListener('click', goBetScreen)
-document.querySelector('#play-again').addEventListener('click', playAgain)
+// play button - start game
+document.querySelector('#start-game').addEventListener('click', () => {
+    console.log('player pressed play from bet screen. START')
+    if (wallet < bet) {
+        resetWallet.style.display = 'flex'
+        createTempMsg('Your wallet is too low. Reset to add gold')
+        return
+    } else if (bet < 10) {
+        createTempMsg('Choose a bet amount to start a game')
+        return
+    }
+    console.log('turning homescreen divs to none and showing game cards')
+    turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
+    turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
+    startGame()
+})
+
+// go to change bet screen
+document.querySelector('#change-bet').addEventListener('click', () => {
+    console.log('player pressed changeBet. goBetScreen() called')
+    resetGame()
+    turnDisplayToNone([gameTable, resultDiv, smallLogo, splitCardsViewDiv])
+    turnDisplayToFlex([homeScreen, largeLogo])
+    // show reset wallet when wallet is less than bet
+    if (wallet < bet) resetWallet.style.display = 'flex'
+})
+
+// play again 
+document.querySelector('#play-again').addEventListener('click', () => {
+    console.log('this will start a quick play game')
+    if (wallet < bet) {
+        resetWallet.style.display = 'flex'
+        createTempMsg('Your wallet is too low. Reset to add gold')
+        return
+    } else if (bet < 10) {
+        createTempMsg('Choose a bet amount to start a game')
+        return
+    }
+    resetGame()
+    console.log('turning result divs, play again buttons to none. showing actions bar')
+    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet, splitCardsViewDiv])
+    turnDisplayToFlex([actionsBar])
+    startGame()
+})
+
+// toggle instructions - info icon
+document.querySelector('#info-button').addEventListener('click', () => {
+    console.log('player pressed on help button')
+    const instructions = document.querySelector('#instructions')
+    if (window.getComputedStyle(instructions).display === 'flex') {
+        instructions.style.display = 'none'
+    } else {instructions.style.display = 'flex'}
+})
+
 document.querySelector('#hit').addEventListener('click', hit)
 document.querySelector('#stand').addEventListener('click', stand)
-document.querySelector('#info-button').addEventListener('click', toggleHelp)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
-
-const resetWallet = document.querySelector('#reset-wallet')
-// refill wallet & displayFunds
+// reset wallet 
 resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()})
 
 const betAmount = document.querySelectorAll('.bet-amnt h3')
@@ -65,55 +114,7 @@ function displayFunds() {
     walletAmount.forEach(bank => bank.innerText = wallet)
 }
 
-/* --------------------------------------- Split Feature -------------------------------------- */
-
-let splitHand = {cards: [], total: 0, hitCardIdx: 0}
-let activeHand = player
-
-const displaySplitCards = document.querySelector('#splitHand-cards')
-const displaySplitTotal = document.querySelector('#splitHand-total')
-const splitCardsViewDiv = document.querySelector('#split-view-2')
-const splitButton = document.querySelector('#split')
-
-splitButton.addEventListener('click', splitCards)
-
-const firstHandDiv = document.querySelector('#split-view-1')
-const secondHandDiv = document.querySelector('#split-view-2')
-
-function splitCards() {
-    console.log('player presses split button')
-
-    // deduct bet from wallet
-    console.log('your current bet:', bet, 'your current wallet:', wallet)
-    wallet -= bet
-    bet += bet
-    console.log('your bet now:', bet, 'your wallet now:', wallet)
-    displayFunds()
-
-    createTempMsg('Your cards have been split')
-    turnDisplayToFlex([splitCardsViewDiv])
-    turnDisplayToNone([splitButton])
-
-    splitHand.cards.push(player.cards.pop())
-    document.querySelectorAll('#player-cards img')[1].remove()
-    
-    // reset totals
-    splitHand.total = player.total = 0
-
-    // display border
-    firstHandDiv.classList.add('cards-border')
-
-    // deal cards FOR SPLIT HAND
-    player.cards.push(getCard())
-    splitHand.cards.push(getCard())
-    addCardTotal()
-    displaySplitTotal.innerText = splitHand.total
-    displayPlayerTotal.innerText = player.total
-    displayPlayerCards.append(createCardImg(player.cards[1]))
-    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
-}
-
-/* --------------------------------------- Start/End Game --------------------------------------- */
+/* --------------------------------------- Start/Reset Game --------------------------------------- */
 
 function startGame() {
     wallet -= bet
@@ -142,7 +143,6 @@ function resetGame() {
         displaySplitTotal
     ]
     resetDisplays.forEach(div => div.innerText = '')
-    
     // reset dealer cards
     divToAddCardFlip.classList.remove("flip-card-inner")
     document.querySelector('#hidden-card').remove()
@@ -155,48 +155,6 @@ function shuffle() {
         card.hasBeenPlayed = false
         if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
     })
-}
-
-function play() {
-    console.log('player pressed play from bet screen. START')
-    if (wallet < bet) {
-        resetWallet.style.display = 'flex'
-        createTempMsg('Your wallet is too low. Reset to add gold')
-        return
-    } else if (bet < 10) {
-        createTempMsg('Choose a bet amount to start a game')
-        return
-    }
-    console.log('turning homescreen divs to none and showing game cards')
-    turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
-    turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
-    startGame()
-}
-
-function goBetScreen() {
-    console.log('player pressed changeBet. goBetScreen() called')
-    resetGame()
-    turnDisplayToNone([gameTable, resultDiv, smallLogo, splitCardsViewDiv])
-    turnDisplayToFlex([homeScreen, largeLogo])
-    // show reset wallet when wallet is less than bet
-    if (wallet < bet) resetWallet.style.display = 'flex'
-}
-
-function playAgain() {
-    console.log('this will start a quick play game')
-    if (wallet < bet) {
-        resetWallet.style.display = 'flex'
-        createTempMsg('Your wallet is too low. Reset to add gold')
-        return
-    } else if (bet < 10) {
-        createTempMsg('Choose a bet amount to start a game')
-        return
-    }
-    resetGame()
-    console.log('turning result divs, play again buttons to none. showing actions bar')
-    turnDisplayToNone([resultDiv, playAgainButtons, resetWallet, splitCardsViewDiv])
-    turnDisplayToFlex([actionsBar])
-    startGame()
 }
 
 /* --------------------------------------- Gameplay --------------------------------------- */
@@ -231,6 +189,7 @@ function dealCards() {
 
     // if dealt cards are same rank, show split button
     if (player.cards[0].rank === player.cards[1].rank) {
+        console.log('player can split. matching ranks found')
         if (wallet < bet) {
             console.log('not enough in wallet to split cards')
             createTempMsg('You do not have enough funds to split your cards')
@@ -253,7 +212,6 @@ function changeAceValues(plyrOrDlr) {
         if (plyrOrDlr === player.cards) {
             console.log('this is a player')
             player.total -= 10
-            // display ace change message with fade
             createTempMsg(`Your Ace value has changed from 11 to 1`)
         } else {
             console.log('this is dealer')
@@ -270,7 +228,6 @@ function addCardTotal() {
     dealer.total = dealer.cards.reduce((acc, card) => acc + card.value, 0)
     player.total = player.cards.reduce((acc, card) => acc + card.value, 0)
     splitHand.total = splitHand.cards.reduce((acc, card) => acc + card.value, 0)
-
     if (dealer.total > 21) {
         console.log('this is over 21. dealer total:', dealer.total)
         changeAceValues(dealer.cards)
@@ -291,15 +248,6 @@ function checkForBlackjack() {
         setTimeout(displayFunds, 450)
         setTimeout(showResultScreen, 450)
     } else if (player.total === 21 && dealer.total === 21) stand()
-}
-
-// This takes a card object and creates a card image HTML element to display
-function createCardImg(card) {
-    const cardImage = document.createElement('img')
-    cardImage.classList.add('card')
-    cardImage.alt = `${card.suit} ${card.rank}`
-    cardImage.src = card.src
-    return cardImage
 }
 
 function displayCards() {
@@ -354,11 +302,8 @@ function hit() {
     checkForBust(activeHand)
 }
 
-// this takes a player total and a dealer total to check for bust
 function checkForBust(hand) {
-
-    // BOTH SPLIT HANDS BUST
-    if (player.total > 21 && splitHand.total > 21) {
+    if (player.total > 21 && splitHand.total > 21) {     // BOTH SPLIT HANDS BUST
         // auto lose, skip dealer turn
         console.log('BOTH HANDS BUST')
         bet = bet / 2
@@ -368,8 +313,7 @@ function checkForBust(hand) {
         return
     }
 
-    // is it player or dealer?
-    if (hand === activeHand && hand.total > 21) {
+    if (hand.total > 21) {
         console.log('this hand is a player and a BUST')
         // check if this hand is split
         if (splitHand.cards.length > 0) {
@@ -385,7 +329,6 @@ function checkForBust(hand) {
         displayH2Result.innerText = `You Bust`
     } 
 }
-
 
 function stand() {
     console.log('stand() is called')
@@ -493,7 +436,62 @@ function showResultScreen() {
     }
 }
 
+/* --------------------------------------- Split Feature -------------------------------------- */
+
+let splitHand = {cards: [], total: 0, hitCardIdx: 0}
+let activeHand = player
+
+const displaySplitCards = document.querySelector('#splitHand-cards')
+const displaySplitTotal = document.querySelector('#splitHand-total')
+const splitCardsViewDiv = document.querySelector('#split-view-2')
+const splitButton = document.querySelector('#split')
+
+splitButton.addEventListener('click', splitCards)
+
+const firstHandDiv = document.querySelector('#split-view-1')
+const secondHandDiv = document.querySelector('#split-view-2')
+
+function splitCards() {
+    console.log('player presses split button')
+    console.log('your current bet:', bet, 'your current wallet:', wallet)
+
+    // deduct bet from wallet
+    wallet -= bet
+    bet += bet
+    console.log('your bet now:', bet, 'your wallet now:', wallet)
+    displayFunds()
+
+    createTempMsg('Your cards have been split')
+    turnDisplayToFlex([splitCardsViewDiv])
+    turnDisplayToNone([splitButton])
+
+    splitHand.cards.push(player.cards.pop())
+    document.querySelectorAll('#player-cards img')[1].remove()
+    
+    // reset totals
+    splitHand.total = player.total = 0
+    // display border
+    firstHandDiv.classList.add('cards-border')
+
+    // deal cards FOR SPLIT HAND
+    player.cards.push(getCard())
+    splitHand.cards.push(getCard())
+    addCardTotal()
+    displaySplitTotal.innerText = splitHand.total
+    displayPlayerTotal.innerText = player.total
+    displayPlayerCards.append(createCardImg(player.cards[1]))
+    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+}
+
 /* --------------------------------------- UI / Visuals -------------------------------------- */
+// this takes a card object and creates a card image HTML element to display
+function createCardImg(card) {
+    const cardImage = document.createElement('img')
+    cardImage.classList.add('card')
+    cardImage.alt = `${card.suit} ${card.rank}`
+    cardImage.src = card.src
+    return cardImage
+}
 
 // this takes an element and applies the fade in/fade out transition
 function handleFadeEffect(element) {
@@ -521,14 +519,6 @@ function createTempMsg(string) {
 // these functions take an array, turn the display of each element to either flex or none
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
 const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
-
-function toggleHelp() {
-    console.log('player pressed on help button')
-    const instructions = document.querySelector('#instructions')
-    if (window.getComputedStyle(instructions).display === 'flex') {
-        instructions.style.display = 'none'
-    } else {instructions.style.display = 'flex'}
-}
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

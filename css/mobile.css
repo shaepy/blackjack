@@ -85,7 +85,7 @@ h3 {
 #actions button {
     background-color: #000;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-family: "Jersey 15", monospace;
     min-width: 90px;
     min-height: 50px;
@@ -140,7 +140,7 @@ h3 {
 .play {
     background-color: #cb2222;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-family: "Jersey 15", monospace;
     padding: 16px 20px;
     letter-spacing: .06rem;
@@ -173,7 +173,7 @@ h3 {
 #change-bet {
     background-color: #404040;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-family: "Jersey 15", monospace;
     padding: 18px;
     letter-spacing: .06rem;
@@ -398,6 +398,8 @@ h3 {
     opacity: 0;
     transition: opacity 0.8s ease;
     margin-top: 18px;
+    background-color: black;
+    padding: 8px;
 }
   
 #temp-msg.fade-in {

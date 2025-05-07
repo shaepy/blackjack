@@ -1,5 +1,8 @@
 /* --------------------------------------- Constants -------------------------------------- */
 
+// card flip
+const hiddenCardFrontElement = document.querySelector('.flip-card-front')
+
 // Message elements
 const tempMessageDiv = document.querySelector('#temp-msg')
 
@@ -162,7 +165,6 @@ function resetGame() {
     dealer.total = player.total = splitHand.total = 0
     const resetDisplays = [
         displayH2Result,
-        displayDealerCards, 
         displayDealerTotal, 
         displayPlayerCards, 
         displayPlayerTotal,
@@ -170,6 +172,20 @@ function resetGame() {
         displaySplitTotal
     ]
     resetDisplays.forEach(div => div.innerText = '')
+    //remove second item from displaydealercards
+    resetDealerCard()
+}
+
+function resetDealerCard() {
+    document.querySelector('#flip-animation-here').classList.remove("flip-card-inner")
+    document.querySelector('#hidden-card').remove()
+
+    const clearDealerHand = document.querySelectorAll('#dealer-cards img.dealer-card')
+    console.log(clearDealerHand)
+    
+    clearDealerHand.forEach(img => {
+            img.remove()
+    })
 }
 
 function shuffle() {
@@ -326,19 +342,23 @@ function createCardImg(card) {
 }
 
 function displayCards() {
-    if (displayPlayerCards.innerHTML === '' && displayDealerCards.innerHTML === '') {
+    if (displayPlayerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
-        // create dealer back card img element
-        const hiddenCard = document.createElement('img')
-        hiddenCard.classList.add('card')
-        hiddenCard.id = 'hidden-card'
-        hiddenCard.src = './img/cards/space2bigger.png'
 
-        // Use createCardImg to append here
-        displayDealerCards.append(createCardImg(dealer.cards[0]), hiddenCard)
-        displayDealerTotal.innerText = dealer.cards[0].value
+        const hiddenCard = createCardImg(dealer.cards[0])
+        hiddenCard.id = 'hidden-card'
+        hiddenCardFrontElement.append(hiddenCard)
+
+        const dealer2ndCard = createCardImg(dealer.cards[1])
+        dealer2ndCard.classList.add('dealer-card')
+        displayDealerCards.append(dealer2ndCard)
+
+        displayDealerTotal.innerText = dealer.cards[1].value
+
         displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
         displayPlayerTotal.innerText = player.total
+
+        console.log(displayDealerCards)
     }
     else {
         console.log('displayCards() for a player hit card')
@@ -435,6 +455,7 @@ function dealerHit() {
     addCardTotal()
     // display dealer card
     const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
+    dealerHitCard.classList.add('dealer-card')
     setTimeout(() => {
         displayDealerCards.append(dealerHitCard)
         displayDealerTotal.innerText = dealer.total
@@ -497,8 +518,9 @@ function compareSplitResult() {
 
 function revealHiddenCard() {
     console.log('revealHiddenCard(), showing dealers 2nd card')
-    const hiddenCard = document.querySelector('#hidden-card')
-    if (hiddenCard) hiddenCard.src = dealer.cards[1].src
+    // const hiddenCard = document.querySelector('#hidden-card')
+    // if (hiddenCard) hiddenCard.src = dealer.cards[0].src
+    document.querySelector('#flip-animation-here').classList.add("flip-card-inner")
     displayDealerTotal.innerText = dealer.total
 }
 

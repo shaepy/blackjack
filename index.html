@@ -19,13 +19,13 @@
         </div>
         <div id="top-buttons">
             <p id="reset-wallet">reset funds</p>
-            <a><img id="info-button" src="./img/assets/pixel-help-icon.png"></a>
+            <a><img id="info-button" src="./img/assets/pixel-help-icon.png" alt="help icon"></a>
         </div>
     </div>
 
     <div id="main-content">
         <div id="large-logo">
-            <img src="./img/assets/j1.png"><h1>pixeljack</h1>
+            <img src="./img/assets/j1.png" alt="joker card logo"><h1>pixeljack</h1>
         </div>
 
         <div id="instructions">
@@ -46,7 +46,20 @@
             <div id="game-table-column-1">
                 <div id="dealer">
                     <h3>dealer</h3>
-                    <div id="dealer-cards"></div>
+                    <div id="dealer-cards">
+
+                           <div class="flip-card">
+                            <div id="flip-animation-here">
+                              <div class="flip-card-back">
+                                <img src="./img/cards/space2bigger.png" alt="card-back" class="card">
+                              </div>
+                              <div class="flip-card-front">
+                                <!-- <img src="" alt="card-front" class="card"> -->
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
                     <div id="dealer-total"></div>
                 </div>
                 <div id="player">
@@ -67,9 +80,9 @@
                     <h2></h2>
                 </div>
                 <div id="game-bank">
-                    <div><img class="chip-icon" src="./img/assets/pixel-coin.png"></div>
+                    <div><img class="chip-icon" src="./img/assets/pixel-coin.png" alt="coin"></div>
                     <div class="bet-amnt"><h3></h3></div>
-                    <div><img class="wallet-icon" src="./img/assets/pixel-wallet.png"></div>
+                    <div><img class="wallet-icon" src="./img/assets/pixel-wallet.png" alt="bag of coins"></div>
                     <div class="wallet-amnt"><h3></h3></div>
                 </div>
                 <div id="actions">
@@ -92,17 +105,17 @@
             <div id="bet-selection">
                 <h3>Select a bet to play a game</h3>
                 <div id="bet-selectors">
-                    <img src="./img/assets/pixel-bet10.png" class="bet" data-bet="10">
-                    <img src="./img/assets/pixel-bet25.png" class="bet" data-bet="25">
-                    <img src="./img/assets/pixel-bet50.png" class="bet" data-bet="50">
-                    <img src="./img/assets/pixel-bet100.png" class="bet" data-bet="100">
+                    <img src="./img/assets/pixel-bet10.png" class="bet" data-bet="10" alt="pixel coin worth 10">
+                    <img src="./img/assets/pixel-bet25.png" class="bet" data-bet="25" alt="pixel coin worth 25">
+                    <img src="./img/assets/pixel-bet50.png" class="bet" data-bet="50" alt="pixel coin worth 50">
+                    <img src="./img/assets/pixel-bet100.png" class="bet" data-bet="100" alt="pixel coin worth 100">
                 </div>
             </div>
 
             <div id="home-bank">
-                <div><img class="chip-icon" src="./img/assets/pixel-coin.png"></div>
+                <div><img class="chip-icon" src="./img/assets/pixel-coin.png" alt="coin"></div>
                 <div class="bet-amnt"><h3></h3></div>
-                <div><img class="wallet-icon" src="./img/assets/pixel-wallet.png"></div>
+                <div><img class="wallet-icon" src="./img/assets/pixel-wallet.png" alt="bag of coins"></div>
                 <div class="wallet-amnt"><h3></h3></div>
             </div>
 

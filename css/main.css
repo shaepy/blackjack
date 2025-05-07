@@ -421,3 +421,38 @@ h3 {
     border: 4px double rgb(222, 222, 222);
     padding: 8px;
 }
+
+/* ! CARD FLIP ANIMATION */
+
+/* flip card container (remove perspective if you don't want the 3D effect */
+.flip-card {
+    background-color: transparent;
+    width: 72px;
+    height: 95px;
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  }
+  
+  /* this container is needed to position the front and back side */
+  .flip-card-inner {
+    position: relative;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+  
+  /* TODO Do an horizontal flip over the flip box container */
+.flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  /* position the front and back side */
+  .flip-card-back, .flip-card-front {
+    position: absolute;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+  }
+  
+  /* shows the back side */
+  .flip-card-front {
+    transform: rotateY(180deg);
+  }
+

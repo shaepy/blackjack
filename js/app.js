@@ -309,7 +309,7 @@ function displayCards() {
         const hiddenCard = createCardImg(dealer.cards[0])
         hiddenCard.id = 'hidden-card'
         document.querySelector('.flip-card-front').append(hiddenCard)
-        
+
         const dealer2ndCard = createCardImg(dealer.cards[1])
         dealer2ndCard.classList.add('dealer-card')
         displayDealerCards.append(dealer2ndCard)
@@ -421,28 +421,24 @@ function dealerHit() {
     }, 300)
 }
 
-// * to get to compareResult() that means player DID NOT BUST
+// to get to compareResult() that means player DID NOT BUST
 function compareResult(firstTotal, secondTotal) {
     console.log('compareResult() is running...')
-    if (activeHand === splitHand) {
-        // this is a splitHand comparison
+    if (activeHand === splitHand) { // this is a splitHand comparison
         compareSplitResult()
         return
     }
 
     const isDealerBust = dealer.total > 21
     if (isDealerBust || firstTotal - secondTotal > 0) {
-        // WIN
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
     } else if (firstTotal - secondTotal === 0) {
-        // TIE
         console.log(`IT'S A TIE`)
         wallet += bet
         displayH2Result.innerText = `Push`
     } 
     else { 
-        // LOSE
         console.log(`PLAYER LOSES`)
         displayH2Result.innerText = `You Lose`
     }

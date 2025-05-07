@@ -145,7 +145,7 @@ h3 {
     padding: 17px 20px;
     letter-spacing: .06rem;
     border-radius: 7px;
-    cursor: pointer;
+    cursor: url('./../img/assets/cursor-button.png'), pointer;
     border: none;
 }
 

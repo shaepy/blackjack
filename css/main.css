@@ -354,7 +354,7 @@ h3 {
 /* Card images */
 
 .card {
-    width: 72px;
+    width: 74px;
     padding: 2px;
 }
 
@@ -427,8 +427,7 @@ h3 {
 /* flip card container (remove perspective if you don't want the 3D effect */
 .flip-card {
     background-color: transparent;
-    width: 72px;
-    height: 95px;
+    width: 74px;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
   }
   

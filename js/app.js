@@ -1,7 +1,6 @@
 /* --------------------------------------- Constants -------------------------------------- */
-
-// card flip
-const hiddenCardFrontElement = document.querySelector('.flip-card-front')
+// Card flip
+const divToAddCardFlip = document.querySelector('#flip-animation-here')
 
 // Message elements
 const tempMessageDiv = document.querySelector('#temp-msg')
@@ -97,6 +96,7 @@ function splitCards() {
 
     splitHand.cards.push(player.cards.pop())
     document.querySelectorAll('#player-cards img')[1].remove()
+    
     // reset totals
     splitHand.total = player.total = 0
 
@@ -111,39 +111,9 @@ function splitCards() {
     displayPlayerTotal.innerText = player.total
     displayPlayerCards.append(createCardImg(player.cards[1]))
     displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
-    
 }
 
 /* --------------------------------------- Start/End Game --------------------------------------- */
-
-displayFunds()
-
-// this takes an element and applies the fade in/fade out transition
-function handleFadeEffect(element) {
-    console.log('handling temporary message')
-    element.style.display = 'flex'
-    requestAnimationFrame(() => element.classList.add('fade-in'))
-    setTimeout(() => {
-        element.classList.remove('fade-in')
-        element.classList.add('fade-out')
-        setTimeout(() => {
-            element.style.display = 'none'
-            element.classList.remove('fade-out')
-            element.innerText = ''
-        }, 1000)
-    }, 2000)
-}
-
-function createTempMsg(string) {
-    const pElement = document.createElement('p')
-    pElement.innerText = string
-    tempMessageDiv.append(pElement)
-    handleFadeEffect(tempMessageDiv)
-}
-
-// these functions take an array, turn the display of each element to either flex or none
-const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
-const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 
 function startGame() {
     wallet -= bet
@@ -157,7 +127,7 @@ function startGame() {
 function resetGame() {
     console.log('resetting the game')
     shuffle()
-    // reset activehand
+    // reset activehand if split
     if (activeHand === splitHand) activeHand = player
     dealer.cards = []
     player.cards = []
@@ -172,20 +142,11 @@ function resetGame() {
         displaySplitTotal
     ]
     resetDisplays.forEach(div => div.innerText = '')
-    //remove second item from displaydealercards
-    resetDealerCard()
-}
-
-function resetDealerCard() {
-    document.querySelector('#flip-animation-here').classList.remove("flip-card-inner")
-    document.querySelector('#hidden-card').remove()
-
-    const clearDealerHand = document.querySelectorAll('#dealer-cards img.dealer-card')
-    console.log(clearDealerHand)
     
-    clearDealerHand.forEach(img => {
-            img.remove()
-    })
+    // reset dealer cards
+    divToAddCardFlip.classList.remove("flip-card-inner")
+    document.querySelector('#hidden-card').remove()
+    document.querySelectorAll('#dealer-cards img.dealer-card').forEach(img => img.remove())
 }
 
 function shuffle() {
@@ -347,18 +308,16 @@ function displayCards() {
 
         const hiddenCard = createCardImg(dealer.cards[0])
         hiddenCard.id = 'hidden-card'
-        hiddenCardFrontElement.append(hiddenCard)
-
+        document.querySelector('.flip-card-front').append(hiddenCard)
+        
         const dealer2ndCard = createCardImg(dealer.cards[1])
         dealer2ndCard.classList.add('dealer-card')
         displayDealerCards.append(dealer2ndCard)
 
-        displayDealerTotal.innerText = dealer.cards[1].value
-
         displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
-        displayPlayerTotal.innerText = player.total
 
-        console.log(displayDealerCards)
+        displayDealerTotal.innerText = dealer.cards[1].value
+        displayPlayerTotal.innerText = player.total
     }
     else {
         console.log('displayCards() for a player hit card')
@@ -517,10 +476,7 @@ function compareSplitResult() {
 }
 
 function revealHiddenCard() {
-    console.log('revealHiddenCard(), showing dealers 2nd card')
-    // const hiddenCard = document.querySelector('#hidden-card')
-    // if (hiddenCard) hiddenCard.src = dealer.cards[0].src
-    document.querySelector('#flip-animation-here').classList.add("flip-card-inner")
+    divToAddCardFlip.classList.add("flip-card-inner")
     displayDealerTotal.innerText = dealer.total
 }
 
@@ -529,10 +485,8 @@ function showResultScreen() {
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
     secondHandDiv.classList.remove('cards-border')
-
     // this changes the game screen bet display to 0
     betAmount[0].innerText = '0'
-    
     // check for high score
     if (wallet > score) {
         score = wallet
@@ -543,6 +497,35 @@ function showResultScreen() {
     }
 }
 
+/* --------------------------------------- UI / Visuals -------------------------------------- */
+
+// this takes an element and applies the fade in/fade out transition
+function handleFadeEffect(element) {
+    console.log('handling temporary message')
+    element.style.display = 'flex'
+    requestAnimationFrame(() => element.classList.add('fade-in'))
+    setTimeout(() => {
+        element.classList.remove('fade-in')
+        element.classList.add('fade-out')
+        setTimeout(() => {
+            element.style.display = 'none'
+            element.classList.remove('fade-out')
+            element.innerText = ''
+        }, 1000)
+    }, 2000)
+}
+
+function createTempMsg(string) {
+    const pElement = document.createElement('p')
+    pElement.innerText = string
+    tempMessageDiv.append(pElement)
+    handleFadeEffect(tempMessageDiv)
+}
+
+// these functions take an array, turn the display of each element to either flex or none
+const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
+const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
+
 function toggleHelp() {
     console.log('player pressed on help button')
     const instructions = document.querySelector('#instructions')
@@ -550,3 +533,7 @@ function toggleHelp() {
         instructions.style.display = 'none'
     } else {instructions.style.display = 'flex'}
 }
+
+/* --------------------------------------- Execute on Start -------------------------------------- */
+
+displayFunds()

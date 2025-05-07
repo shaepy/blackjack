@@ -384,38 +384,11 @@ h3 {
 
 .card {
     width: 62px;
-    padding: 1px 0;
+    padding: 2px;
 }
 
 .card:hover {
     transform: scale(1.4);
-}
-
-@media screen and (max-width: 431px) {
-    .card {
-        width: 45px;
-    }
-
-    .card:hover {
-        transform: scale(1.4);
-    }
-
-    #result h2 {
-        text-align: center;
-        font-size: 1.3rem;
-    }
-
-    #player-total, #dealer-total, #splitHand-total {
-        font-size: .95rem
-    }
-
-    #game-bank h3 {
-        font-size: 1.6rem;
-    }
-
-    .wallet-icon, .chip-icon {
-        width: 30px;
-    }
 }
 
 #temp-msg {
@@ -440,3 +413,57 @@ h3 {
     border: 4px double rgb(222, 222, 222);
     padding: 6px 15px;
 }
+
+/* ! CARD FLIP ANIMATION */
+
+/* flip card container (remove perspective if you don't want the 3D effect */
+.flip-card {
+    background-color: transparent;
+    width: 62px;
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  }
+  
+  /* this container is needed to position the front and back side */
+  .flip-card-inner {
+    position: relative;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+  
+  /* TODO Do an horizontal flip over the flip box container */
+.flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  /* position the front and back side */
+  .flip-card-back, .flip-card-front {
+    position: absolute;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+  }
+  
+  /* shows the back side */
+  .flip-card-front {
+    transform: rotateY(180deg);
+  }
+
+  @media screen and (max-width: 431px) {
+
+    #result h2 {
+        text-align: center;
+        font-size: 1.3rem;
+    }
+
+    #player-total, #dealer-total, #splitHand-total {
+        font-size: .95rem
+    }
+
+    #game-bank h3 {
+        font-size: 1.6rem;
+    }
+
+    .wallet-icon, .chip-icon {
+        width: 30px;
+    }
+}
+

@@ -34,6 +34,8 @@ const firstHandDiv = document.querySelector('#split-view-1')
 const secondHandDiv = document.querySelector('#split-view-2')
 const splitButton = document.querySelector('#split')
 const doubleButton = document.querySelector('#double')
+const hitButton = document.querySelector('#hit')
+const standButton = document.querySelector('#stand')
 
 // To check if local server or remote
 const baseUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
@@ -100,8 +102,9 @@ document.querySelector('#info-button').addEventListener('click', () => {
     } else {instructions.style.display = 'flex'}
 })
 
-document.querySelector('#hit').addEventListener('click', hit)
-document.querySelector('#stand').addEventListener('click', stand)
+// game actions
+hitButton.addEventListener('click', hit)
+standButton.addEventListener('click', stand)
 splitButton.addEventListener('click', splitCards)
 doubleButton.addEventListener('click', doubleDown)
 
@@ -151,6 +154,7 @@ function resetGame() {
         displaySplitTotal
     ]
     resetDisplays.forEach(div => div.innerText = '')
+    removeDisableAttr([hitButton, standButton])
     // reset dealer cards
     divToAddCardFlip.classList.remove("flip-card-inner")
     document.querySelector('#hidden-card').remove()
@@ -203,7 +207,7 @@ function dealCards() {
             createTempMsg('You do not have enough funds to split your cards')
             return
         }
-        removeDisableAttr(splitButton)
+        removeDisableAttr([splitButton])
     }
 }
 
@@ -292,7 +296,7 @@ function hit() {
     activeHand.cards.push(newCard)
     console.log('new card added:', activeHand)
 
-    if (player.cards.length > 2) setDisableAttr(doubleButton), setDisableAttr(splitButton)
+    if (player.cards.length > 2) setDisableAttr([splitButton, doubleButton])
 
     // if you hit while a split button is active, this means you did not split
 
@@ -353,6 +357,7 @@ function stand() {
         return
     }
 
+    setDisableAttr([hitButton, standButton])
     // dealer's turn
     setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
@@ -439,7 +444,7 @@ function showResultScreen() {
     h3betAmounts[0].innerText = '0'
 
     // check if double was disabled
-    if (doubleButton.disabled === true) removeDisableAttr(doubleButton)
+    if (doubleButton.disabled === true) removeDisableAttr([doubleButton])
 
     // check for high score
     if (wallet > score) {
@@ -489,15 +494,15 @@ function createTempMsg(string) {
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
 const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 
-// disable or enable button elements
-const setDisableAttr = (el) => {
+// these will take an array and remove or set the 'disabled' attribute for each element
+const setDisableAttr = (arr) => arr.forEach(el => {
     if (el.disabled === false) el.setAttribute('disabled', '')
     console.log(el, '-this is currently enabled. adding the disabled attribute')
-}
-const removeDisableAttr = (el) => {
+})
+const removeDisableAttr = (arr) => arr.forEach(el => {
     if (el.disabled === true) el.removeAttribute('disabled')
-        console.log(el, '-this is currently disabled. removing the disabled attribute')
-}
+    console.log(el, '-this is currently disabled. removing the disabled attribute')
+})
 
 /* --------------------------------------- Split Feature -------------------------------------- */
 
@@ -514,8 +519,7 @@ function splitCards() {
     createTempMsg('Your cards have been split')
     turnDisplayToFlex([secondHandDiv])
 
-    setDisableAttr(splitButton)
-    setDisableAttr(doubleButton)
+    setDisableAttr([splitButton, doubleButton])
 
     splitHand.cards.push(player.cards.pop())
     document.querySelectorAll('#player-cards img')[1].remove()
@@ -540,7 +544,7 @@ function splitCards() {
 function doubleDown() {
     console.log('player wants to double down')
     // disable the split button
-    setDisableAttr(splitButton)
+    setDisableAttr([splitButton])
     // add to bet, deduct from wallet
     console.log('bet is:', bet, 'wallet is:', wallet)
     bet += bet

@@ -13,7 +13,12 @@
 }
 
 body {
-    background-image: linear-gradient(to bottom right, #7ac2f1, #8d5ece);
+    background-image: url('./../img/assets/pixel-casino-floor-bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-blend-mode: darken;
+    background-color: #d3d6c5;
     font-family: "Jersey 20", monospace;
     /* Ensures full height compatibility across devices */
     min-height: 100dvh;
@@ -54,7 +59,7 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 30px;
     margin: 20px;
 }
 
@@ -64,10 +69,11 @@ h3 {
     justify-content: center;
     gap: 23px;
     margin: 5px 0 3px 0;
+    filter: drop-shadow(rgb(3, 3, 3) 1rem 1rem 13px);
 }
 
 #bet-selectors img {
-    width: 65px;
+    width: 76px;
     cursor: url('./../img/assets/cursor-button.png'), pointer;
 }
 
@@ -85,9 +91,9 @@ h3 {
 }
 
 #actions button {
-    background-color: #000;
+    background-color: #399b8b;
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
     min-width: 100px;
     min-height: 60px;
@@ -136,7 +142,7 @@ h3 {
 .play, #change-bet {
     background-color: #cb2222;
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
     padding: 17px 20px;
     letter-spacing: .06rem;
@@ -146,7 +152,7 @@ h3 {
 }
 
 #start-game {
-    padding: 15px 21px;
+    padding: 18px 25px;
 }
 
 #play-again-buttons {
@@ -156,7 +162,7 @@ h3 {
 }
 
 #change-bet {
-    background-color: #404040;
+    background-color: #777777;
 }
 
 /* Main Logos */
@@ -167,6 +173,7 @@ h3 {
     justify-content: center;
     gap: 10px;
     margin: 35px 0 8px 0;
+    filter: drop-shadow(rgb(3, 3, 3) 1rem 1rem 20px);
 }
 
     #large-logo img {
@@ -220,7 +227,11 @@ h3 {
     gap: 22px;
     justify-content: space-around;
     align-items: center;
-    margin: 14px;
+    margin: 10px 20px 20px;
+}
+
+#home-bank h3 {
+    font-size: 4rem;
 }
 
 #game-bank {
@@ -232,24 +243,25 @@ h3 {
     margin: 12px 0;
 }
 
-.wallet-icon, .chip-icon {
-    width: 58px;
+#game-bank h3 {
+    font-size: 3rem;
 }
 
-#home-bank h3, #game-bank h3 {
-    font-size: 3rem;
+.wallet-icon, .chip-icon {
+    width: 58px;
 }
 
 /* Game Table - Dealer vs Player */
 .score-section {
     display: none;
     flex-direction: row;
-    gap: 8px;
+    gap: 18px;
     padding: 2px 0 10px 0;
 }
 
 #home-score {
     padding: 15px 10px;
+    font-size: 1.7rem;
 }
 
 #split-view-1 {
@@ -306,7 +318,7 @@ h3 {
 
     #result h2 {
         text-align: center;
-        font-size: 2rem;
+        font-size: 2.4rem;
     }
 
 /* Game screen rows */
@@ -339,6 +351,10 @@ h3 {
     align-items: center;
     justify-content: space-evenly;
     margin: 0 20px;
+    background-color: rgba(17, 17, 17, 0.974);
+    border: 6px double #000000;
+    border-radius: 35px;
+    padding: 20px 32px 20px 20px;
 }
 
 /* Card images */
@@ -377,7 +393,7 @@ h3 {
 
 /* this highlights the cards section when splitting cards */
 .cards-border {
-    border: 4px double rgb(222, 222, 222);
+    border: 3px solid rgb(255, 255, 199);
     padding: 8px;
 }
 

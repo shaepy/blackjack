@@ -7,6 +7,7 @@ const largeLogo = document.querySelector('#large-logo')
 const smallLogo = document.querySelector('#small-logo')
 
 // Display elements
+const bodyElement = document.querySelector('body')
 const actionsBar = document.querySelector('#actions')
 const resultDiv = document.querySelector('#result')
 const gameTable = document.querySelector('#game-table')
@@ -56,6 +57,7 @@ document.querySelector('#start-game').addEventListener('click', () => {
         createTempMsg('Choose a bet amount to start a game')
         return
     }
+    bodyElement.style.backgroundImage = `url('./../img/assets/dealer-bg.png')`
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
     startGame()
@@ -66,6 +68,7 @@ document.querySelector('#change-bet').addEventListener('click', () => {
     resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo, secondHandDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
+    bodyElement.style.backgroundImage = `url('./../img/assets/pixel-casino-floor-bg.png')`
     if (wallet < bet) resetWallet.style.display = 'flex'
 })
 

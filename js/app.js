@@ -34,6 +34,9 @@ const firstHandDiv = document.querySelector('#split-view-1')
 const secondHandDiv = document.querySelector('#split-view-2')
 const splitButton = document.querySelector('#split')
 
+// To check if local server or remote
+const baseUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
+
 /* --------------------------------------- Variables -------------------------------------- */
 
 let dealer = {cards: [], total: 0, hitCardIdx: 0}
@@ -45,8 +48,6 @@ let bet = score = 0
 let wallet = 100
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
-
-const baseUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
 // play button - start game
 document.querySelector('#start-game').addEventListener('click', () => {

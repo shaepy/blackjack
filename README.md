@@ -49,12 +49,18 @@ Both you and the dealer start with two cards and take turns choosing to 'hit' (g
 // Elaborate further
 1. Built out data structure
 2. Scaffolding for HTML for a dealer, player, and 2 buttons for `hit` and `stand`
+3. Dealing the cards
+    - Created `getCard()` that grabs a random card from the `cardDeck` array
+    - `dealCards()` adds 2 cards to each hand (player and dealer)
+    - `addCardTotal()` calculates the total of each hand
+    - Display those cards using `displayCards()` which later on is used to also display hit cards from the player
 
 ## ♦️ Design Process
 // Elaborate further
 1. Initial wireframes
 2. Mockups with initial design
 3. Choosing a Pixel theme
+4. AI-generated background images
 
 ## ♦️ Next Steps
 - (05/05/25) Split feature has been merged successfully

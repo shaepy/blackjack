@@ -5,15 +5,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: url('./../img/assets/cursor-reg.png'), pointer;
+    cursor: url('../img/assets/cursor-reg.png'), pointer;
 }
 
 * button:hover {
-    cursor: url('./../img/assets/cursor-button.png'), pointer;
+    cursor: url('../img/assets/cursor-button.png'), pointer;
 }
 
 body {
-    background-image: url('./../img/assets/pixel-casino-floor-bg.png');
+    background-image: url('../img/assets/pixel-casino-floor-bg.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -68,7 +68,7 @@ h3 {
 
 #bet-selectors img {
     width: 65px;
-    cursor: url('./../img/assets/cursor-button.png'), pointer;
+    cursor: url('../img/assets/cursor-button.png'), pointer;
 }
 
 #bet-selectors img:hover {
@@ -129,7 +129,7 @@ h3 {
 }
 
 #info-button {
-    cursor: url('./../img/assets/cursor-button.png'), pointer;
+    cursor: url('../img/assets/cursor-button.png'), pointer;
     margin: 5px;
     width: 17px;
 }
@@ -238,7 +238,7 @@ h3 {
 #reset-wallet {
     display: none;
     background-color: #000;
-    cursor: url('./../img/assets/cursor-button.png'), pointer;
+    cursor: url('../img/assets/cursor-button.png'), pointer;
 }
 
 #reset-wallet:hover {

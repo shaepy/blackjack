@@ -36,6 +36,7 @@ const splitButton = document.querySelector('#split')
 const doubleButton = document.querySelector('#double')
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
+const playerActions = document.querySelectorAll('#actions button')
 
 // To check if local server or remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
@@ -188,6 +189,7 @@ function displayFunds() {
 /* --------------------------------------- Start/Reset Game --------------------------------------- */
 
 function startGame() {
+    if (window.getComputedStyle(instructions).display === 'flex') instructions.style.display = 'none'
     wallet -= bet
     displayFunds()
     dealCards()
@@ -263,7 +265,6 @@ function dealCards() {
     if (player.cards[0].rank === player.cards[1].rank) {
         console.log('player can split. matching ranks found')
         if (wallet < bet) {
-            console.log('not enough in wallet to split cards')
             createTempMsg('You do not have enough funds to split your cards')
             return
         }
@@ -313,6 +314,7 @@ function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
+        setDisableAttr(playerActions)
         displayH2Result.innerText = 'Pixeljack! You Win'
         wallet += bet + (bet * 1.5)
         setTimeout(revealHiddenCard, 300)
@@ -417,7 +419,7 @@ function stand() {
         return
     }
 
-    setDisableAttr([hitButton, standButton, doubleButton])
+    setDisableAttr(playerActions)
     // dealer's turn
     setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()

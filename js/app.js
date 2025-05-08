@@ -38,7 +38,7 @@ const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 
 // To check if local server or remote
-const baseUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
+const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
 /* --------------------------------------- Variables -------------------------------------- */
 
@@ -63,7 +63,7 @@ document.querySelector('#start-game').addEventListener('click', () => {
         createTempMsg('Choose a bet amount to start a game')
         return
     }
-    bodyElement.style.backgroundImage = `url("${baseUrl}/img/assets/dealer-bg.png")`;
+    bodyElement.style.backgroundImage = `url("${srcUrl}/img/assets/dealer-bg.png")`;
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
     startGame()
@@ -74,7 +74,7 @@ document.querySelector('#change-bet').addEventListener('click', () => {
     resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo, secondHandDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
-    bodyElement.style.backgroundImage = `url("${baseUrl}/img/assets/pixel-casino-floor-bg.png")`;
+    bodyElement.style.backgroundImage = `url("${srcUrl}/img/assets/pixel-casino-floor-bg.png")`;
     if (wallet < bet) resetWallet.style.display = 'flex'
 })
 
@@ -102,13 +102,73 @@ document.querySelector('#info-button').addEventListener('click', () => {
     } else {instructions.style.display = 'flex'}
 })
 
-// game actions
+// split feature
+splitButton.addEventListener('click', () => {
+        console.log('player presses split button')
+        console.log('your current bet:', bet, 'your current wallet:', wallet)
+    
+        // deduct bet from wallet
+        wallet -= bet
+        bet += bet
+        console.log('your bet now:', bet, 'your wallet now:', wallet)
+        displayFunds()
+    
+        createTempMsg('Your cards have been split')
+        turnDisplayToFlex([secondHandDiv])
+    
+        setDisableAttr([splitButton, doubleButton])
+    
+        splitHand.cards.push(player.cards.pop())
+        document.querySelectorAll('#player-cards img')[1].remove()
+        
+        // reset totals
+        splitHand.total = player.total = 0
+        // display border
+        firstHandDiv.classList.add('cards-border')
+    
+        // deal cards FOR SPLIT HAND
+        player.cards.push(getCard())
+        splitHand.cards.push(getCard())
+        addCardTotal()
+        displaySplitTotal.innerText = splitHand.total
+        displayPlayerTotal.innerText = player.total
+        displayPlayerCards.append(createCardImg(player.cards[1]))
+        displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+})
+
+// double down feature
+doubleButton.addEventListener('click', () => {
+    console.log('player wants to double down')
+    if (wallet < bet) {
+        createTempMsg('Your wallet is too low to double your bet')
+        return
+    }
+    setDisableAttr([splitButton])
+    // add to bet, deduct from wallet
+    console.log('bet is:', bet, 'wallet is:', wallet)
+    wallet -= bet
+    bet += bet
+    console.log('bet is now:', bet, 'wallet is now:', wallet)
+    displayFunds()
+    hit()
+    console.log('player hand:', player)
+    // we only want this to happen if checkforbust does not happen
+    if (!checkForBust(activeHand)) {
+        console.log('player did not bust')
+        stand()
+    }
+    // back to original bet after results
+    bet = bet / 2
+    console.log('bet is now:', bet, 'wallet is now:', wallet)
+})
+
+// player actions
 hitButton.addEventListener('click', hit)
 standButton.addEventListener('click', stand)
-splitButton.addEventListener('click', splitCards)
-doubleButton.addEventListener('click', doubleDown)
+
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
+
 // reset wallet and displayFunds()
 resetWallet.addEventListener('click', () => {wallet = 200, displayFunds()})
 
@@ -182,12 +242,12 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    // player.cards.push(getCard(), getCard())
+    player.cards.push(getCard(), getCard())
 
     // * split cards
-    const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
-    const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
-    player.cards.push(splitcard1, splitcard2)
+    // const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
+    // const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
+    // player.cards.push(splitcard1, splitcard2)
 
     // * ace edge case
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
@@ -357,7 +417,7 @@ function stand() {
         return
     }
 
-    setDisableAttr([hitButton, standButton])
+    setDisableAttr([hitButton, standButton, doubleButton])
     // dealer's turn
     setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
@@ -497,71 +557,10 @@ const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 // these will take an array and remove or set the 'disabled' attribute for each element
 const setDisableAttr = (arr) => arr.forEach(el => {
     if (el.disabled === false) el.setAttribute('disabled', '')
-    console.log(el, '-this is currently enabled. adding the disabled attribute')
 })
 const removeDisableAttr = (arr) => arr.forEach(el => {
     if (el.disabled === true) el.removeAttribute('disabled')
-    console.log(el, '-this is currently disabled. removing the disabled attribute')
 })
-
-/* --------------------------------------- Split Feature -------------------------------------- */
-
-function splitCards() {
-    console.log('player presses split button')
-    console.log('your current bet:', bet, 'your current wallet:', wallet)
-
-    // deduct bet from wallet
-    wallet -= bet
-    bet += bet
-    console.log('your bet now:', bet, 'your wallet now:', wallet)
-    displayFunds()
-
-    createTempMsg('Your cards have been split')
-    turnDisplayToFlex([secondHandDiv])
-
-    setDisableAttr([splitButton, doubleButton])
-
-    splitHand.cards.push(player.cards.pop())
-    document.querySelectorAll('#player-cards img')[1].remove()
-    
-    // reset totals
-    splitHand.total = player.total = 0
-    // display border
-    firstHandDiv.classList.add('cards-border')
-
-    // deal cards FOR SPLIT HAND
-    player.cards.push(getCard())
-    splitHand.cards.push(getCard())
-    addCardTotal()
-    displaySplitTotal.innerText = splitHand.total
-    displayPlayerTotal.innerText = player.total
-    displayPlayerCards.append(createCardImg(player.cards[1]))
-    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
-}
-
-/* --------------------------------------- Double Down -------------------------------------- */
-
-function doubleDown() {
-    console.log('player wants to double down')
-    // disable the split button
-    setDisableAttr([splitButton])
-    // add to bet, deduct from wallet
-    console.log('bet is:', bet, 'wallet is:', wallet)
-    bet += bet
-    wallet -= bet
-    console.log('bet is now:', bet, 'wallet is now:', wallet)
-    displayFunds()
-    hit()
-    console.log('player hand:', player)
-    // we only want this to happen if checkforbust does not happen
-    if (!checkForBust(activeHand)) {
-        console.log('player did not bust')
-        stand()
-    }
-    // back to original bet after results
-    bet = bet / 2
-    console.log('bet is now:', bet, 'wallet is now:', wallet)
-}
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

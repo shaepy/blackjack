@@ -300,24 +300,32 @@ h3 {
 
 #split-view-1 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
 
 #split-view-2 {
     display: none;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
 
-#dealer, #player {
+#player {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
     margin: 2px;
+}
+
+#dealer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 2px;
+    gap: 4px;
 }
 
 #dealer h3 {
@@ -337,19 +345,19 @@ h3 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 2px;
-    max-width: 300px;
+    min-width: 130px;
+    max-width: 340px;
 }
 
 #result {
     color: rgb(255, 255, 255);
     display: none;
-    margin-top: 6px;
-    padding: 4px;
+    padding: 10px;
 }
 
 #result h2 {
     text-align: center;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
 }
 
 /* Game screen rows */
@@ -365,8 +373,8 @@ h3 {
 }
 
 #game-table-column-1 {
-    gap: 10px;
-    margin-top: 25px;
+    gap: 22px;
+    padding: 22px;
 }
 
 #game-table-column-1 p {
@@ -378,17 +386,17 @@ h3 {
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
     background-color: rgba(17, 17, 17, 0.974);
     border: 6px double #000000;
     border-radius: 30px;
     margin-top: 10px;
-    padding: 8px 40px 12px 40px;
+    padding: 12px;
+    min-width: 390px;
 }
 
 /* Card images */
 .card {
-    width: 54px;
+    width: 58px;
     padding: 2px;
 }
 
@@ -426,7 +434,7 @@ h3 {
 /* flip card container */
 .card-container {
     background-color: transparent;
-    width: 54px;
+    width: 58px;
     perspective: 1000px; /* 3D effect */
   }
   
@@ -461,7 +469,7 @@ h3 {
 
     #result h2 {
         text-align: center;
-        font-size: 1.3rem;
+        font-size: 1.8rem;
     }
 
     #player-total, #dealer-total, #splitHand-total {
@@ -480,11 +488,19 @@ h3 {
         display: none;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
         background-color: rgba(17, 17, 17, 0.974);
         border: 6px double #000000;
         border-radius: 30px;
-        padding: 0px 20px 20px 20px;
+        max-width: 370px;
+        min-width: 330px;
+    }
+
+    #game-table-column-2 {
+        padding: 8px;
+    }
+
+    #game-table-column-1 {
+        padding: 10px;
     }
 
     #actions button {
@@ -497,6 +513,10 @@ h3 {
     #actions {
         max-width: 176px;
         gap: 12px;
+    }
+
+    #dealer-cards, #player-cards, #splitHand-cards {
+        max-width: 265px;
     }
 }
 

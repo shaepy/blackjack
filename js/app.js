@@ -263,7 +263,6 @@ function dealCards() {
 
     // if dealt cards are same rank, show split button
     if (player.cards[0].rank === player.cards[1].rank) {
-        console.log('player can split. matching ranks found')
         if (wallet < bet) {
             createTempMsg('You do not have enough funds to split your cards')
             return
@@ -272,23 +271,23 @@ function dealCards() {
     }
 }
 
-function changeAceValues(handOfCards) {
-    const aceIdx = handOfCards.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
+function changeAceValues(hand) {
+    const aceIdx = hand.cards.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
     // if an ace is returned (aceIdx is not -1)
     if (aceIdx !== -1) {
-        console.log('there is an ace we can change:', handOfCards[aceIdx])
-        handOfCards[aceIdx].value = 1
-        handOfCards[aceIdx].aceValueChanged = true
-        console.log('changed!', handOfCards[aceIdx])
-        if (handOfCards === activeHand.cards) {
+        console.log('there is an ace we can change:', hand.cards[aceIdx])
+        hand.cards[aceIdx].value = 1
+        hand.cards[aceIdx].aceValueChanged = true
+        console.log('changed!', hand.cards[aceIdx])
+        if (hand === player || hand === splitHand) {
             console.log('this is a player')
-            player.total -= 10
+            hand.total -= 10
             createTempMsg(`Your Ace value has changed from 11 to 1`)
         } else {
             console.log('this is dealer')
             dealer.total -= 10
         }
-        console.log('ace changed:', handOfCards[aceIdx], player.total, dealer.total)
+        console.log('ace changed:', hand.cards[aceIdx], hand.total, dealer.total)
     } else {
         // remove later
         console.log('there is no ace that qualifies')
@@ -302,11 +301,15 @@ function addCardTotal() {
     splitHand.total = splitHand.cards.reduce((acc, card) => acc + card.value, 0)
     if (dealer.total > 21) {
         console.log('this is over 21. dealer total:', dealer.total)
-        changeAceValues(dealer.cards)
+        changeAceValues(dealer)
     } 
     if (player.total > 21) {
         console.log('this is over 21. player total:', player.total)
-        changeAceValues(player.cards)
+        changeAceValues(player)
+    }
+    if (splitHand.total > 21) {
+        console.log('this is over 21. splithand total:', splitHand.total)
+        changeAceValues(splitHand)
     }
 }
 
@@ -378,7 +381,7 @@ function hit() {
 }
 
 function checkForBust(hand) {
-    if (player.total > 21 && splitHand.total > 21) {     // BOTH SPLIT HANDS BUST
+    if (player.total > 21 && splitHand.total > 21) {
         // auto lose, skip dealer turn
         console.log('BOTH HANDS BUST')
         bet = bet / 2
@@ -399,6 +402,7 @@ function checkForBust(hand) {
             return
         } 
         // proceed as normal
+        setDisableAttr(playerActions)
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `You Bust`

@@ -33,6 +33,7 @@ const displaySplitTotal = document.querySelector('#splitHand-total')
 const firstHandDiv = document.querySelector('#split-view-1')
 const secondHandDiv = document.querySelector('#split-view-2')
 const splitButton = document.querySelector('#split')
+const doubleButton = document.querySelector('#double')
 
 // To check if local server or remote
 const baseUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
@@ -45,7 +46,7 @@ let splitHand = {cards: [], total: 0, hitCardIdx: 0}
 
 let activeHand = player
 let bet = score = 0
-let wallet = 100
+let wallet = 200
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
@@ -102,10 +103,11 @@ document.querySelector('#info-button').addEventListener('click', () => {
 document.querySelector('#hit').addEventListener('click', hit)
 document.querySelector('#stand').addEventListener('click', stand)
 splitButton.addEventListener('click', splitCards)
+doubleButton.addEventListener('click', doubleDown)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 // reset wallet and displayFunds()
-resetWallet.addEventListener('click', () => {wallet = 100, displayFunds()})
+resetWallet.addEventListener('click', () => {wallet = 200, displayFunds()})
 
 const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
 const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
@@ -176,12 +178,12 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    player.cards.push(getCard(), getCard())
+    // player.cards.push(getCard(), getCard())
 
     // * split cards
-    // const splitcard1 = cardDeck.find(c => c.rank === '3' && c.suit === 'spade')
-    // const splitcard2 = cardDeck.find(c => c.rank === '3' && c.suit === 'heart')
-    // player.cards.push(splitcard1, splitcard2)
+    const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
+    const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
+    player.cards.push(splitcard1, splitcard2)
 
     // * ace edge case
     // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
@@ -201,7 +203,7 @@ function dealCards() {
             createTempMsg('You do not have enough funds to split your cards')
             return
         }
-        splitButton.style.display = 'flex'
+        removeDisableAttr(splitButton)
     }
 }
 
@@ -290,7 +292,9 @@ function hit() {
     activeHand.cards.push(newCard)
     console.log('new card added:', activeHand)
 
-    if (player.cards.length > 2) splitButton.style.display = 'none'
+    if (player.cards.length > 2) setDisableAttr(doubleButton), setDisableAttr(splitButton)
+
+    // if you hit while a split button is active, this means you did not split
 
     activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
@@ -332,6 +336,7 @@ function checkForBust(hand) {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `You Bust`
+        return 1
     } 
 }
 
@@ -379,6 +384,7 @@ function compareResult(firstTotal, secondTotal) {
 
     const isDealerBust = dealer.total > 21
     if (isDealerBust || firstTotal - secondTotal > 0) {
+        console.log(`PLAYER WINS`)
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
     } else if (firstTotal - secondTotal === 0) {
@@ -431,6 +437,10 @@ function showResultScreen() {
     secondHandDiv.classList.remove('cards-border')
     // this changes the game screen bet display to 0
     h3betAmounts[0].innerText = '0'
+
+    // check if double was disabled
+    if (doubleButton.disabled === true) removeDisableAttr(doubleButton)
+
     // check for high score
     if (wallet > score) {
         score = wallet
@@ -439,40 +449,6 @@ function showResultScreen() {
         createTempMsg(`Your high score is now ${score}`)
         document.querySelectorAll('.high-score').forEach(display => display.innerText = score)
     }
-}
-
-/* --------------------------------------- Split Feature -------------------------------------- */
-
-function splitCards() {
-    console.log('player presses split button')
-    console.log('your current bet:', bet, 'your current wallet:', wallet)
-
-    // deduct bet from wallet
-    wallet -= bet
-    bet += bet
-    console.log('your bet now:', bet, 'your wallet now:', wallet)
-    displayFunds()
-
-    createTempMsg('Your cards have been split')
-    turnDisplayToFlex([secondHandDiv])
-    turnDisplayToNone([splitButton])
-
-    splitHand.cards.push(player.cards.pop())
-    document.querySelectorAll('#player-cards img')[1].remove()
-    
-    // reset totals
-    splitHand.total = player.total = 0
-    // display border
-    firstHandDiv.classList.add('cards-border')
-
-    // deal cards FOR SPLIT HAND
-    player.cards.push(getCard())
-    splitHand.cards.push(getCard())
-    addCardTotal()
-    displaySplitTotal.innerText = splitHand.total
-    displayPlayerTotal.innerText = player.total
-    displayPlayerCards.append(createCardImg(player.cards[1]))
-    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
 }
 
 /* --------------------------------------- UI / Visuals -------------------------------------- */
@@ -512,6 +488,76 @@ function createTempMsg(string) {
 // these functions take an array, turn the display of each element to either flex or none
 const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
 const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
+
+// disable or enable button elements
+const setDisableAttr = (el) => {
+    if (el.disabled === false) el.setAttribute('disabled', '')
+    console.log(el, '-this is currently enabled. adding the disabled attribute')
+}
+const removeDisableAttr = (el) => {
+    if (el.disabled === true) el.removeAttribute('disabled')
+        console.log(el, '-this is currently disabled. removing the disabled attribute')
+}
+
+/* --------------------------------------- Split Feature -------------------------------------- */
+
+function splitCards() {
+    console.log('player presses split button')
+    console.log('your current bet:', bet, 'your current wallet:', wallet)
+
+    // deduct bet from wallet
+    wallet -= bet
+    bet += bet
+    console.log('your bet now:', bet, 'your wallet now:', wallet)
+    displayFunds()
+
+    createTempMsg('Your cards have been split')
+    turnDisplayToFlex([secondHandDiv])
+
+    setDisableAttr(splitButton)
+    setDisableAttr(doubleButton)
+
+    splitHand.cards.push(player.cards.pop())
+    document.querySelectorAll('#player-cards img')[1].remove()
+    
+    // reset totals
+    splitHand.total = player.total = 0
+    // display border
+    firstHandDiv.classList.add('cards-border')
+
+    // deal cards FOR SPLIT HAND
+    player.cards.push(getCard())
+    splitHand.cards.push(getCard())
+    addCardTotal()
+    displaySplitTotal.innerText = splitHand.total
+    displayPlayerTotal.innerText = player.total
+    displayPlayerCards.append(createCardImg(player.cards[1]))
+    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+}
+
+/* --------------------------------------- Double Down -------------------------------------- */
+
+function doubleDown() {
+    console.log('player wants to double down')
+    // disable the split button
+    setDisableAttr(splitButton)
+    // add to bet, deduct from wallet
+    console.log('bet is:', bet, 'wallet is:', wallet)
+    bet += bet
+    wallet -= bet
+    console.log('bet is now:', bet, 'wallet is now:', wallet)
+    displayFunds()
+    hit()
+    console.log('player hand:', player)
+    // we only want this to happen if checkforbust does not happen
+    if (!checkForBust(activeHand)) {
+        console.log('player did not bust')
+        stand()
+    }
+    // back to original bet after results
+    bet = bet / 2
+    console.log('bet is now:', bet, 'wallet is now:', wallet)
+}
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

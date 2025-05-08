@@ -85,31 +85,32 @@ h3 {
 #actions {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 20px;
+    gap: 13px;
     margin: 12px 0;
+    max-width: 236px;
 }
 
 #actions button {
-    background-color: #399b8b;
+    background-color: #4DB7D1;
     color: #fff;
     font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
-    min-width: 100px;
-    min-height: 60px;
-    padding: 10px 18px;
+    min-width: 110px;
+    min-height: 65px;
+    padding: 18px;
     letter-spacing: .06rem;
     border-radius: 7px;
     border: none;
 }
 
-#split {
-    display: none;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin: 12px 0;
+#actions #double {
+    background-color: #F5A614;
+}
+
+#actions #split {
+    background-color: #EF6CD7;
 }
 
 /* Instructions and help icon */
@@ -144,7 +145,7 @@ h3 {
     color: #fff;
     font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
-    padding: 17px 20px;
+    padding: 21px;
     letter-spacing: .06rem;
     border-radius: 7px;
     cursor: url('../img/assets/cursor-button.png'), pointer;
@@ -152,7 +153,7 @@ h3 {
 }
 
 #start-game {
-    padding: 18px 25px;
+    padding: 19px 26px;
 }
 
 #play-again-buttons {
@@ -388,6 +389,17 @@ h3 {
 
 #temp-msg.fade-out {
     opacity: 0;
+}
+
+/* INACTIVE BUTTON STATES FOR ACTIONS */
+
+#actions button:disabled {
+    opacity: 0.3;
+}
+
+#actions button:disabled:hover {
+    transform: none;
+    cursor: url('../img/assets/cursor-reg.png'), pointer;
 }
 
 /* this highlights the cards section when splitting cards */

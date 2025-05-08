@@ -63,6 +63,7 @@ h3 {
     justify-content: center;
     gap: 24px;
     margin: 3px;
+    filter: drop-shadow(rgb(3, 3, 3) 1rem 1rem 13px);
 }
 
 #bet-selectors img {
@@ -94,6 +95,8 @@ h3 {
     letter-spacing: .06rem;
     border-radius: 7px;
     border: none;
+    margin-top: 10px;
+    margin-bottom: 16px;
 }
 
 #actions button:hover {
@@ -159,7 +162,7 @@ h3 {
 #play-again-buttons {
     display: none;
     flex-direction: row;
-    gap: 12px;
+    gap: 16px;
     margin: 10px;
     align-items: center;
     justify-content: center;
@@ -191,6 +194,7 @@ h3 {
     align-items: center;
     gap: 12px;
     margin: 30px 18px 8px;
+    filter: drop-shadow(rgb(3, 3, 3) 1rem 1rem 20px);
 }
 
 #large-logo img {
@@ -330,13 +334,12 @@ h3 {
     color: rgb(255, 255, 255);
     display: none;
     margin-top: 6px;
-    padding: 8px 15px;
-    background-color: rgb(0, 0, 0);
+    padding: 4px;
 }
 
 #result h2 {
     text-align: center;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
 }
 
 /* Game screen rows */
@@ -389,7 +392,7 @@ h3 {
     align-items: center;
     opacity: 0;
     transition: opacity 0.8s ease;
-    margin-top: 18px;
+    margin-top: 9px;
     background-color: black;
     padding: 8px;
 }

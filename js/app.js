@@ -243,22 +243,7 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    // player.cards.push(getCard(), getCard())
-
-    // * split cards
-    const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
-    const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
-    player.cards.push(splitcard1, splitcard2)
-
-    // * ace edge case
-    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // player.cards.push(ace1, ace2)
-
-    // * blackjack edge case
-    // const testcard10 = cardDeck.find(c => c.value === 10)
-    // const testace11 = cardDeck.find(c => c.rank === 'ace')
-    // player.cards.push(testcard10, testace11)
+    player.cards.push(getCard(), getCard())
 
     if (player.cards[0].rank === player.cards[1].rank) {
         if (wallet < bet) {

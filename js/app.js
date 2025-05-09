@@ -38,10 +38,6 @@ const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const actionButtons = document.querySelectorAll('#actions button')
 
-// Bust tag
-const bustTag = document.createElement('span')
-bustTag.innerText = 'BUST'
-
 // To check if local server or remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
@@ -367,13 +363,19 @@ function hit() {
     checkForBust(activeHand)
 }
 
+// Bust tag
+function createBustTag(div) {
+    const bustTag = document.createElement('span')
+    bustTag.innerText = 'BUST'
+    div.append(bustTag)
+}
+
 // this function should STOP the turn of the dealer if BOTH HANDS BUST, or if single hand player BUST
 function checkForBust(hand) {
     if (player.total > 21 && splitHand.total > 21) {
         player.isBust = true
         splitHand.isBust = true
-        displayPlayerTotal.append(bustTag)
-        displaySplitTotal.append(bustTag)
+        createBustTag(displaySplitTotal)
         compareSplitResult()
         return
     }
@@ -382,15 +384,15 @@ function checkForBust(hand) {
         if (splitHand.cards.length > 0) {
             console.log('this is a SPLIT with a bust. auto standing now')
             hand.isBust = true
-            if (hand === player) {displayPlayerTotal.append(bustTag)} 
-            else {displaySplitTotal.append(bustTag)}
+            if (hand === player) {createBustTag(displayPlayerTotal)} 
+            else {createBustTag(displaySplitTotal)}
             stand()
             return
         } 
         console.log('this hand is a player and a BUST')
         // proceed as normal
         hand.isBust = true
-        displayPlayerTotal.append(bustTag)
+        createBustTag(displayPlayerTotal)
         compareResult()
         return 1
     } 

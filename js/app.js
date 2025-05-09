@@ -54,21 +54,10 @@ let activeHand = player
 let bet = score = 0
 let wallet = 200
 
-/* --------------------------------------- Audio -------------------------------------- */
-
-const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
-const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/cards-being-dealt.mp3`)
-const playerWinSound = new Audio(`${srcUrl}/assets/audio/pixel-coin-collect-win.mp3`)
-const playerBustSound = new Audio(`${srcUrl}/assets/audio/pixeljack-bust.mp3`)
-const hitCardSound = new Audio(`${srcUrl}/assets/audio/card-hit.mp3`)
-const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
-const blackjackSound = new Audio(`${srcUrl}/assets/audio/pixeljack.mp3`)
-const playerLoseSound = new Audio(`${srcUrl}/assets/audio/player-lose.mp3`)
-const playerPushSound = new Audio(`${srcUrl}/assets/audio/player-push.mp3`)
-
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 document.querySelector('#start-game').addEventListener('click', () => {
+    menuClickSound.play()
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
         createTempMsg('Your wallet is too low. Reset to add gold')
@@ -85,6 +74,7 @@ document.querySelector('#start-game').addEventListener('click', () => {
 })
 
 document.querySelector('#change-bet').addEventListener('click', () => {
+    menuClickSound.play()
     resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo, secondHandDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
@@ -93,6 +83,7 @@ document.querySelector('#change-bet').addEventListener('click', () => {
 })
 
 document.querySelector('#play-again').addEventListener('click', () => {
+    menuClickSound.play()
     if (wallet < bet) {
         resetWallet.style.display = 'flex'
         createTempMsg('Your wallet is too low. Reset to add gold')
@@ -108,6 +99,7 @@ document.querySelector('#play-again').addEventListener('click', () => {
 })
 
 document.querySelector('#info-button').addEventListener('click', () => {
+    menuClickSound.play()
     const instructions = document.querySelector('#instructions')
     if (window.getComputedStyle(instructions).display === 'flex') {
         instructions.style.display = 'none'
@@ -158,7 +150,7 @@ standButton.addEventListener('click', stand)
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
-resetWallet.addEventListener('click', () => {wallet = 200, displayFunds()})
+resetWallet.addEventListener('click', () => {wallet = 200, displayFunds(), coinJingle.play()})
 
 const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
 const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
@@ -402,20 +394,20 @@ function compareResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `You Bust`
-        playerBustSound.play()
+        bustSound.play()
         return
     }
     if (dealer.isBust|| player.total - dealer.total > 0) {
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
-        playerWinSound.play()
+        winSound.play()
     } else if (player.total - dealer.total === 0) {
         wallet += bet
         displayH2Result.innerText = `Push`
-        playerPushSound.play()
+        pushSound.play()
     } else { 
         displayH2Result.innerText = `You Lose`
-        playerLoseSound.play()
+        loseSound.play()
     }
     setTimeout(displayFunds, 450)
     setTimeout(showResultScreen, 450)
@@ -427,7 +419,7 @@ function compareSplitResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `Both Hands Bust`
-        playerBustSound.play()
+        bustSound.play()
         bet = bet / 2
         return
     }
@@ -435,14 +427,14 @@ function compareSplitResult() {
         if (dealer.isBust || handTotal - dealer.total > 0) {
             wallet += bet
             displayH2Result.innerHTML += ` ${label} Wins<br>`
-            playerWinSound.play()
+            winSound.play()
         } else if (handTotal - dealer.total === 0) {
             wallet += bet / 2
             displayH2Result.innerHTML += ` ${label} Push<br>`
-            playerPushSound.play()
+            pushSound.play()
         } else {
             displayH2Result.innerHTML += ` ${label} Loses<br>`
-            playerLoseSound.play()
+            loseSound.play()
         }
     }
     if (!player.isBust) {compareHands(player.total, '1st Hand')}
@@ -514,6 +506,50 @@ const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 // these will take an array and remove or set the 'disabled' attribute for each element
 const setDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === false) el.setAttribute('disabled', '')})
 const removeDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === true) el.removeAttribute('disabled')})
+
+/* ----------------------------------------- Audio ---------------------------------------- */
+
+let isMuted = false
+const muteButton = document.querySelector('#mute-button')
+muteButton.addEventListener('click', () => {
+    isMuted = !isMuted
+    audioElements.forEach(audio => audio.muted = isMuted)
+    isMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png` : muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
+})
+
+const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
+const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/dealing-cards.mp3`)
+const hitCardSound = new Audio(`${srcUrl}/assets/audio/card-hit.mp3`)
+const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
+const pushSound = new Audio(`${srcUrl}/assets/audio/push.mp3`)
+const bustSound = new Audio(`${srcUrl}/assets/audio/bust.mp3`)
+const loseSound = new Audio(`${srcUrl}/assets/audio/death.mp3`)
+const winSound = new Audio(`${srcUrl}/assets/audio/win.mp3`)
+const blackjackSound = new Audio(`${srcUrl}/assets/audio/blackjack.mp3`)
+const coinJingle = new Audio(`${srcUrl}/assets/audio/coin-jingle.mp3`)
+const menuClickSound = new Audio(`${srcUrl}/assets/audio/menu-select.mp3`)
+
+dealingCardsSound.playbackRate = 1.5
+hitCardSound.playbackRate = 1.5
+loseSound.playbackRate = 1.5
+coinJingle.playbackRate = 1.4
+menuClickSound.playbackRate = 1.9
+pushSound.playbackRate = 1.3
+bustSound.playbackRate = 1.1
+blackjackSound.playbackRate = 1.3
+winSound.volume = 0.25
+menuClickSound.volume = 0.4
+
+const masterVolume = [
+selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, 
+pushSound, bustSound, loseSound, blackjackSound, coinJingle
+]
+masterVolume.forEach(s => s.volume = 0.6)
+
+const audioElements = [
+selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle,
+pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound
+]
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

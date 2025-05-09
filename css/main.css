@@ -129,13 +129,13 @@ h3 {
     padding: 7px 50px;
 }
 
-#info-button {
+#info-button, #mute-button {
     cursor: url('../assets/img/cursor-button.png'), pointer;
     margin: 5px;
-    width: 18.5px;
+    height: 23px;
 }
 
-#info-button:hover {
+#info-button:hover, #mute-button:hover {
     transform: scale(1.2);
 }
 

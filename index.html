@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pixeljack</title>
+    <title>Pixeljack</title>
     <script defer src="./js/cards.js"></script>
     <script defer src="./js/app.js"></script>
     <link rel="stylesheet" media="screen and (min-width: 726px)" href="./css/main.css">
     <link rel="stylesheet" media="screen and (max-width: 725px)" href="./css/mobile.css">
-    <link rel="icon" href="/cards-favi-128.png" type="image/png">
+    <link rel="icon" href="./cards-favi-128.png" type="image/png">
 </head>
 <body>
-
     <div id="top-bar">
         <div>
             <div id="small-logo">
@@ -24,7 +23,6 @@
             <img id="info-button" src="./assets/img/pixel-help-icon.png" alt="pixel help icon">
         </div>
     </div>
-
     <div id="main-content">
         <div id="instructions">
             <h3>How to Play</h3>
@@ -55,19 +53,15 @@
                 <div id="dealer">
                     <h3>dealer</h3>
                     <div id="dealer-cards">
-
                            <div class="card-container">
                             <div id="flip-animation-here">
                               <div class="flip-card-back">
                                 <img src="./assets/cards/space2bigger.png" alt="card-back" class="card">
-                              </div>
-                              <div class="flip-card-front">
-                                <!-- <img src="dealt card image goes here"> -->
-                              </div>
+                                    </div>
+                              <div class="flip-card-front"></div>
+                                </div>
                             </div>
-                          </div>
-
-                    </div>
+                        </div>
                     <div id="dealer-total"></div>
                 </div>
                 <div id="player">
@@ -82,13 +76,13 @@
                     </div>
                 </div>
             </div>
-
             <div id="game-table-column-2">
                 <div id="result">
                     <h2></h2>
                 </div>
                 <div id="game-bank">
-                    <div><img class="chip-icon" src="./assets/img/pixel-coin.png" alt="pixel coin"></div>
+                    <div>
+                        <img class="chip-icon" src="./assets/img/pixel-coin.png" alt="pixel coin"></div>
                     <div class="bet-amnt"><h3></h3></div>
                     <div><img class="wallet-icon" src="./assets/img/pixel-wallet.png" alt="pixel bag of coins"></div>
                     <div class="wallet-amnt"><h3></h3></div>
@@ -109,7 +103,6 @@
                 </div>
             </div>
         </div>
-
         <div id="home-screen">
             <div id="bet-selection">
                 <h3>Pick a coin to place your bet</h3>
@@ -120,22 +113,18 @@
                     <img src="./assets/img/pixel-bet100.png" class="bet" data-bet="100" alt="pixel coin worth 100">
                 </div>
             </div>
-
             <div id="home-bank">
                 <div><img class="chip-icon" src="./assets/img/pixel-coin.png" alt="pixel coin"></div>
                 <div class="bet-amnt"><h3></h3></div>
                 <div><img class="wallet-icon" src="./assets/img/pixel-wallet.png" alt="pixel bag of coins"></div>
                 <div class="wallet-amnt"><h3></h3></div>
             </div>
-
             <button id="start-game" class="play">PLAY</button>
-
             <div class="score-section" id="home-score">
                 <p>high score</p>
                 <span class="high-score"></span>
             </div>
         </div>
-
         <div id="temp-msg"></div>
     </div>
 </body>

@@ -18,7 +18,6 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     font-family: "Jersey 20", monospace;
-    /* Ensures full height compatibility across devices */
     min-height: 100dvh;
     letter-spacing: .09rem;
     display: flex;
@@ -112,7 +111,6 @@ h3 {
 }
 
 /* INACTIVE BUTTON STATES FOR ACTIONS */
-
 #actions button:disabled {
     opacity: 0.3;
 }
@@ -122,7 +120,7 @@ h3 {
     cursor: url('../assets/img/cursor-reg.png'), pointer;
 }
 
-/* Instructions and help icon */
+/* Instructions, help/mute icon */
 #instructions {
     display: none;
     flex-direction: column;
@@ -244,7 +242,6 @@ h3 {
     min-height: 50px;
 }
 
-/* Reset Wallet CTA */
 #reset-wallet {
     display: none;
     background-color: #000;
@@ -265,6 +262,10 @@ h3 {
     margin: 14px;
 }
 
+    #home-bank h3 {
+        font-size: 3rem;
+    }
+
 #game-bank {
     display: none;
     flex-direction: row;
@@ -274,13 +275,9 @@ h3 {
     margin: 6px 0;
 }
 
-#home-bank h3 {
-    font-size: 3rem;
-}
-
-#game-bank h3 {
-    font-size: 1.8rem;
-}
+    #game-bank h3 {
+        font-size: 1.8rem;
+    }
 
 .wallet-icon, .chip-icon {
     width: 40px;
@@ -413,6 +410,7 @@ h3 {
     transform: scale(1.45);
 }
 
+/* Temp message and fade in/fade out */
 #temp-msg {
     display: none;
     flex-direction: column;
@@ -432,15 +430,13 @@ h3 {
     opacity: 0;
 }
 
-/* this highlights the cards section when splitting cards */
+/* This highlights the cards section when splitting cards */
 .cards-border {
     border: 3px solid rgb(255, 255, 182);
     padding: 6px 15px;
 }
 
 /* ! CARD FLIP ANIMATION */
-
-/* flip card container */
 .card-container {
     background-color: transparent;
     width: 58px;

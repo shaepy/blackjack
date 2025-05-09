@@ -1,5 +1,4 @@
 const cardDeck = [
-    // spades
         {suit: 'spade', rank: 'ace', value: 11, hasBeenPlayed: false, src: './assets/cards/spade-a.png', aceValueChanged: false},
         {suit: 'spade', rank: '2', value: 2, hasBeenPlayed: false, src: './assets/cards/spade-2.png'},
         {suit: 'spade', rank: '3', value: 3, hasBeenPlayed: false, src: './assets/cards/spade-3.png'},
@@ -13,7 +12,6 @@ const cardDeck = [
         {suit: 'spade', rank: 'jack', value: 10, hasBeenPlayed: false, src: './assets/cards/spade-j.png'},
         {suit: 'spade', rank: 'queen', value: 10, hasBeenPlayed: false, src: './assets/cards/spade-q.png'},
         {suit: 'spade', rank: 'king', value: 10, hasBeenPlayed: false, src: './assets/cards/spade-k.png'},
-    // hearts
         {suit: 'heart', rank: 'ace', value: 11, hasBeenPlayed: false, src: './assets/cards/heart-a.png', aceValueChanged: false},
         {suit: 'heart', rank: '2', value: 2, hasBeenPlayed: false, src: './assets/cards/heart-2.png'},
         {suit: 'heart', rank: '3', value: 3, hasBeenPlayed: false, src: './assets/cards/heart-3.png'},
@@ -27,7 +25,6 @@ const cardDeck = [
         {suit: 'heart', rank: 'jack', value: 10, hasBeenPlayed: false, src: './assets/cards/heart-j.png'},
         {suit: 'heart', rank: 'queen', value: 10, hasBeenPlayed: false, src: './assets/cards/heart-q.png'},
         {suit: 'heart', rank: 'king', value: 10, hasBeenPlayed: false, src: './assets/cards/heart-k.png'},
-    // clubs
         {suit: 'club', rank: 'ace', value: 11, hasBeenPlayed: false, src: './assets/cards/club-a.png', aceValueChanged: false},
         {suit: 'club', rank: '2', value: 2, hasBeenPlayed: false, src: './assets/cards/club-2.png'},
         {suit: 'club', rank: '3', value: 3, hasBeenPlayed: false, src: './assets/cards/club-3.png'},
@@ -41,7 +38,6 @@ const cardDeck = [
         {suit: 'club', rank: 'jack', value: 10, hasBeenPlayed: false, src: './assets/cards/club-j.png'},
         {suit: 'club', rank: 'queen', value: 10, hasBeenPlayed: false, src: './assets/cards/club-q.png'},
         {suit: 'club', rank: 'king', value: 10, hasBeenPlayed: false, src: './assets/cards/club-k.png'},
-    // diamonds
         {suit: 'diamond', rank: 'ace', value: 11, hasBeenPlayed: false, src: './assets/cards/diamond-a.png', aceValueChanged: false},
         {suit: 'diamond', rank: '2', value: 2, hasBeenPlayed: false, src: './assets/cards/diamond-2.png'},
         {suit: 'diamond', rank: '3', value: 3, hasBeenPlayed: false, src: './assets/cards/diamond-3.png'},

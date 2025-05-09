@@ -20,7 +20,6 @@ body {
     background-blend-mode: darken;
     background-color: #d3d6c5;
     font-family: "Jersey 20", monospace;
-    /* Ensures full height compatibility across devices */
     min-height: 100dvh;
     letter-spacing: .07rem;
     display: flex;
@@ -113,7 +112,17 @@ h3 {
     background-color: #EF6CD7;
 }
 
-/* Instructions and help icon */
+/* INACTIVE BUTTON STATES FOR ACTIONS */
+#actions button:disabled {
+    opacity: 0.3;
+}
+
+#actions button:disabled:hover {
+    transform: none;
+    cursor: url('../assets/img/cursor-reg.png'), pointer;
+}
+
+/* Instructions, help/mute icon */
 #instructions {
     display: none;
     flex-direction: column;
@@ -214,7 +223,6 @@ h3 {
     gap: 8px;
 }
 
-/* Reset Wallet CTA */
 #reset-wallet {
     display: none;
     background-color: #000;
@@ -231,9 +239,9 @@ h3 {
     margin: 10px 20px 20px;
 }
 
-#home-bank h3 {
-    font-size: 4rem;
-}
+    #home-bank h3 {
+        font-size: 4rem;
+    }
 
 #game-bank {
     display: none;
@@ -244,9 +252,9 @@ h3 {
     margin: 12px 0;
 }
 
-#game-bank h3 {
-    font-size: 3rem;
-}
+    #game-bank h3 {
+        font-size: 3rem;
+    }
 
 .wallet-icon, .chip-icon {
     width: 58px;
@@ -381,6 +389,7 @@ h3 {
     transform: scale(1.1)
 }
 
+/* Temp message and fade in/fade out */
 #temp-msg {
     display: none;
     flex-direction: column;
@@ -400,26 +409,13 @@ h3 {
     opacity: 0;
 }
 
-/* INACTIVE BUTTON STATES FOR ACTIONS */
-
-#actions button:disabled {
-    opacity: 0.3;
-}
-
-#actions button:disabled:hover {
-    transform: none;
-    cursor: url('../assets/img/cursor-reg.png'), pointer;
-}
-
-/* this highlights the cards section when splitting cards */
+/* This highlights the cards section when splitting cards */
 .cards-border {
     border: 3px solid rgb(255, 255, 199);
     padding: 8px;
 }
 
 /* ! CARD FLIP ANIMATION */
-
-/* flip card container */
 .card-container {
     background-color: transparent;
     width: 74px;

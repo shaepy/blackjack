@@ -309,6 +309,7 @@ function checkForBust(hand) {
             hand.isBust = true
             if (hand === player) {createBustTag(displayPlayerTotal)} 
             else {createBustTag(displaySplitTotal)}
+            bustSound.play()
             stand()
             return
         } 
@@ -484,12 +485,13 @@ bustSound.playbackRate = 1.1
 blackjackSound.playbackRate = 1.3
 
 const masterVolume = [
-    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, pushSound, 
+    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, 
     bustSound, loseSound, blackjackSound, coinJingle
 ]
-masterVolume.forEach(s => s.volume = 0.6)
-winSound.volume = 0.2
-menuClickSound.volume = 0.4
+masterVolume.forEach(s => s.volume = 0.3)
+winSound.volume = 0.09
+menuClickSound.volume = 0.09
+pushSound.volume = 0.2
 
 const audioElements = [
     selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 

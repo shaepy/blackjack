@@ -1,11 +1,9 @@
 /* --------------------------------------- Constants -------------------------------------- */
-// Card flip
-const divToAddCardFlip = document.querySelector('#flip-animation-here')
 
+const divToAddCardFlip = document.querySelector('#flip-animation-here')
 // Logo elemenets
 const largeLogo = document.querySelector('#large-logo')
 const smallLogo = document.querySelector('#small-logo')
-
 // Display elements
 const bodyElement = document.querySelector('body')
 const actionsBar = document.querySelector('#actions')
@@ -15,32 +13,24 @@ const gameBank = document.querySelector('#game-bank')
 const homeScreen = document.querySelector('#home-screen')
 const playAgainButtons = document.querySelector('#play-again-buttons')
 const resetWallet = document.querySelector('#reset-wallet')
-
 // Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
 const displayH2Result = document.querySelector('#result h2')
 const displayDealerTotal = document.querySelector('#dealer-total')
 const displayPlayerTotal = document.querySelector('#player-total')
-
-// High score displays
-const gameScoreDiv = document.querySelector('#game-score')
-const homeScoreDiv = document.querySelector('#home-score')
-
 // Split feature elements
 const displaySplitCards = document.querySelector('#splitHand-cards')
 const displaySplitTotal = document.querySelector('#splitHand-total')
 const firstHandDiv = document.querySelector('#split-view-1')
 const secondHandDiv = document.querySelector('#split-view-2')
-
 // Player actions
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const doubleButton = document.querySelector('#double')
 const splitButton = document.querySelector('#split')
 const actionButtons = document.querySelectorAll('#actions button')
-
-// To check if local server or remote
+// Local or Remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
 /* --------------------------------------- Variables -------------------------------------- */
@@ -48,18 +38,19 @@ const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 let dealer = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
-const allHands = [player, dealer, splitHand]
 
 let activeHand = player
 let bet = score = 0
 let wallet = 200
+
+const allHands = [player, dealer, splitHand]
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 document.querySelector('#start-game').addEventListener('click', () => {
     menuClickSound.play()
     if (wallet < bet) {
-        resetWallet.style.display = 'flex'
+        turnDisplayToFlex([resetWallet])
         createTempMsg('Your wallet is too low. Reset to add gold')
         return
     } else if (bet < 10) {
@@ -79,13 +70,13 @@ document.querySelector('#change-bet').addEventListener('click', () => {
     turnDisplayToNone([gameTable, resultDiv, smallLogo, secondHandDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
     bodyElement.style.backgroundImage = `url("${srcUrl}/assets/img/pixel-casino-floor-bg.png")`;
-    if (wallet < bet) resetWallet.style.display = 'flex'
+    if (wallet < bet) turnDisplayToFlex([resetWallet])
 })
 
 document.querySelector('#play-again').addEventListener('click', () => {
     menuClickSound.play()
     if (wallet < bet) {
-        resetWallet.style.display = 'flex'
+        turnDisplayToFlex([resetWallet])
         createTempMsg('Your wallet is too low. Reset to add gold')
         return
     } else if (bet < 10) {
@@ -101,24 +92,20 @@ document.querySelector('#play-again').addEventListener('click', () => {
 document.querySelector('#info-button').addEventListener('click', () => {
     menuClickSound.play()
     const instructions = document.querySelector('#instructions')
-    if (window.getComputedStyle(instructions).display === 'flex') {
-        instructions.style.display = 'none'
-    } else {instructions.style.display = 'flex'}
+    if (window.getComputedStyle(instructions).display === 'flex') instructions.style.display = 'none'
+    else instructions.style.display = 'flex'
 })
 
 splitButton.addEventListener('click', () => {
-    // deduct bet from wallet
     wallet -= bet
     bet += bet
     displayFunds()
-    createTempMsg('Your cards have been split')
     turnDisplayToFlex([secondHandDiv])
     setDisableAttr([splitButton, doubleButton])
     splitHand.cards.push(player.cards.pop())
     document.querySelectorAll('#player-cards img')[1].remove()
     splitHand.total = player.total = 0
     firstHandDiv.classList.add('cards-border')
-    // deal cards FOR SPLIT HAND
     player.cards.push(getCard())
     splitHand.cards.push(getCard())
     addCardTotal()
@@ -126,6 +113,7 @@ splitButton.addEventListener('click', () => {
     displayPlayerTotal.innerText = player.total
     displayPlayerCards.append(createCardImg(player.cards[1]))
     displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+    createTempMsg('Your cards have been split')
     splitCardSound.play()
 })
 
@@ -135,13 +123,11 @@ doubleButton.addEventListener('click', () => {
         return
     }
     setDisableAttr([splitButton])
-    // add to bet, deduct from wallet
     wallet -= bet
     bet += bet
     displayFunds()
     hit()
     if (!player.isBust) stand()
-    // back to original bet after results
     bet = bet / 2
 })
 
@@ -152,18 +138,17 @@ standButton.addEventListener('click', stand)
 
 resetWallet.addEventListener('click', () => {wallet = 200, displayFunds(), coinJingle.play()})
 
-const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
-const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
-
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (e) => {
     bet = Number(e.target.dataset.bet)
     selectCoinSound.play()
     displayFunds()
 }))
 
+const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
+
 function displayFunds() {
     h3betAmounts.forEach(amnt => amnt.innerText = bet)
-    h3walletAmounts.forEach(amnt => amnt.innerText = wallet)
+    document.querySelectorAll('.wallet-amnt h3').forEach(amnt => amnt.innerText = wallet)
 }
 
 /* --------------------------------------- Start/Reset Game --------------------------------------- */
@@ -179,7 +164,6 @@ function startGame() {
 }
 
 function resetGame() {
-    console.log('shuffling...')
     cardDeck.forEach(card => {
         card.hasBeenPlayed = false
         if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
@@ -219,22 +203,6 @@ function getCard() {
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
     player.cards.push(getCard(), getCard())
-
- // * split cards
-    // const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
-    // const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
-    // player.cards.push(splitcard1, splitcard2)
-
-    // * ace edge case
-    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // player.cards.push(ace1, ace2)
-
-    // * blackjack edge case
-    // const testcard10 = cardDeck.find(c => c.value === 10)
-    // const testace11 = cardDeck.find(c => c.rank === 'ace')
-    // player.cards.push(testcard10, testace11)
-
     if (player.cards[0].rank === player.cards[1].rank) {
         if (wallet < bet) {
             createTempMsg('You do not have enough funds to split your cards')
@@ -297,7 +265,6 @@ function displayCards() {
         displayPlayerTotal.innerText = player.total
     }
     else {
-        console.log('displayCards() for a player hit card')
         if (activeHand === player) {
             displayPlayerCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
             displayPlayerTotal.innerText = activeHand.total
@@ -338,7 +305,6 @@ function checkForBust(hand) {
         return
     }
     if (hand.total > 21) {
-        // check if this hand is split
         if (splitHand.cards.length > 0) {
             hand.isBust = true
             if (hand === player) {createBustTag(displayPlayerTotal)} 
@@ -359,7 +325,6 @@ function stand() {
         secondHandDiv.classList.add('cards-border')
         return
     }
-    // dealer's turn
     setDisableAttr(actionButtons)
     setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
@@ -367,13 +332,11 @@ function stand() {
 }
 
 function dealerHit() {
-    console.log('total is <=16. dealerHit() running')
     const newCard = getCard()
     dealer.cards.push(newCard)
     dealer.hitCardIdx = dealer.cards.findIndex((card) => card === newCard)
     addCardTotal()
     if (dealer.total > 21) dealer.isBust = true
-    // display dealer card
     const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
     dealerHitCard.classList.add('dealer-card')
     setTimeout(() => {
@@ -383,13 +346,11 @@ function dealerHit() {
 }
 
 function compareResult() {
-    console.log('compareResult() is running...')
     if (activeHand === splitHand) {
         compareSplitResult()
         return
     }
     if (player.isBust) {
-        console.log('comparing result complete. player isBust')
         setDisableAttr(actionButtons)
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
@@ -441,7 +402,6 @@ function compareSplitResult() {
     if (!splitHand.isBust) {compareHands(splitHand.total, '2nd Hand')}
     setTimeout(displayFunds, 450)
     setTimeout(showResultScreen, 450)
-    // set bet back to regular amount before split
     bet = bet / 2
 }
 
@@ -451,15 +411,13 @@ function revealHiddenCard() {
 }
 
 function showResultScreen() {
-    console.log('showResultScreen()')
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
     secondHandDiv.classList.remove('cards-border')
     h3betAmounts[0].innerText = '0'
-    // check for high score
     if (wallet > score) {
         score = wallet
-        turnDisplayToFlex([gameScoreDiv, homeScoreDiv])
+        turnDisplayToFlex([document.querySelector('#game-score'), document.querySelector('#home-score')])
         createTempMsg(`Your high score is now ${score}`)
         document.querySelectorAll('.high-score').forEach(display => display.innerText = score)
     }
@@ -467,7 +425,11 @@ function showResultScreen() {
 
 /* --------------------------------------- UI / Visuals -------------------------------------- */
 
-// this takes a card object and creates a card image HTML element to display
+const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
+const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
+const setDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === false) el.setAttribute('disabled', '')})
+const removeDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === true) el.removeAttribute('disabled')})
+
 function createCardImg(card) {
     const cardImage = document.createElement('img')
     cardImage.classList.add('card')
@@ -476,7 +438,6 @@ function createCardImg(card) {
     return cardImage
 }
 
-// this takes an element and applies the fade in/fade out transition
 function handleFadeEffect(element) {
     element.style.display = 'flex'
     requestAnimationFrame(() => element.classList.add('fade-in'))
@@ -499,23 +460,7 @@ function createTempMsg(string) {
     handleFadeEffect(tempMsgDiv)
 }
 
-// these functions take an array, turn the display of each element to either flex or none
-const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
-const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
-
-// these will take an array and remove or set the 'disabled' attribute for each element
-const setDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === false) el.setAttribute('disabled', '')})
-const removeDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === true) el.removeAttribute('disabled')})
-
-/* ----------------------------------------- Audio ---------------------------------------- */
-
-let isMuted = false
-const muteButton = document.querySelector('#mute-button')
-muteButton.addEventListener('click', () => {
-    isMuted = !isMuted
-    audioElements.forEach(audio => audio.muted = isMuted)
-    isMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png` : muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
-})
+/* ------------------------------------- Audio / Mute Button ------------------------------------ */
 
 const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
 const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/dealing-cards.mp3`)
@@ -532,25 +477,32 @@ const menuClickSound = new Audio(`${srcUrl}/assets/audio/menu-select.mp3`)
 dealingCardsSound.playbackRate = 1.5
 hitCardSound.playbackRate = 1.5
 loseSound.playbackRate = 1.5
-coinJingle.playbackRate = 1.4
+coinJingle.playbackRate = 1.5
 menuClickSound.playbackRate = 1.9
-pushSound.playbackRate = 1.3
+pushSound.playbackRate = 1.1
 bustSound.playbackRate = 1.1
 blackjackSound.playbackRate = 1.3
-winSound.volume = 0.25
-menuClickSound.volume = 0.4
 
 const masterVolume = [
-selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, 
-pushSound, bustSound, loseSound, blackjackSound, coinJingle
+    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, pushSound, 
+    bustSound, loseSound, blackjackSound, coinJingle
 ]
 masterVolume.forEach(s => s.volume = 0.6)
+winSound.volume = 0.2
+menuClickSound.volume = 0.4
 
 const audioElements = [
-selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle,
-pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound
+    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 
+    pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound
 ]
+let isMuted = false
+const muteButton = document.querySelector('#mute-button')
+muteButton.addEventListener('click', () => {
+    isMuted = !isMuted
+    audioElements.forEach(audio => audio.muted = isMuted)
+    isMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png`:muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
+    menuClickSound.play()
+})
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
-
 displayFunds()

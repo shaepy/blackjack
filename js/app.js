@@ -56,15 +56,15 @@ let wallet = 200
 
 /* --------------------------------------- Audio -------------------------------------- */
 
-const selectCoinSound = new Audio('/assets/audio/chips-stack.mp3')
-const dealingCardsSound = new Audio('/assets/audio/cards-being-dealt.mp3')
-const playerWinSound = new Audio('/assets/audio/pixel-coin-collect-win.mp3')
-const playerBustSound = new Audio('/assets/audio/pixeljack-bust.mp3')
-const hitCardSound = new Audio('/assets/audio/card-hit.mp3')
-const splitCardSound = new Audio('/assets/audio/card-split.mp3')
-const blackjackSound = new Audio('/assets/audio/pixeljack.mp3')
-const playerLoseSound = new Audio('/assets/audio/player-lose.mp3')
-const playerPushSound = new Audio('/assets/audio/player-push.mp3')
+const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
+const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/cards-being-dealt.mp3`)
+const playerWinSound = new Audio(`${srcUrl}/assets/audio/pixel-coin-collect-win.mp3`)
+const playerBustSound = new Audio(`${srcUrl}/assets/audio/pixeljack-bust.mp3`)
+const hitCardSound = new Audio(`${srcUrl}/assets/audio/card-hit.mp3`)
+const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
+const blackjackSound = new Audio(`${srcUrl}/assets/audio/pixeljack.mp3`)
+const playerLoseSound = new Audio(`${srcUrl}/assets/audio/player-lose.mp3`)
+const playerPushSound = new Audio(`${srcUrl}/assets/audio/player-push.mp3`)
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 

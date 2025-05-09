@@ -54,7 +54,7 @@ document.querySelector('#start-game').addEventListener('click', () => {
     menuClickSound.play()
     if (wallet < bet) {
         turnDisplayToFlex([resetWallet])
-        createTempMsg('Your wallet is too low. Reset to add gold')
+        createTempMsg('You do not have enough coins. Reset to add more')
         return
     } else if (bet < 10) {
         createTempMsg('Choose a bet amount to start a game')
@@ -80,7 +80,7 @@ document.querySelector('#play-again').addEventListener('click', () => {
     menuClickSound.play()
     if (wallet < bet) {
         turnDisplayToFlex([resetWallet])
-        createTempMsg('Your wallet is too low. Reset to add gold')
+        createTempMsg('You do not have enough coins. Reset to add more')
         return
     } else if (bet < 10) {
         createTempMsg('Choose a bet amount to start a game')
@@ -209,7 +209,7 @@ function dealCards() {
     player.cards.push(getCard(), getCard())
     if (player.cards[0].rank === player.cards[1].rank) {
         if (wallet < bet) {
-            createTempMsg('You do not have enough funds to split your cards')
+            createTempMsg('You do not have enough coins to split your cards')
             return
         }
         removeDisableAttr([splitButton])

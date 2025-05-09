@@ -13,6 +13,7 @@ const gameBank = document.querySelector('#game-bank')
 const homeScreen = document.querySelector('#home-screen')
 const playAgainButtons = document.querySelector('#play-again-buttons')
 const resetWallet = document.querySelector('#reset-wallet')
+const scoreElements = document.querySelectorAll('.high-score')
 // Cards, result, handTotal elements
 const displayDealerCards = document.querySelector('#dealer-cards')
 const displayPlayerCards = document.querySelector('#player-cards')
@@ -32,16 +33,18 @@ const splitButton = document.querySelector('#split')
 const actionButtons = document.querySelectorAll('#actions button')
 // Local or Remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
+// Local storage
+const savedHighScore = localStorage.getItem('savedHighScore')
 
 /* --------------------------------------- Variables -------------------------------------- */
 
 let dealer = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
-
 let activeHand = player
-let bet = score = 0
+let bet = 0
 let wallet = 200
+let score = 0
 
 const allHands = [player, dealer, splitHand]
 
@@ -145,10 +148,11 @@ document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (e) =
 }))
 
 const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
+const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
 
 function displayFunds() {
     h3betAmounts.forEach(amnt => amnt.innerText = bet)
-    document.querySelectorAll('.wallet-amnt h3').forEach(amnt => amnt.innerText = wallet)
+    h3walletAmounts.forEach(amnt => amnt.innerText = wallet)
 }
 
 /* --------------------------------------- Start/Reset Game --------------------------------------- */
@@ -418,9 +422,10 @@ function showResultScreen() {
     h3betAmounts[0].innerText = '0'
     if (wallet > score) {
         score = wallet
+        if (score > savedHighScore) localStorage.setItem('savedHighScore', score)
         turnDisplayToFlex([document.querySelector('#game-score'), document.querySelector('#home-score')])
         createTempMsg(`Your high score is now ${score}`)
-        document.querySelectorAll('.high-score').forEach(display => display.innerText = score)
+        scoreElements.forEach(display => display.innerText = score)
     }
 }
 
@@ -507,4 +512,11 @@ muteButton.addEventListener('click', () => {
 })
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
+
 displayFunds()
+
+if (savedHighScore > 0) {
+    score = savedHighScore
+    scoreElements.forEach(scoreElement => scoreElement.innerText = savedHighScore)
+    turnDisplayToFlex([document.querySelector('#game-score'), document.querySelector('#home-score')])
+}

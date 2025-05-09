@@ -410,7 +410,7 @@ h3 {
 }
 
 .card:hover {
-    transform: scale(1.4);
+    transform: scale(1.45);
 }
 
 #temp-msg {

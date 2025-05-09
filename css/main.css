@@ -87,9 +87,9 @@ h3 {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    gap: 13px;
+    gap: 16px;
     margin: 12px 0;
-    max-width: 236px;
+    max-width: 246px;
 }
 
 #actions button {
@@ -97,8 +97,8 @@ h3 {
     color: #fff;
     font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
-    min-width: 110px;
-    min-height: 65px;
+    min-width: 115px;
+    min-height: 68px;
     padding: 18px;
     letter-spacing: .06rem;
     border-radius: 7px;
@@ -373,7 +373,7 @@ h3 {
 }
 
     .card:hover {
-        transform: scale(1.6);
+        transform: scale(1.5);
     }
 
 /* Button transforms */

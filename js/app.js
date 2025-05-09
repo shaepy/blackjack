@@ -245,7 +245,7 @@ function checkForBlackjack() {
         setDisableAttr(actionButtons)
         wallet += bet + (bet * 1.5)
         displayH2Result.innerText = 'Pixeljack! You Win'
-        blackjackSound.play()
+        setTimeout(() => {blackjackSound.play()}, 200);
         setTimeout(revealHiddenCard, 300)
         setTimeout(displayFunds, 450)
         setTimeout(showResultScreen, 450)
@@ -354,21 +354,21 @@ function compareResult() {
         setDisableAttr(actionButtons)
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
+        setTimeout(() => {bustSound.play()}, 500);
         displayH2Result.innerText = `You Bust`
-        bustSound.play()
         return
     }
     if (dealer.isBust|| player.total - dealer.total > 0) {
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
-        winSound.play()
+        setTimeout(() => {winSound.play()}, 500);
     } else if (player.total - dealer.total === 0) {
         wallet += bet
         displayH2Result.innerText = `Push`
-        pushSound.play()
+        setTimeout(() => {pushSound.play()}, 400);
     } else { 
         displayH2Result.innerText = `You Lose`
-        loseSound.play()
+        setTimeout(() => {loseSound.play()}, 400);
     }
     setTimeout(displayFunds, 450)
     setTimeout(showResultScreen, 450)
@@ -379,8 +379,8 @@ function compareSplitResult() {
         setDisableAttr(actionButtons)
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
+        setTimeout(() => {bustSound.play()}, 500);
         displayH2Result.innerText = `Both Hands Bust`
-        bustSound.play()
         bet = bet / 2
         return
     }
@@ -388,14 +388,14 @@ function compareSplitResult() {
         if (dealer.isBust || handTotal - dealer.total > 0) {
             wallet += bet
             displayH2Result.innerHTML += ` ${label} Wins<br>`
-            winSound.play()
+            setTimeout(() => {winSound.play()}, 500);
         } else if (handTotal - dealer.total === 0) {
             wallet += bet / 2
             displayH2Result.innerHTML += ` ${label} Push<br>`
-            pushSound.play()
+            setTimeout(() => {pushSound.play()}, 400);
         } else {
             displayH2Result.innerHTML += ` ${label} Loses<br>`
-            loseSound.play()
+            setTimeout(() => {loseSound.play()}, 400);
         }
     }
     if (!player.isBust) {compareHands(player.total, '1st Hand')}

@@ -54,6 +54,18 @@ let activeHand = player
 let bet = score = 0
 let wallet = 200
 
+/* --------------------------------------- Audio -------------------------------------- */
+
+const selectCoinSound = new Audio('/assets/audio/chips-stack.mp3')
+const dealingCardsSound = new Audio('/assets/audio/cards-being-dealt.mp3')
+const playerWinSound = new Audio('/assets/audio/pixel-coin-collect-win.mp3')
+const playerBustSound = new Audio('/assets/audio/pixeljack-bust.mp3')
+const hitCardSound = new Audio('/assets/audio/card-hit.mp3')
+const splitCardSound = new Audio('/assets/audio/card-split.mp3')
+const blackjackSound = new Audio('/assets/audio/pixeljack.mp3')
+const playerLoseSound = new Audio('/assets/audio/player-lose.mp3')
+const playerPushSound = new Audio('/assets/audio/player-push.mp3')
+
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
 document.querySelector('#start-game').addEventListener('click', () => {
@@ -65,9 +77,10 @@ document.querySelector('#start-game').addEventListener('click', () => {
         createTempMsg('Choose a bet amount to start a game')
         return
     }
-    bodyElement.style.backgroundImage = `url("${srcUrl}/img/assets/dealer-bg.png")`;
+    bodyElement.style.backgroundImage = `url("${srcUrl}/assets/img/dealer-bg.png")`;
     turnDisplayToNone([homeScreen, largeLogo, playAgainButtons, resetWallet])
     turnDisplayToFlex([gameTable, smallLogo, gameBank, actionsBar])
+    dealingCardsSound.play()
     startGame()
 })
 
@@ -75,7 +88,7 @@ document.querySelector('#change-bet').addEventListener('click', () => {
     resetGame()
     turnDisplayToNone([gameTable, resultDiv, smallLogo, secondHandDiv])
     turnDisplayToFlex([homeScreen, largeLogo])
-    bodyElement.style.backgroundImage = `url("${srcUrl}/img/assets/pixel-casino-floor-bg.png")`;
+    bodyElement.style.backgroundImage = `url("${srcUrl}/assets/img/pixel-casino-floor-bg.png")`;
     if (wallet < bet) resetWallet.style.display = 'flex'
 })
 
@@ -121,6 +134,7 @@ splitButton.addEventListener('click', () => {
     displayPlayerTotal.innerText = player.total
     displayPlayerCards.append(createCardImg(player.cards[1]))
     displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+    splitCardSound.play()
 })
 
 doubleButton.addEventListener('click', () => {
@@ -151,6 +165,7 @@ const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
 
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (e) => {
     bet = Number(e.target.dataset.bet)
+    selectCoinSound.play()
     displayFunds()
 }))
 
@@ -211,7 +226,23 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    player.cards.push(getCard(), getCard())
+    // player.cards.push(getCard(), getCard())
+
+ // * split cards
+    // const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
+    // const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
+    // player.cards.push(splitcard1, splitcard2)
+
+    // * ace edge case
+    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    player.cards.push(ace1, ace2)
+
+    // * blackjack edge case
+    // const testcard10 = cardDeck.find(c => c.value === 10)
+    // const testace11 = cardDeck.find(c => c.rank === 'ace')
+    // player.cards.push(testcard10, testace11)
+
     if (player.cards[0].rank === player.cards[1].rank) {
         if (wallet < bet) {
             createTempMsg('You do not have enough funds to split your cards')
@@ -241,6 +272,7 @@ function addCardTotal() {
     if (splitHand.total > 21) checkForAce(splitHand)
     if (player.total > 21) {
         if (player.cards[0].rank === 'ace' && player.cards[1].rank === 'ace' && player.cards.length < 3 && splitHand.total <= 0) {
+            player.total = 12
             return
         }
         checkForAce(player)
@@ -253,6 +285,7 @@ function checkForBlackjack() {
         setDisableAttr(actionButtons)
         wallet += bet + (bet * 1.5)
         displayH2Result.innerText = 'Pixeljack! You Win'
+        blackjackSound.play()
         setTimeout(revealHiddenCard, 300)
         setTimeout(displayFunds, 450)
         setTimeout(showResultScreen, 450)
@@ -286,6 +319,7 @@ function displayCards() {
 function hit() {
     const newCard = getCard()
     activeHand.cards.push(newCard)
+    hitCardSound.play()
     if (player.cards.length > 2) setDisableAttr([splitButton, doubleButton])
     activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
@@ -368,16 +402,20 @@ function compareResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `You Bust`
+        playerBustSound.play()
         return
     }
     if (dealer.isBust|| player.total - dealer.total > 0) {
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
+        playerWinSound.play()
     } else if (player.total - dealer.total === 0) {
         wallet += bet
         displayH2Result.innerText = `Push`
+        playerPushSound.play()
     } else { 
         displayH2Result.innerText = `You Lose`
+        playerLoseSound.play()
     }
     setTimeout(displayFunds, 450)
     setTimeout(showResultScreen, 450)
@@ -389,6 +427,7 @@ function compareSplitResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         displayH2Result.innerText = `Both Hands Bust`
+        playerBustSound.play()
         bet = bet / 2
         return
     }
@@ -396,11 +435,14 @@ function compareSplitResult() {
         if (dealer.isBust || handTotal - dealer.total > 0) {
             wallet += bet
             displayH2Result.innerHTML += ` ${label} Wins<br>`
+            playerWinSound.play()
         } else if (handTotal - dealer.total === 0) {
             wallet += bet / 2
             displayH2Result.innerHTML += ` ${label} Push<br>`
+            playerPushSound.play()
         } else {
             displayH2Result.innerHTML += ` ${label} Loses<br>`
+            playerLoseSound.play()
         }
     }
     if (!player.isBust) {compareHands(player.total, '1st Hand')}

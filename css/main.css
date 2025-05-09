@@ -5,15 +5,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: url('../img/assets/cursor-reg.png'), pointer;
+    cursor: url('../assets/img/cursor-reg.png'), pointer;
 }
 
 * button:hover {
-    cursor: url('../img/assets/cursor-button.png'), pointer;
+    cursor: url('../assets/img/cursor-button.png'), pointer;
 }
 
 body {
-    background-image: url('../img/assets/pixel-casino-floor-bg.png');
+    background-image: url('../assets/img/pixel-casino-floor-bg.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -74,7 +74,7 @@ h3 {
 
 #bet-selectors img {
     width: 76px;
-    cursor: url('../img/assets/cursor-button.png'), pointer;
+    cursor: url('../assets/img/cursor-button.png'), pointer;
 }
 
 #bet-selectors img:hover {
@@ -130,7 +130,7 @@ h3 {
 }
 
 #info-button {
-    cursor: url('../img/assets/cursor-button.png'), pointer;
+    cursor: url('../assets/img/cursor-button.png'), pointer;
     margin: 5px;
     width: 18.5px;
 }
@@ -148,7 +148,7 @@ h3 {
     padding: 21px;
     letter-spacing: .06rem;
     border-radius: 7px;
-    cursor: url('../img/assets/cursor-button.png'), pointer;
+    cursor: url('../assets/img/cursor-button.png'), pointer;
     border: none;
 }
 
@@ -218,7 +218,7 @@ h3 {
 #reset-wallet {
     display: none;
     background-color: #000;
-    cursor: url('../img/assets/cursor-button.png'), pointer;
+    cursor: url('../assets/img/cursor-button.png'), pointer;
 }
 
 /* Home Bank and Game Bank Sections (bet, wallet) */
@@ -408,7 +408,7 @@ h3 {
 
 #actions button:disabled:hover {
     transform: none;
-    cursor: url('../img/assets/cursor-reg.png'), pointer;
+    cursor: url('../assets/img/cursor-reg.png'), pointer;
 }
 
 /* this highlights the cards section when splitting cards */

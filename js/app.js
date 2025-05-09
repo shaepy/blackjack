@@ -152,7 +152,7 @@ doubleButton.addEventListener('click', () => {
     hit()
     console.log('player hand:', player)
     // we only want this to happen if checkforbust does not happen
-    if (!checkForBust(activeHand)) {
+    if (!player.isBust) {
         console.log('player did not bust')
         stand()
     }
@@ -268,7 +268,7 @@ function checkForAce(hand) {
             createTempMsg(`Your Ace value has changed from 11 to 1`)
         } else {
             console.log('this is dealer')
-            dealer.total -= 10
+        dealer.total -= 10
         }
         console.log('ace changed:', hand.cards[aceIdx], hand.total, dealer.total)
     } else { // remove later
@@ -379,7 +379,6 @@ function checkForBust(hand) {
         hand.isBust = true
         createBustTag(displayPlayerTotal)
         compareResult()
-        return 1
     } 
 }
 

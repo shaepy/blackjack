@@ -154,7 +154,7 @@ h3 {
     color: #fff;
     font-size: 1.15rem;
     font-family: "Jersey 15", monospace;
-    padding: 21px;
+    padding: 23px 20px;
     letter-spacing: .06rem;
     border-radius: 7px;
     cursor: url('../assets/img/cursor-button.png'), pointer;
@@ -168,7 +168,7 @@ h3 {
 #play-again-buttons {
     display: none;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
 }
 
 #change-bet {

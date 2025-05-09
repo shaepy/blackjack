@@ -82,7 +82,7 @@ h3 {
     align-items: center;
     gap: 15px;
     margin: 15px 0;
-    max-width: 195px;
+    max-width: 216px;
 }
 
 #actions button {
@@ -90,8 +90,8 @@ h3 {
     color: #fff;
     font-size: 1rem;
     font-family: "Jersey 15", monospace;
-    min-width: 90px;
-    min-height: 55px;
+    min-width: 100px;
+    min-height: 64px;
     padding: 18px;
     letter-spacing: .06rem;
     border-radius: 7px;
@@ -505,18 +505,18 @@ h3 {
     }
 
     #game-table-column-1 {
-        padding: 10px;
+        padding: 4px;
     }
 
     #actions button {
         background-color: #4DB7D1;
-        min-width: 80px;
-        min-height: 50px;
+        min-width: 92px;
+        min-height: 60px;
         padding: 15px;
     }
 
     #actions {
-        max-width: 176px;
+        max-width: 196px;
         gap: 12px;
     }
 

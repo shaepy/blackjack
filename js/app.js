@@ -504,7 +504,7 @@ pushSound.volume = 0.2
 
 const audioElements = [
     selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 
-    pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound
+    pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound, standSound
 ]
 
 let isMuted = false

@@ -135,7 +135,10 @@ doubleButton.addEventListener('click', () => {
 })
 
 hitButton.addEventListener('click', hit)
-standButton.addEventListener('click', stand)
+standButton.addEventListener('click', () => {
+    standSound.play()
+    stand()
+})
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
@@ -471,6 +474,7 @@ function createTempMsg(string) {
 const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
 const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/dealing-cards.mp3`)
 const hitCardSound = new Audio(`${srcUrl}/assets/audio/card-hit.mp3`)
+const standSound = new Audio(`${srcUrl}/assets/audio/stand-chips.mp3`)
 const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
 const pushSound = new Audio(`${srcUrl}/assets/audio/push.mp3`)
 const bustSound = new Audio(`${srcUrl}/assets/audio/bust.mp3`)
@@ -491,7 +495,7 @@ blackjackSound.playbackRate = 1.3
 
 const masterVolume = [
     selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, 
-    bustSound, loseSound, blackjackSound, coinJingle
+    bustSound, loseSound, blackjackSound, coinJingle, standSound
 ]
 masterVolume.forEach(s => s.volume = 0.3)
 winSound.volume = 0.09
@@ -502,6 +506,7 @@ const audioElements = [
     selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 
     pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound
 ]
+
 let isMuted = false
 const muteButton = document.querySelector('#mute-button')
 muteButton.addEventListener('click', () => {

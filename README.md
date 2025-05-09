@@ -85,7 +85,6 @@ Created a function that creates the card
 
 ### Wins
 -  Figuring out card flip animation and transform with CSS
-- 
 
 ## ♦️ Design Process (elaborate)
 1. Initial wireframes
@@ -99,6 +98,13 @@ Created a function that creates the card
 - Card counting mode
 
 ## ♦️ Resources Used
-- Card assets by Magory: https://magory.itch.io/cute-pixel-playing-cards
-- Icons by Yusuf Matra: https://thenounproject.com/creator/yusufmatra/
-- Cursors by Kenney: https://kenney.nl/assets/cursor-pixel-pack
+- Card assets by [Magory.itch.io](https://magory.itch.io/cute-pixel-playing-cards)
+- Cursors by [Kenney.nl](https://kenney.nl/assets/cursor-pixel-pack)
+- Icons
+    - [Yusuf Matra](https://thenounproject.com/creator/yusufmatra/)
+    - [Favicon](https://www.flaticon.com/free-icon/cards_8315168) 
+    - [Nazar](https://thenounproject.com/creator/eyeshapedamulet/)
+- Audio
+    - [freesound community](https://pixabay.com/users/freesound_community-46691455/)
+    - [Kenney.nl](https://kenney.nl/assets/casino-audio)
+    - [Lumora Studios](https://pixabay.com/users/lumora_studios-39090352/)

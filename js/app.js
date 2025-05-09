@@ -36,16 +36,17 @@ const splitButton = document.querySelector('#split')
 const doubleButton = document.querySelector('#double')
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
-const playerActions = document.querySelectorAll('#actions button')
+const actionButtons = document.querySelectorAll('#actions button')
 
 // To check if local server or remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
 /* --------------------------------------- Variables -------------------------------------- */
 
-let dealer = {cards: [], total: 0, hitCardIdx: 0}
-let player = {cards: [], total: 0, hitCardIdx: 0}
-let splitHand = {cards: [], total: 0, hitCardIdx: 0}
+let dealer = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+const hands = [player, dealer, splitHand]
 
 let activeHand = player
 let bet = score = 0
@@ -189,13 +190,13 @@ function displayFunds() {
 /* --------------------------------------- Start/Reset Game --------------------------------------- */
 
 function startGame() {
-    if (window.getComputedStyle(instructions).display === 'flex') instructions.style.display = 'none'
     wallet -= bet
     displayFunds()
     dealCards()
     addCardTotal()
     displayCards()
     checkForBlackjack()
+    if (window.getComputedStyle(instructions).display === 'flex') instructions.style.display = 'none'
 }
 
 function resetGame() {
@@ -203,10 +204,11 @@ function resetGame() {
     shuffle()
     // reset activehand if split
     if (activeHand === splitHand) activeHand = player
-    dealer.cards = []
-    player.cards = []
-    splitHand.cards = []
-    dealer.total = player.total = splitHand.total = 0
+    hands.forEach(hand => {
+        hand.cards = []
+        hand.total = 0
+        hand.isBust = false
+    })
     const resetDisplays = [
         displayH2Result,
         displayDealerTotal, 
@@ -244,7 +246,7 @@ function getCard() {
 
 function dealCards() {
     dealer.cards.push(getCard(), getCard())
-    player.cards.push(getCard(), getCard())
+    // player.cards.push(getCard(), getCard())
 
     // * split cards
     // const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
@@ -252,9 +254,9 @@ function dealCards() {
     // player.cards.push(splitcard1, splitcard2)
 
     // * ace edge case
-    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    // player.cards.push(ace1, ace2)
+    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    player.cards.push(ace1, ace2)
 
     // * blackjack edge case
     // const testcard10 = cardDeck.find(c => c.value === 10)
@@ -271,7 +273,7 @@ function dealCards() {
     }
 }
 
-function changeAceValues(hand) {
+function checkForAce(hand) {
     const aceIdx = hand.cards.findIndex(card => card.rank === 'ace' && !card.aceValueChanged)
     // if an ace is returned (aceIdx is not -1)
     if (aceIdx !== -1) {
@@ -288,28 +290,24 @@ function changeAceValues(hand) {
             dealer.total -= 10
         }
         console.log('ace changed:', hand.cards[aceIdx], hand.total, dealer.total)
-    } else {
-        // remove later
+    } else { // remove later
         console.log('there is no ace that qualifies')
     }
 }
 
 function addCardTotal() {
     console.log('addCardTotal() - adding total for dealer and player hands')
-    dealer.total = dealer.cards.reduce((acc, card) => acc + card.value, 0)
-    player.total = player.cards.reduce((acc, card) => acc + card.value, 0)
-    splitHand.total = splitHand.cards.reduce((acc, card) => acc + card.value, 0)
-    if (dealer.total > 21) {
-        console.log('this is over 21. dealer total:', dealer.total)
-        changeAceValues(dealer)
-    } 
+    hands.forEach(hand => hand.total = hand.cards.reduce((acc, card) => acc + card.value, 0))
+    if (dealer.total > 21) checkForAce(dealer)
+    if (splitHand.total > 21) checkForAce(splitHand)
     if (player.total > 21) {
-        console.log('this is over 21. player total:', player.total)
-        changeAceValues(player)
-    }
-    if (splitHand.total > 21) {
-        console.log('this is over 21. splithand total:', splitHand.total)
-        changeAceValues(splitHand)
+        if (player.cards[0].rank === 'ace' && player.cards[1].rank === 'ace' && player.cards.length < 3 && splitHand.total <= 0) {
+            console.log('WE HAVE TWO ACES, SPLIT POTENTIAL HIGH')
+            return
+        }
+        checkForAce(player)
+        // if the player.total is still > 21 after checkForAce(player), then do it again
+        if (player.total > 21) checkForAce(player)
     }
 }
 
@@ -317,7 +315,7 @@ function checkForBlackjack() {
     console.log('calling checkForBlackjack()')
     if (player.total === 21 && dealer.total < 21) {
         console.log('this is a blackjack! yay')
-        setDisableAttr(playerActions)
+        setDisableAttr(actionButtons)
         displayH2Result.innerText = 'Pixeljack! You Win'
         wallet += bet + (bet * 1.5)
         setTimeout(revealHiddenCard, 300)
@@ -329,17 +327,13 @@ function checkForBlackjack() {
 function displayCards() {
     if (displayPlayerCards.innerHTML === '') {
         console.log('displayCards() for the dealt cards')
-
         const hiddenCard = createCardImg(dealer.cards[0])
         hiddenCard.id = 'hidden-card'
         document.querySelector('.flip-card-front').append(hiddenCard)
-
         const dealer2ndCard = createCardImg(dealer.cards[1])
         dealer2ndCard.classList.add('dealer-card')
         displayDealerCards.append(dealer2ndCard)
-
         displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
-
         displayDealerTotal.innerText = dealer.cards[1].value
         displayPlayerTotal.innerText = player.total
     }
@@ -359,75 +353,61 @@ function hit() {
     console.log('player pressed hit()')
     const newCard = getCard()
     activeHand.cards.push(newCard)
-    console.log('new card added:', activeHand)
-
     if (player.cards.length > 2) setDisableAttr([splitButton, doubleButton])
-
-    // if you hit while a split button is active, this means you did not split
-
     activeHand.hitCardIdx = activeHand.cards.findIndex((card) => card === newCard)
     addCardTotal()
     displayCards()
-    console.log('total is now:', activeHand)
+    console.log('total & cards for activeHand:', activeHand)
     // if 21, autostand
     if (activeHand.total === 21) {
-        // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND. REPLACE MSG STRING
         createTempMsg('Stand on 21')
         stand()
         return
     }
-    // check for bust
     checkForBust(activeHand)
 }
 
+// this function should STOP the turn of the dealer if BOTH HANDS BUST, or if single hand player BUST
 function checkForBust(hand) {
     if (player.total > 21 && splitHand.total > 21) {
-        // auto lose, skip dealer turn
-        console.log('BOTH HANDS BUST')
-        bet = bet / 2
-        revealHiddenCard()
-        showResultScreen()
-        displayH2Result.innerText = `Both Hands Bust`
+        player.isBust = true
+        splitHand.isBust = true
+        compareSplitResult()
         return
     }
-
     if (hand.total > 21) {
-        console.log('this hand is a player and a BUST')
         // check if this hand is split
         if (splitHand.cards.length > 0) {
             console.log('this is a SPLIT with a bust. auto standing now')
-            // !TODO USER FACING MESSAGE OR ANIMATION, AUTO STAND. REPLACE MSG STRING
+            hand.isBust = true
             createTempMsg('Bust')
             stand()
             return
         } 
+        console.log('this hand is a player and a BUST')
         // proceed as normal
-        setDisableAttr(playerActions)
-        setTimeout(revealHiddenCard, 300)
-        setTimeout(showResultScreen, 450)
-        displayH2Result.innerText = `You Bust`
+        hand.isBust = true
+        compareResult()
         return 1
     } 
 }
 
 function stand() {
     console.log('stand() is called')
-
     // check if there's a split hand
     if (activeHand === player && splitHand.cards.length > 0) {
         console.log('this is a splitHand stand. change activeHand')
         // play splitHand
-        activeHand = splitHand // change activeHand
+        activeHand = splitHand
         firstHandDiv.classList.remove('cards-border')
         secondHandDiv.classList.add('cards-border')
         return
     }
-
-    setDisableAttr(playerActions)
     // dealer's turn
+    setDisableAttr(actionButtons)
     setTimeout(revealHiddenCard, 300)
     while (dealer.total <= 16) dealerHit()
-    compareResult(activeHand.total, dealer.total)
+    compareResult()
 }
 
 function dealerHit() {
@@ -436,6 +416,7 @@ function dealerHit() {
     dealer.cards.push(newCard)
     dealer.hitCardIdx = dealer.cards.findIndex((card) => card === newCard)
     addCardTotal()
+    if (dealer.total > 21) dealer.isBust = true
     // display dealer card
     const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
     dealerHitCard.classList.add('dealer-card')
@@ -445,26 +426,27 @@ function dealerHit() {
     }, 300)
 }
 
-// to get to compareResult() that means player DID NOT BUST
-function compareResult(firstTotal, secondTotal) {
+function compareResult() {
     console.log('compareResult() is running...')
-    if (activeHand === splitHand) { // this is a splitHand comparison
+    if (activeHand === splitHand) {
         compareSplitResult()
         return
     }
-
-    const isDealerBust = dealer.total > 21
-    if (isDealerBust || firstTotal - secondTotal > 0) {
-        console.log(`PLAYER WINS`)
+    if (player.isBust) {
+        console.log('comparing result complete. player isBust')
+        setDisableAttr(actionButtons)
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(showResultScreen, 450)
+        displayH2Result.innerText = `You Bust`
+        return
+    }
+    if (dealer.isBust|| player.total - dealer.total > 0) {
         wallet += bet * 2
         displayH2Result.innerText = 'You Win'
-    } else if (firstTotal - secondTotal === 0) {
-        console.log(`IT'S A TIE`)
+    } else if (player.total - dealer.total === 0) {
         wallet += bet
         displayH2Result.innerText = `Push`
-    } 
-    else { 
-        console.log(`PLAYER LOSES`)
+    } else { 
         displayH2Result.innerText = `You Lose`
     }
     setTimeout(displayFunds, 450)
@@ -472,12 +454,17 @@ function compareResult(firstTotal, secondTotal) {
 }
 
 function compareSplitResult() {
-    const isPlayerBust = player.total > 21
-    const isSplitBust = splitHand.total > 21
-    const isDealerBust = dealer.total > 21
-
+    if (player.isBust && splitHand.isBust) {
+        console.log('BOTH HANDS BUST')
+        bet = bet / 2
+        setDisableAttr(actionButtons)
+        setTimeout(revealHiddenCard, 300)
+        setTimeout(showResultScreen, 450)
+        displayH2Result.innerText = `Both Hands Bust`
+        return
+    }
     function compareHands(handTotal, label) {
-        if (isDealerBust || handTotal - dealer.total > 0) {
+        if (dealer.isBust || handTotal - dealer.total > 0) {
             wallet += bet
             displayH2Result.innerHTML += ` ${label} Wins<br>`
         } else if (handTotal - dealer.total === 0) {
@@ -487,9 +474,8 @@ function compareSplitResult() {
             displayH2Result.innerHTML += ` ${label} Loses<br>`
         }
     }
-
-    if (!isPlayerBust) {compareHands(player.total, '1st Hand')}
-    if (!isSplitBust) {compareHands(splitHand.total, '2nd Hand')}
+    if (!player.isBust) {compareHands(player.total, '1st Hand')}
+    if (!splitHand.isBust) {compareHands(splitHand.total, '2nd Hand')}
     // set bet back to regular amount before split
     bet = bet / 2
     setTimeout(displayFunds, 450)
@@ -506,12 +492,9 @@ function showResultScreen() {
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
     secondHandDiv.classList.remove('cards-border')
-    // this changes the game screen bet display to 0
     h3betAmounts[0].innerText = '0'
-
-    // check if double was disabled
+    // enable double again
     if (doubleButton.disabled === true) removeDisableAttr([doubleButton])
-
     // check for high score
     if (wallet > score) {
         score = wallet
@@ -523,6 +506,7 @@ function showResultScreen() {
 }
 
 /* --------------------------------------- UI / Visuals -------------------------------------- */
+
 // this takes a card object and creates a card image HTML element to display
 function createCardImg(card) {
     const cardImage = document.createElement('img')
@@ -534,7 +518,6 @@ function createCardImg(card) {
 
 // this takes an element and applies the fade in/fade out transition
 function handleFadeEffect(element) {
-    console.log('handling temporary message')
     element.style.display = 'flex'
     requestAnimationFrame(() => element.classList.add('fade-in'))
     setTimeout(() => {
@@ -551,9 +534,9 @@ function handleFadeEffect(element) {
 function createTempMsg(string) {
     const pElement = document.createElement('p')
     pElement.innerText = string
-    const tempMessageDiv = document.querySelector('#temp-msg')
-    tempMessageDiv.append(pElement)
-    handleFadeEffect(tempMessageDiv)
+    const tempMsgDiv = document.querySelector('#temp-msg')
+    tempMsgDiv.append(pElement)
+    handleFadeEffect(tempMsgDiv)
 }
 
 // these functions take an array, turn the display of each element to either flex or none
@@ -561,12 +544,8 @@ const turnDisplayToFlex = (arr) => arr.forEach(el => el.style.display = 'flex')
 const turnDisplayToNone = (arr) => arr.forEach(el => el.style.display = 'none')
 
 // these will take an array and remove or set the 'disabled' attribute for each element
-const setDisableAttr = (arr) => arr.forEach(el => {
-    if (el.disabled === false) el.setAttribute('disabled', '')
-})
-const removeDisableAttr = (arr) => arr.forEach(el => {
-    if (el.disabled === true) el.removeAttribute('disabled')
-})
+const setDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === false) el.setAttribute('disabled', '')})
+const removeDisableAttr = (arr) => arr.forEach(el => {if (el.disabled === true) el.removeAttribute('disabled')})
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

@@ -293,6 +293,15 @@ h3 {
         background-color: black;
         color: white;
         padding: 4px 7.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #player-total span, #dealer-total span, #splitHand-total span {
+        background-color: red;
+        padding: 3px;
+        font-size: .8rem;
     }
 
     #dealer-cards, #player-cards, #splitHand-cards {

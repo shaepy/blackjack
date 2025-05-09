@@ -38,6 +38,10 @@ const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const actionButtons = document.querySelectorAll('#actions button')
 
+// Bust tag
+const bustTag = document.createElement('span')
+bustTag.innerText = 'BUST'
+
 // To check if local server or remote
 const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
 
@@ -106,36 +110,33 @@ document.querySelector('#info-button').addEventListener('click', () => {
 
 // split feature
 splitButton.addEventListener('click', () => {
-        console.log('player presses split button')
-        console.log('your current bet:', bet, 'your current wallet:', wallet)
+    console.log('player presses split button')
+    // deduct bet from wallet
+    wallet -= bet
+    bet += bet
+    displayFunds()
+
+    createTempMsg('Your cards have been split')
+    turnDisplayToFlex([secondHandDiv])
+
+    setDisableAttr([splitButton, doubleButton])
+
+    splitHand.cards.push(player.cards.pop())
+    document.querySelectorAll('#player-cards img')[1].remove()
     
-        // deduct bet from wallet
-        wallet -= bet
-        bet += bet
-        console.log('your bet now:', bet, 'your wallet now:', wallet)
-        displayFunds()
-    
-        createTempMsg('Your cards have been split')
-        turnDisplayToFlex([secondHandDiv])
-    
-        setDisableAttr([splitButton, doubleButton])
-    
-        splitHand.cards.push(player.cards.pop())
-        document.querySelectorAll('#player-cards img')[1].remove()
-        
-        // reset totals
-        splitHand.total = player.total = 0
-        // display border
-        firstHandDiv.classList.add('cards-border')
-    
-        // deal cards FOR SPLIT HAND
-        player.cards.push(getCard())
-        splitHand.cards.push(getCard())
-        addCardTotal()
-        displaySplitTotal.innerText = splitHand.total
-        displayPlayerTotal.innerText = player.total
-        displayPlayerCards.append(createCardImg(player.cards[1]))
-        displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+    // reset totals
+    splitHand.total = player.total = 0
+    // display border
+    firstHandDiv.classList.add('cards-border')
+
+    // deal cards FOR SPLIT HAND
+    player.cards.push(getCard())
+    splitHand.cards.push(getCard())
+    addCardTotal()
+    displaySplitTotal.innerText = splitHand.total
+    displayPlayerTotal.innerText = player.total
+    displayPlayerCards.append(createCardImg(player.cards[1]))
+    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
 })
 
 // double down feature
@@ -249,21 +250,20 @@ function dealCards() {
     // player.cards.push(getCard(), getCard())
 
     // * split cards
-    // const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
-    // const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
-    // player.cards.push(splitcard1, splitcard2)
+    const splitcard1 = cardDeck.find(c => c.rank === '5' && c.suit === 'spade')
+    const splitcard2 = cardDeck.find(c => c.rank === '5' && c.suit === 'heart')
+    player.cards.push(splitcard1, splitcard2)
 
     // * ace edge case
-    const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
-    const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
-    player.cards.push(ace1, ace2)
+    // const ace1 = cardDeck.find(c => c.suit === 'spade' && c.rank === 'ace')
+    // const ace2 = cardDeck.find(c => c.suit === 'heart' && c.rank === 'ace')
+    // player.cards.push(ace1, ace2)
 
     // * blackjack edge case
     // const testcard10 = cardDeck.find(c => c.value === 10)
     // const testace11 = cardDeck.find(c => c.rank === 'ace')
     // player.cards.push(testcard10, testace11)
 
-    // if dealt cards are same rank, show split button
     if (player.cards[0].rank === player.cards[1].rank) {
         if (wallet < bet) {
             createTempMsg('You do not have enough funds to split your cards')
@@ -372,6 +372,8 @@ function checkForBust(hand) {
     if (player.total > 21 && splitHand.total > 21) {
         player.isBust = true
         splitHand.isBust = true
+        displayPlayerTotal.append(bustTag)
+        displaySplitTotal.append(bustTag)
         compareSplitResult()
         return
     }
@@ -380,13 +382,15 @@ function checkForBust(hand) {
         if (splitHand.cards.length > 0) {
             console.log('this is a SPLIT with a bust. auto standing now')
             hand.isBust = true
-            createTempMsg('Bust')
+            if (hand === player) {displayPlayerTotal.append(bustTag)} 
+            else {displaySplitTotal.append(bustTag)}
             stand()
             return
         } 
         console.log('this hand is a player and a BUST')
         // proceed as normal
         hand.isBust = true
+        displayPlayerTotal.append(bustTag)
         compareResult()
         return 1
     } 

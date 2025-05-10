@@ -43,8 +43,8 @@ let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
 let activeHand = player
 let bet = 0
-let wallet = 200
 let score = 0
+let wallet = Number(localStorage.getItem('savedWallet')) || 200
 
 const allHands = [player, dealer, splitHand]
 
@@ -418,6 +418,7 @@ function revealHiddenCard() {
 }
 
 function showResultScreen() {
+    localStorage.setItem('savedWallet', wallet)
     turnDisplayToFlex([resultDiv, playAgainButtons])
     turnDisplayToNone([actionsBar])
     secondHandDiv.classList.remove('cards-border')
@@ -517,10 +518,10 @@ muteButton.addEventListener('click', () => {
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 
-displayFunds()
-
 if (savedHighScore > 0) {
     score = savedHighScore
     scoreElements.forEach(scoreElement => scoreElement.innerText = savedHighScore)
     turnDisplayToFlex([document.querySelector('#game-score'), document.querySelector('#home-score')])
 }
+
+displayFunds()

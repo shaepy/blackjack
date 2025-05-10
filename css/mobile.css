@@ -177,7 +177,7 @@ h3 {
 }
 
 #play-again.play {
-    padding: 18px;
+    padding: 20px 15px;
 }
 
 #change-bet {
@@ -185,7 +185,7 @@ h3 {
     color: #fff;
     font-size: 1.08rem;
     font-family: "Jersey 15", monospace;
-    padding: 18px;
+    padding: 20px 15px;
     letter-spacing: .06rem;
     border-radius: 7px;
     border: none;

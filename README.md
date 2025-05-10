@@ -27,7 +27,7 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 - I should be able to see instructions on how to play the game.
 
 ## ♦️ Planning
-<img alt="game flowchart" src="https://github.com/user-attachments/assets/372d64a5-b477-4535-bf27-e2085134fce7" width="420px">
+<img alt="game flowchart" src="https://github.com/user-attachments/assets/372d64a5-b477-4535-bf27-e2085134fce7" width="400">
 
 ### Planning Process
 1. Created a [Project Spec](https://www.notion.so/GA-Unit-1-Blackjack-Spec-1df7ed1fdd588080b0eac50acd836b7e) to map out MVP requirements for the game
@@ -38,22 +38,22 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 
 ### Design Process
 #### Initial wireframes
-<img alt="game screen" src="https://github.com/user-attachments/assets/95e77dd5-2ab7-44ec-b2a7-78ddc6e95b68" height="200px">
-<img alt="result screen" src="https://github.com/user-attachments/assets/bfec5590-c02c-467f-9c27-a7c2ac5c6614" height="200px">
-<img alt="mobile screen" src="https://github.com/user-attachments/assets/d068e7ac-1944-47f0-930a-c8d87c5a990d" height="200px">
+<img alt="game screen" src="https://github.com/user-attachments/assets/95e77dd5-2ab7-44ec-b2a7-78ddc6e95b68" height="180">
+<img alt="result screen" src="https://github.com/user-attachments/assets/bfec5590-c02c-467f-9c27-a7c2ac5c6614" height="180">
+<img alt="mobile screen" src="https://github.com/user-attachments/assets/d068e7ac-1944-47f0-930a-c8d87c5a990d" height="180">
 
 #### Mockups with initial design
-<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" height="200px">
-<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" height="200px">
-<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" height="200px">
-<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" height="200px">
+<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" height="180">
+<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" height="180">
+<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" height="180">
+<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" height="180">
 
 #### Choosing a Pixel theme
-<img alt="pixeljack sketch" src="https://github.com/user-attachments/assets/2af4ecc1-bdeb-4772-a5ce-081d77d2c430" height="200px">
-<img alt="pixel theme with gradient background" src="https://github.com/user-attachments/assets/e12b2991-3b3c-4a07-8cd6-fa1befb1af15" height="200px">
+<img alt="pixeljack sketch" src="https://github.com/user-attachments/assets/2af4ecc1-bdeb-4772-a5ce-081d77d2c430" height="180">
+<img alt="pixel theme with gradient background" src="https://github.com/user-attachments/assets/e12b2991-3b3c-4a07-8cd6-fa1befb1af15" height="180">
 <br>
-<img height="200" alt="mobile-pj" src="https://github.com/user-attachments/assets/49d06bac-1940-4c0d-8d1a-7336b0a2723e" />
-<img height="200" alt="desktop-pj" src="https://github.com/user-attachments/assets/1dbd0311-6e01-48de-a8fb-473c058b1bfc" />
+<img height="180" alt="mobile-pj" src="https://github.com/user-attachments/assets/49d06bac-1940-4c0d-8d1a-7336b0a2723e" />
+<img height="180" alt="desktop-pj" src="https://github.com/user-attachments/assets/1dbd0311-6e01-48de-a8fb-473c058b1bfc" />
 
 
 ## ♦️ Code Process
@@ -63,10 +63,9 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - `cardDeck` holds 52 card objects
     - I started with a single object for the table to hold both dealer and player cards. ie `let table = {dealer: [], player: []}`, which is later changed to separate objects of `dealer = {cards: [], total: [], hitCardIdx: 0}` for player and splitHand as well
 
-<img height="250" alt="starting concept" src="https://github.com/user-attachments/assets/d4163840-dc46-4695-b9db-625e2b8a352f">
-<img height="250" alt="html scaffold" src="https://github.com/user-attachments/assets/56842fe6-acd9-4886-8dfc-baefbd58837c">
-<img height="250" alt="data-structure" src="https://github.com/user-attachments/assets/c3556a6d-3073-443e-952e-6d29cdacdd3c" />
-
+<img height="200" alt="starting concept" src="https://github.com/user-attachments/assets/d4163840-dc46-4695-b9db-625e2b8a352f">
+<img height="200" alt="html scaffold" src="https://github.com/user-attachments/assets/56842fe6-acd9-4886-8dfc-baefbd58837c">
+<img height="200" alt="data-structure" src="https://github.com/user-attachments/assets/c3556a6d-3073-443e-952e-6d29cdacdd3c" />
 
 2. Scaffolding HTML for a dealer, player, and 2 buttons for `hit` and `stand`
 3. Using JavaScript to deal the cards to each hand, then display it
@@ -83,12 +82,10 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - `while (dealer.total <= 16) dealerHit()`
 6. Win, lose, or tie logic implemented
     - `compareResult` will check the hand totals between player versus dealer (see *Refactoring Code #4*) while adjusting the bet/wallet totals, and `showResultScreen` will display or remove the visual elements
-
-<img width="200" alt="blackjack win" src="https://github.com/user-attachments/assets/18f3a552-fbf9-4de6-a4ad-f098c21ab16a" />
-
 7. Built out a `resetGame()` function that clears results and displays to prep the player to play again after a game ends
     - In the early builds, the `play again` button led you back to the bet screen rather than loading up another game. You had to pass through this screen and press 'play' again. Future improvements made `play again` and `change bet` into separate options for the user.
 
+<img width="200" alt="blackjack win" src="https://github.com/user-attachments/assets/18f3a552-fbf9-4de6-a4ad-f098c21ab16a" />
 <img width="200" alt="bet and wallet on game screen" src="https://github.com/user-attachments/assets/4eabf71c-d9dd-43f1-95de-5bf70504ed93" />
 
 8. Bet mechanic was added last after the main gameplay was functional and complete.
@@ -97,8 +94,8 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - Added reset wallet for when player runs out of currency in wallet
 9. Once the MVP requirements were functional and tested, I had a basic Blackjack skin for the game theme and used CSS to make it responsive for mobile and web (before deciding on a pixel theme).
 
-<img height="240" alt="mobile home screen" src="https://github.com/user-attachments/assets/e0b41cc6-5dc8-4f1f-b7ac-48a47c80dcbd" />
-<img height="240" alt="mobile game screen" src="https://github.com/user-attachments/assets/4109cbcc-2a5f-4124-97f9-63d71566d25f" />
+<img height="180" alt="mobile home screen" src="https://github.com/user-attachments/assets/e0b41cc6-5dc8-4f1f-b7ac-48a47c80dcbd" />
+<img height="180" alt="mobile game screen" src="https://github.com/user-attachments/assets/4109cbcc-2a5f-4124-97f9-63d71566d25f" />
 <br>
 <img height="100" alt="desktop bet screen" src="https://github.com/user-attachments/assets/9867e0f0-202b-44dc-ae8b-32469eb07acd" />
 <img height="100" alt="desktop game screen" src="https://github.com/user-attachments/assets/8360d999-fc02-42ae-8c2f-5ff21488eae6" />
@@ -123,7 +120,7 @@ Created a function that creates the card
 - The Split feature required a lot of areas to refactor and change since the feature was implemented post-MVP. This led to a lot of things breaking during the process. My learning is to keep track of unit testing and existing technical areas the new feature will touch, rather than focusing only on the implementation logic.
 - The ability for Aces to be flexible of either 1 or 11 value made Split hands difficult. It opened up a lot of edge cases since having a pair of aces can lead to the total of '22' unless accounting for switches to the value of 1. A large majority of time spent in implementing the Split feature was fixing cases and issues derived from this flexibility.
 
-<img width="500" alt="edge case two aces" src="https://github.com/user-attachments/assets/9b8af7ee-c0a5-4e5e-b846-e7eaca70c558">
+<img width="380" alt="edge case two aces" src="https://github.com/user-attachments/assets/9b8af7ee-c0a5-4e5e-b846-e7eaca70c558">
 
 ### Wins
 - Figuring out a card flip animation using transform and perspective with CSS was fun although challenging.

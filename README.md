@@ -38,15 +38,15 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 
 ### Design Process
 #### Initial wireframes
-<img alt="game screen" src="https://github.com/user-attachments/assets/95e77dd5-2ab7-44ec-b2a7-78ddc6e95b68" width="300px">
-<img alt="result screen" src="https://github.com/user-attachments/assets/bfec5590-c02c-467f-9c27-a7c2ac5c6614" width="300px">
+<img alt="game screen" src="https://github.com/user-attachments/assets/95e77dd5-2ab7-44ec-b2a7-78ddc6e95b68" height="200px">
+<img alt="result screen" src="https://github.com/user-attachments/assets/bfec5590-c02c-467f-9c27-a7c2ac5c6614" height="200px">
 <img alt="mobile screen" src="https://github.com/user-attachments/assets/d068e7ac-1944-47f0-930a-c8d87c5a990d" height="200px">
 
 #### Mockups with initial design
-<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" width="300px">
-<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" width="300px">
-<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" width="300px">
-<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" width="400px">
+<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" height="200px">
+<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" height="200px">
+<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" height="200px">
+<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" height="200px">
 
 #### Choosing a Pixel theme
 <img alt="pixeljack sketch" src="https://github.com/user-attachments/assets/2af4ecc1-bdeb-4772-a5ce-081d77d2c430" height="200px">
@@ -65,7 +65,6 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 
 <img height="350" alt="starting concept" src="https://github.com/user-attachments/assets/d4163840-dc46-4695-b9db-625e2b8a352f">
 <img height="350" alt="html scaffold" src="https://github.com/user-attachments/assets/56842fe6-acd9-4886-8dfc-baefbd58837c">
-
 
 2. Scaffolding HTML for a dealer, player, and 2 buttons for `hit` and `stand`
 3. Using JavaScript to deal the cards to each hand, then display it
@@ -130,8 +129,8 @@ Created a function that creates the card
     - This also helped when I needed to create the post-MVP features: Split and Double Down. I was able to use the Kanban Board tasks similar to JIRA style tickets for myself.
     - On each 'ticket', I would do a mini-planning for each feature. This included user stories, psuedo-code, technical challenges to consider, etc. Even some scratch code to think things through.
 
-<img height="400" alt="user stories for split" src="https://github.com/user-attachments/assets/3abcb809-17d7-41e2-a2d8-56fb7ab2e040">
-<img height="400" alt="sketch code for split" src="https://github.com/user-attachments/assets/c0e9864d-5f43-4d6a-9978-47288965f5ae" />
+<img height="200" alt="user stories for split" src="https://github.com/user-attachments/assets/3abcb809-17d7-41e2-a2d8-56fb7ab2e040">
+<img height="200" alt="sketch code for split" src="https://github.com/user-attachments/assets/c0e9864d-5f43-4d6a-9978-47288965f5ae" />
 
 - By building in a modular design and cleaning up redundant code as I went, building the Double Down feature took only a few hours due to the reusability of previous functions. I also found debugging to go quicker when I understood the flow of operations really well thanks to the readability.
     - `createTempMsg` creates a temporary message that displays with a fade-in/fade-out effect to inform users when they do not have enough coins

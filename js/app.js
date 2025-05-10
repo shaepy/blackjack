@@ -50,6 +50,9 @@ const allHands = [player, dealer, splitHand]
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
 
+
+document.body.addEventListener('click', playMusicTracks, {once: true})
+
 document.querySelector('#start-game').addEventListener('click', () => {
     menuClickSound.play()
     if (wallet < bet) {
@@ -484,6 +487,10 @@ const blackjackSound = new Audio(`${srcUrl}/assets/audio/blackjack.mp3`)
 const coinJingle = new Audio(`${srcUrl}/assets/audio/coin-jingle.mp3`)
 const menuClickSound = new Audio(`${srcUrl}/assets/audio/menu-select.mp3`)
 
+const happyPixelTrack = new Audio(`${srcUrl}/assets/audio/happy-bg-music.mp3`)
+const pixDreamsTrack = new Audio(`${srcUrl}/assets/audio/pixel-dreams-bg-music.mp3`)
+const adventureTrack = new Audio(`${srcUrl}/assets/audio/adventure-theme-bg-music.mp3`)
+
 dealingCardsSound.playbackRate = 1.5
 hitCardSound.playbackRate = 1.5
 loseSound.playbackRate = 1.5
@@ -494,27 +501,54 @@ bustSound.playbackRate = 1.1
 blackjackSound.playbackRate = 1.3
 
 const masterVolume = [
-    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, 
+    selectCoinSound, hitCardSound, splitCardSound, 
     bustSound, loseSound, blackjackSound, coinJingle, standSound
 ]
-masterVolume.forEach(s => s.volume = 0.3)
-winSound.volume = 0.09
-menuClickSound.volume = 0.09
-pushSound.volume = 0.2
+masterVolume.forEach(s => s.volume = 0.15)
+winSound.volume = 0.06
+menuClickSound.volume = 0.06
+pushSound.volume = 0.09
+dealingCardsSound.volume = 0.14
 
 const audioElements = [
     selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 
     pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound, standSound
 ]
 
-let isMuted = false
+let soundIsMuted = false
 const muteButton = document.querySelector('#mute-button')
 muteButton.addEventListener('click', () => {
-    isMuted = !isMuted
-    audioElements.forEach(audio => audio.muted = isMuted)
-    isMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png`:muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
+    soundIsMuted = !soundIsMuted
+    audioElements.forEach(audio => audio.muted = soundIsMuted)
+    soundIsMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png`:muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
     menuClickSound.play()
 })
+
+const backgroundMusic = [happyPixelTrack, pixDreamsTrack, adventureTrack]
+happyPixelTrack.volume = 0.006
+happyPixelTrack.playbackRate = 0.96
+pixDreamsTrack.volume = 0.009
+adventureTrack.volume = 0.012
+
+let bgIsMuted = false
+const musicButton = document.querySelector('#music-button')
+musicButton.addEventListener('click', () => {
+    bgIsMuted = !bgIsMuted
+    backgroundMusic.forEach(track => track.muted = bgIsMuted)
+    bgIsMuted ? musicButton.src = `${srcUrl}/assets/img/music-off.png`:musicButton.src = `${srcUrl}/assets/img/music-on.png`
+    menuClickSound.play()
+})
+
+let currentTrackIdx = 0
+
+function playMusicTracks() {
+    const track = backgroundMusic[currentTrackIdx]
+    track.play()
+    track.addEventListener('ended', () => {
+        currentTrackIdx = (currentTrackIdx + 1) % backgroundMusic.length
+        playMusicTracks()
+    }, {once: true})
+}
 
 /* --------------------------------------- Execute on Start -------------------------------------- */
 

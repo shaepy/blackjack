@@ -102,14 +102,14 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 <img height="100" alt="desktop blackjack" src="https://github.com/user-attachments/assets/5c5dcb5e-9e48-4d25-9740-8a62dae18cf2" />
 
 ### Refactoring Code
-1. Refactored from using `.innerHTML` assignments to add card images to `div` placements for cards, and instead now `createCardImg(card)` takes a card object and will construct the entire element before appending it to HTML. 
-Created a function that creates the card
-2. Originally, the temporary user-facing messages ex. "Your Ace value has been changed" or "You do not have enough funds to play. Reset your wallet" were coded into the HTML and hidden. Since the messages all looked the same and appeared in similar spots, I refactored this to be two dynamic pieces so I could reuse it for any string that needed a temporary user-facing message.
+1. Refactored from using `.innerHTML` declarations ie. `display.innerHTML = <img src="${player.cards[0}">` and instead now `createCardImg(card)` takes a card object and will construct the entire element and I can just append it to the necessary `div` element. 
+2. Originally, the temporary user-facing messages ex. "Your Ace value has been changed" or "Choose a bet amount to start a game" were coded into the HTML and hidden. Since the messages all looked the same and appeared in similar spots, I refactored this to be two dynamic pieces so I could reuse it for any string that needed a temporary user-facing message.
     - `handleFadeEffect(element)` will take an element and apply or remove the opacity fading css classes
     - `createTempMsg(string)` will take a string and make it into a temp message which calls the `handleFadeEffect` to add the effect to this string. 
 3. Since the code uses a lot of setting `display: none` and `display: flex` for showing or hiding elements on the page, I use two functions that will take an array and set each element in the array to either `display: flex` or `display: none`
     - `turnDisplayToFlex(arr)` and `turnDisplayToNone(arr)`
-    - Improvement would be to change this to utilizing utility classes for displays and applying/removing a separate class but might need to review the current usage of IDs
+    - This is also the method used to setAttribute of `disabled` or removeAttribute, for player action buttons. 
+    - Future improvement would be to change this to utility classes for displays and applying/removing a separate class but might need to review the current usage of IDs
 4. Updated `compareResult()` and `compareSplitResult()` to take all the result cases, including when a player busts. This way, `checkForBust()` only handles the checking of it, passing any visual elements and changing to `isBust: true`, and is directed towards the `compare` functions.
     - Doing this keeps the functions separate. All result outputs are now in either `compareResult` or `compareSplitResult` rather than being in `checkForBust`. The only exception is when getting a natural blackjack (a case that does not result in the normal flow of operations).
 
@@ -123,7 +123,6 @@ Created a function that creates the card
 <img width="380" alt="edge case two aces" src="https://github.com/user-attachments/assets/9b8af7ee-c0a5-4e5e-b846-e7eaca70c558">
 
 ### Wins
-- Figuring out a card flip animation using transform and perspective with CSS was fun although challenging.
 - Tracking my tasks in a Kanban board helped me in prioritizing features, bugs, and edge cases as they were discovered and built.
     - This also helped when I needed to create the post-MVP features: Split and Double Down. I was able to use the Kanban Board tasks similar to JIRA style tickets for myself.
     - On each 'ticket', I would do a mini-planning for each feature. This included user stories, psuedo-code, technical challenges to consider, etc. Even some scratch code to think things through.
@@ -138,10 +137,10 @@ Created a function that creates the card
     - If player did not bust, call `stand`
     - Return bet to normal
 
-<img width="500" alt="double down code" src="https://github.com/user-attachments/assets/6c6a63e7-cb0c-4def-a180-426f76222bd1">
+<img width="400" alt="double down code" src="https://github.com/user-attachments/assets/6c6a63e7-cb0c-4def-a180-426f76222bd1">
 
 ## ♦️ Future Improvements
-- Card counting mode (currently the deck resets every game)
+- Card counting mode (currently, the deck resets every game)
 - Adjust cards to be stacked in a peek on top of each other rather than displayed fully
 - Potentially, allow player to forfeit game and exit to home screen before game has ended
 

@@ -63,8 +63,10 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - `cardDeck` holds 52 card objects
     - I started with a single object for the table to hold both dealer and player cards. ie `let table = {dealer: [], player: []}`, which is later changed to separate objects of `dealer = {cards: [], total: [], hitCardIdx: 0}` for player and splitHand as well
 
-<img height="350" alt="starting concept" src="https://github.com/user-attachments/assets/d4163840-dc46-4695-b9db-625e2b8a352f">
-<img height="350" alt="html scaffold" src="https://github.com/user-attachments/assets/56842fe6-acd9-4886-8dfc-baefbd58837c">
+<img height="250" alt="starting concept" src="https://github.com/user-attachments/assets/d4163840-dc46-4695-b9db-625e2b8a352f">
+<img height="250" alt="html scaffold" src="https://github.com/user-attachments/assets/56842fe6-acd9-4886-8dfc-baefbd58837c">
+<img height="250" alt="data-structure" src="https://github.com/user-attachments/assets/c3556a6d-3073-443e-952e-6d29cdacdd3c" />
+
 
 2. Scaffolding HTML for a dealer, player, and 2 buttons for `hit` and `stand`
 3. Using JavaScript to deal the cards to each hand, then display it

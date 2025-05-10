@@ -125,7 +125,6 @@ doubleButton.addEventListener('click', () => {
         createTempMsg('Your wallet is too low to double your bet')
         return
     }
-    setDisableAttr([splitButton])
     wallet -= bet
     bet += bet
     displayFunds()

@@ -8,6 +8,8 @@
 ### Description
 Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by getting as close to 21 as possible without going over. Both you and the dealer start with two cards and take turns choosing to 'hit' (get another card) or 'stand' (keep your hand). Whoever gets closer to 21 without going over wins.
 
+**[Pixeljack Presentation PDF](https://drive.google.com/file/d/1buH4nGbc1BMpjQOJtaJd6Sc1Y0gGODK0/view?usp=sharing)**
+
 ## ♦️ Tech Stack
 - HTML
 - CSS

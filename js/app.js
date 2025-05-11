@@ -91,8 +91,7 @@ document.querySelector('#play-again').addEventListener('click', () => {
 document.querySelector('#info-button').addEventListener('click', () => {
     menuClickSound.play()
     const instructions = document.querySelector('#instructions')
-    if (window.getComputedStyle(instructions).display === 'flex') instructions.style.display = 'none'
-    else instructions.style.display = 'flex'
+    window.getComputedStyle(instructions).display === 'flex' ? instructions.style.display = 'none':instructions.style.display = 'flex'
 })
 
 splitButton.addEventListener('click', () => {

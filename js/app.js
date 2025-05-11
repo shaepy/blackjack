@@ -1,10 +1,18 @@
+/* --------------------------------------- Variables -------------------------------------- */
+
+let dealer = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
+let activeHand = player
+let bet = score = 0
+let wallet = Number(localStorage.getItem('savedWallet')) || 200
+
 /* --------------------------------------- Constants -------------------------------------- */
 
-const divToAddCardFlip = document.querySelector('#flip-animation-here')
-// Logo elemenets
-const largeLogo = document.querySelector('#large-logo')
-const smallLogo = document.querySelector('#small-logo')
-// Display elements
+const allHands = [player, dealer, splitHand]
+const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
+const savedHighScore = localStorage.getItem('savedHighScore')
+
 const bodyElement = document.querySelector('body')
 const actionsBar = document.querySelector('#actions')
 const resultDiv = document.querySelector('#result')
@@ -14,42 +22,27 @@ const homeScreen = document.querySelector('#home-screen')
 const playAgainButtons = document.querySelector('#play-again-buttons')
 const resetWallet = document.querySelector('#reset-wallet')
 const scoreElements = document.querySelectorAll('.high-score')
-// Cards, result, handTotal elements
-const displayDealerCards = document.querySelector('#dealer-cards')
-const displayPlayerCards = document.querySelector('#player-cards')
-const displayH2Result = document.querySelector('#result h2')
-const displayDealerTotal = document.querySelector('#dealer-total')
-const displayPlayerTotal = document.querySelector('#player-total')
-// Split feature elements
-const displaySplitCards = document.querySelector('#splitHand-cards')
-const displaySplitTotal = document.querySelector('#splitHand-total')
+const divToAddCardFlip = document.querySelector('#flip-animation-here')
+const largeLogo = document.querySelector('#large-logo')
+const smallLogo = document.querySelector('#small-logo')
+
+const h2ResultElement = document.querySelector('#result h2')
+const dealerCardsDiv = document.querySelector('#dealer-cards')
+const playerCardsDiv = document.querySelector('#player-cards')
+const dealerTotalDiv = document.querySelector('#dealer-total')
+const playerTotalDiv = document.querySelector('#player-total')
+const splitCardsDiv = document.querySelector('#splitHand-cards')
+const splitTotalDiv = document.querySelector('#splitHand-total')
 const firstHandDiv = document.querySelector('#split-view-1')
 const secondHandDiv = document.querySelector('#split-view-2')
-// Player actions
+
 const hitButton = document.querySelector('#hit')
 const standButton = document.querySelector('#stand')
 const doubleButton = document.querySelector('#double')
 const splitButton = document.querySelector('#split')
 const actionButtons = document.querySelectorAll('#actions button')
-// Local or Remote
-const srcUrl = window.location.hostname === '127.0.0.1' ? '' : '/pixeljack';
-// Local storage
-const savedHighScore = localStorage.getItem('savedHighScore')
-
-/* --------------------------------------- Variables -------------------------------------- */
-
-let dealer = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
-let player = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
-let splitHand = {cards: [], total: 0, hitCardIdx: 0, isBust: false}
-let activeHand = player
-let bet = 0
-let score = 0
-let wallet = Number(localStorage.getItem('savedWallet')) || 200
-
-const allHands = [player, dealer, splitHand]
 
 /* ------------------------------------ Event Listeners ------------------------------------ */
-
 
 document.body.addEventListener('click', playMusicTracks, {once: true})
 
@@ -115,10 +108,10 @@ splitButton.addEventListener('click', () => {
     player.cards.push(getCard())
     splitHand.cards.push(getCard())
     addCardTotal()
-    displaySplitTotal.innerText = splitHand.total
-    displayPlayerTotal.innerText = player.total
-    displayPlayerCards.append(createCardImg(player.cards[1]))
-    displaySplitCards.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
+    splitTotalDiv.innerText = splitHand.total
+    playerTotalDiv.innerText = player.total
+    playerCardsDiv.append(createCardImg(player.cards[1]))
+    splitCardsDiv.append(createCardImg(splitHand.cards[0]), createCardImg(splitHand.cards[1]))
     createTempMsg('Your cards have been split')
     splitCardSound.play()
 })
@@ -137,6 +130,7 @@ doubleButton.addEventListener('click', () => {
 })
 
 hitButton.addEventListener('click', hit)
+
 standButton.addEventListener('click', () => {
     standSound.play()
     stand()
@@ -144,7 +138,7 @@ standButton.addEventListener('click', () => {
 
 /* --------------------------------------- Bet Mechanic -------------------------------------- */
 
-resetWallet.addEventListener('click', () => {wallet = 200, displayFunds(), coinJingle.play()})
+resetWallet.addEventListener('click', () => {wallet = 200, displayFunds(), coinJingleSound.play()})
 
 document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (e) => {
     bet = Number(e.target.dataset.bet)
@@ -178,18 +172,14 @@ function resetGame() {
         if (card.rank === 'ace') card.value = 11, card.aceValueChanged = false
     })
     if (activeHand === splitHand) activeHand = player
-    allHands.forEach(hand => {
-        hand.cards = []
-        hand.total = 0
-        hand.isBust = false
-    })
+    allHands.forEach(hand => {hand.cards = [], hand.total = 0, hand.isBust = false})
     const resetDisplays = [
-        displayH2Result,
-        displayDealerTotal, 
-        displayPlayerCards, 
-        displayPlayerTotal,
-        displaySplitCards,
-        displaySplitTotal
+        h2ResultElement,
+        dealerTotalDiv, 
+        playerCardsDiv, 
+        playerTotalDiv,
+        splitCardsDiv,
+        splitTotalDiv
     ]
     resetDisplays.forEach(div => div.innerText = '')
     removeDisableAttr([hitButton, standButton, doubleButton])
@@ -253,7 +243,7 @@ function checkForBlackjack() {
     if (player.total === 21 && dealer.total < 21) {
         setDisableAttr(actionButtons)
         wallet += bet + (bet * 1.5)
-        displayH2Result.innerText = 'Pixeljack! You Win'
+        h2ResultElement.innerText = 'Pixeljack! You Win'
         setTimeout(() => {blackjackSound.play()}, 200);
         setTimeout(revealHiddenCard, 300)
         setTimeout(displayFunds, 450)
@@ -262,24 +252,24 @@ function checkForBlackjack() {
 }
 
 function displayCards() {
-    if (displayPlayerCards.innerHTML === '') {
+    if (playerCardsDiv.innerHTML === '') {
         const hiddenCard = createCardImg(dealer.cards[0])
         hiddenCard.id = 'hidden-card'
         document.querySelector('.flip-card-front').append(hiddenCard)
         const dealer2ndCard = createCardImg(dealer.cards[1])
         dealer2ndCard.classList.add('dealer-card')
-        displayDealerCards.append(dealer2ndCard)
-        displayPlayerCards.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
-        displayDealerTotal.innerText = dealer.cards[1].value
-        displayPlayerTotal.innerText = player.total
+        dealerCardsDiv.append(dealer2ndCard)
+        playerCardsDiv.append(createCardImg(player.cards[0]), createCardImg(player.cards[1]))
+        dealerTotalDiv.innerText = dealer.cards[1].value
+        playerTotalDiv.innerText = player.total
     }
     else {
         if (activeHand === player) {
-            displayPlayerCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
-            displayPlayerTotal.innerText = activeHand.total
+            playerCardsDiv.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            playerTotalDiv.innerText = activeHand.total
         } else {
-            displaySplitCards.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
-            displaySplitTotal.innerText = activeHand.total
+            splitCardsDiv.append(createCardImg(activeHand.cards[activeHand.hitCardIdx]))
+            splitTotalDiv.innerText = activeHand.total
         }
     }
 }
@@ -309,21 +299,21 @@ function checkForBust(hand) {
     if (player.total > 21 && splitHand.total > 21) {
         player.isBust = true
         splitHand.isBust = true
-        createBustTag(displaySplitTotal)
+        createBustTag(splitTotalDiv)
         compareSplitResult()
         return
     }
     if (hand.total > 21) {
         if (splitHand.cards.length > 0) {
             hand.isBust = true
-            if (hand === player) {createBustTag(displayPlayerTotal)} 
-            else {createBustTag(displaySplitTotal)}
+            if (hand === player) {createBustTag(playerTotalDiv)} 
+            else {createBustTag(splitTotalDiv)}
             bustSound.play()
             stand()
             return
         } 
         hand.isBust = true
-        createBustTag(displayPlayerTotal)
+        createBustTag(playerTotalDiv)
         compareResult()
     }
 }
@@ -350,8 +340,8 @@ function dealerHit() {
     const dealerHitCard = createCardImg(dealer.cards[dealer.hitCardIdx])
     dealerHitCard.classList.add('dealer-card')
     setTimeout(() => {
-        displayDealerCards.append(dealerHitCard)
-        displayDealerTotal.innerText = dealer.total
+        dealerCardsDiv.append(dealerHitCard)
+        dealerTotalDiv.innerText = dealer.total
     }, 300)
 }
 
@@ -365,19 +355,19 @@ function compareResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         setTimeout(() => {bustSound.play()}, 500);
-        displayH2Result.innerText = `You Bust`
+        h2ResultElement.innerText = `You Bust`
         return
     }
-    if (dealer.isBust|| player.total - dealer.total > 0) {
+    if (dealer.isBust || player.total - dealer.total > 0) {
         wallet += bet * 2
-        displayH2Result.innerText = 'You Win'
+        h2ResultElement.innerText = 'You Win'
         setTimeout(() => {winSound.play()}, 500);
     } else if (player.total - dealer.total === 0) {
         wallet += bet
-        displayH2Result.innerText = `Push`
+        h2ResultElement.innerText = `Push`
         setTimeout(() => {pushSound.play()}, 400);
     } else { 
-        displayH2Result.innerText = `You Lose`
+        h2ResultElement.innerText = `You Lose`
         setTimeout(() => {loseSound.play()}, 400);
     }
     setTimeout(displayFunds, 450)
@@ -390,21 +380,21 @@ function compareSplitResult() {
         setTimeout(revealHiddenCard, 300)
         setTimeout(showResultScreen, 450)
         setTimeout(() => {bustSound.play()}, 500);
-        displayH2Result.innerText = `Both Hands Bust`
+        h2ResultElement.innerText = `Both Hands Bust`
         bet = bet / 2
         return
     }
     function compareHands(handTotal, label) {
         if (dealer.isBust || handTotal - dealer.total > 0) {
             wallet += bet
-            displayH2Result.innerHTML += ` ${label} Wins<br>`
+            h2ResultElement.innerHTML += ` ${label} Wins<br>`
             setTimeout(() => {winSound.play()}, 500);
         } else if (handTotal - dealer.total === 0) {
             wallet += bet / 2
-            displayH2Result.innerHTML += ` ${label} Push<br>`
+            h2ResultElement.innerHTML += ` ${label} Push<br>`
             setTimeout(() => {pushSound.play()}, 400);
         } else {
-            displayH2Result.innerHTML += ` ${label} Loses<br>`
+            h2ResultElement.innerHTML += ` ${label} Loses<br>`
             setTimeout(() => {loseSound.play()}, 400);
         }
     }
@@ -417,7 +407,7 @@ function compareSplitResult() {
 
 function revealHiddenCard() {
     divToAddCardFlip.classList.add("flip-card-inner")
-    displayDealerTotal.innerText = dealer.total
+    dealerTotalDiv.innerText = dealer.total
 }
 
 function showResultScreen() {
@@ -472,80 +462,79 @@ function createTempMsg(string) {
     handleFadeEffect(tempMsgDiv)
 }
 
-/* ------------------------------------- Audio / Mute Button ------------------------------------ */
+/* ------------------------------------- Audio / Mute Buttons ------------------------------------ */
 
 const selectCoinSound = new Audio(`${srcUrl}/assets/audio/chips-stack.mp3`)
 const dealingCardsSound = new Audio(`${srcUrl}/assets/audio/dealing-cards.mp3`)
+const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
 const hitCardSound = new Audio(`${srcUrl}/assets/audio/card-hit.mp3`)
 const standSound = new Audio(`${srcUrl}/assets/audio/stand-chips.mp3`)
-const splitCardSound = new Audio(`${srcUrl}/assets/audio/card-split.mp3`)
 const pushSound = new Audio(`${srcUrl}/assets/audio/push.mp3`)
 const bustSound = new Audio(`${srcUrl}/assets/audio/bust.mp3`)
 const loseSound = new Audio(`${srcUrl}/assets/audio/death.mp3`)
 const winSound = new Audio(`${srcUrl}/assets/audio/win.mp3`)
 const blackjackSound = new Audio(`${srcUrl}/assets/audio/blackjack.mp3`)
-const coinJingle = new Audio(`${srcUrl}/assets/audio/coin-jingle.mp3`)
+const coinJingleSound = new Audio(`${srcUrl}/assets/audio/coin-jingle.mp3`)
 const menuClickSound = new Audio(`${srcUrl}/assets/audio/menu-select.mp3`)
-
 const happyPixelTrack = new Audio(`${srcUrl}/assets/audio/happy-bg-music.mp3`)
 const pixDreamsTrack = new Audio(`${srcUrl}/assets/audio/pixel-dreams-bg-music.mp3`)
 const adventureTrack = new Audio(`${srcUrl}/assets/audio/adventure-theme-bg-music.mp3`)
+const retroArcadeTrack = new Audio(`${srcUrl}/assets/audio/retro-arcade-bg-music.mp3`)
+const retroGameTrack = new Audio(`${srcUrl}/assets/audio/retro-game-bg-music.mp3`)
 
 dealingCardsSound.playbackRate = 1.5
 hitCardSound.playbackRate = 1.5
 loseSound.playbackRate = 1.5
-coinJingle.playbackRate = 1.5
+coinJingleSound.playbackRate = 1.5
 menuClickSound.playbackRate = 1.9
 pushSound.playbackRate = 1.1
 bustSound.playbackRate = 1.1
 blackjackSound.playbackRate = 1.3
 
-const masterVolume = [
-    selectCoinSound, hitCardSound, splitCardSound, 
-    bustSound, loseSound, blackjackSound, coinJingle, standSound
-]
+const masterVolume = [selectCoinSound, hitCardSound, splitCardSound, bustSound, loseSound, blackjackSound, coinJingleSound, standSound]
 masterVolume.forEach(s => s.volume = 0.15)
 winSound.volume = 0.06
 menuClickSound.volume = 0.06
 pushSound.volume = 0.09
 dealingCardsSound.volume = 0.14
 
-const audioElements = [
-    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingle, 
+const soundElements = [
+    selectCoinSound, dealingCardsSound, hitCardSound, splitCardSound, coinJingleSound, 
     pushSound, bustSound, loseSound, blackjackSound, winSound, menuClickSound, standSound
 ]
+
+const bgMusicTracks = [retroArcadeTrack, retroGameTrack, happyPixelTrack, pixDreamsTrack, adventureTrack]
+happyPixelTrack.volume = 0.006
+happyPixelTrack.playbackRate = 0.96
+pixDreamsTrack.volume = 0.009
+adventureTrack.volume = 0.012
+retroArcadeTrack.volume = 0.006
+retroGameTrack.volume = 0.006
 
 let soundIsMuted = false
 const muteButton = document.querySelector('#mute-button')
 muteButton.addEventListener('click', () => {
     soundIsMuted = !soundIsMuted
-    audioElements.forEach(audio => audio.muted = soundIsMuted)
+    soundElements.forEach(sound => sound.muted = soundIsMuted)
     soundIsMuted ? muteButton.src = `${srcUrl}/assets/img/pixel-muted.png`:muteButton.src = `${srcUrl}/assets/img/pixel-sound.png`
     menuClickSound.play()
 })
-
-const backgroundMusic = [happyPixelTrack, pixDreamsTrack, adventureTrack]
-happyPixelTrack.volume = 0.006
-happyPixelTrack.playbackRate = 0.96
-pixDreamsTrack.volume = 0.009
-adventureTrack.volume = 0.012
 
 let bgIsMuted = false
 const musicButton = document.querySelector('#music-button')
 musicButton.addEventListener('click', () => {
     bgIsMuted = !bgIsMuted
-    backgroundMusic.forEach(track => track.muted = bgIsMuted)
+    bgMusicTracks.forEach(track => track.muted = bgIsMuted)
     bgIsMuted ? musicButton.src = `${srcUrl}/assets/img/music-off.png`:musicButton.src = `${srcUrl}/assets/img/music-on.png`
     menuClickSound.play()
 })
 
 let currentTrackIdx = 0
-
 function playMusicTracks() {
-    const track = backgroundMusic[currentTrackIdx]
+    const track = bgMusicTracks[currentTrackIdx]
     track.play()
     track.addEventListener('ended', () => {
-        currentTrackIdx = (currentTrackIdx + 1) % backgroundMusic.length
+        currentTrackIdx = (currentTrackIdx + 1) % bgMusicTracks.length
         playMusicTracks()
     }, {once: true})
 }

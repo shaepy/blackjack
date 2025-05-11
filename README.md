@@ -45,14 +45,14 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 <img alt="mobile screen" src="https://github.com/user-attachments/assets/d068e7ac-1944-47f0-930a-c8d87c5a990d" height="180">
 
 #### Mockups with initial design
-<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" height="180">
-<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" height="180">
-<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" height="180">
-<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" height="180">
+<img alt="bet screen" src="https://github.com/user-attachments/assets/76b545c9-7a39-4b46-a3c0-ab992bb7fff1" height="120">
+<img alt="game screen" src="https://github.com/user-attachments/assets/ff851454-641d-4221-9dee-b52dc9b9e6f0" height="120">
+<img alt="result screen" src="https://github.com/user-attachments/assets/f67a7907-55b5-44d4-abef-4becdbea8929" height="120">
+<img alt="old theme sketch" src="https://github.com/user-attachments/assets/3169b643-b49a-4c37-a3b3-576bfcabb1c4" height="120">
 
 #### Choosing a Pixel theme
-<img alt="pixeljack sketch" src="https://github.com/user-attachments/assets/2af4ecc1-bdeb-4772-a5ce-081d77d2c430" height="180">
-<img alt="pixel theme with gradient background" src="https://github.com/user-attachments/assets/e12b2991-3b3c-4a07-8cd6-fa1befb1af15" height="180">
+<img alt="pixeljack sketch" src="https://github.com/user-attachments/assets/2af4ecc1-bdeb-4772-a5ce-081d77d2c430" height="120">
+<img alt="pixel theme with gradient background" src="https://github.com/user-attachments/assets/e12b2991-3b3c-4a07-8cd6-fa1befb1af15" height="120">
 <br>
 <img height="180" alt="mobile-pj" src="https://github.com/user-attachments/assets/49d06bac-1940-4c0d-8d1a-7336b0a2723e" />
 <img height="180" alt="desktop-pj" src="https://github.com/user-attachments/assets/1dbd0311-6e01-48de-a8fb-473c058b1bfc" />
@@ -87,8 +87,8 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 7. Built out a `resetGame()` function that clears results and displays to prep the player to play again after a game ends
     - In the early builds, the `play again` button led you back to the bet screen rather than loading up another game. You had to pass through this screen and press 'play' again. Future improvements made `play again` and `change bet` into separate options for the user.
 
-<img width="200" alt="blackjack win" src="https://github.com/user-attachments/assets/18f3a552-fbf9-4de6-a4ad-f098c21ab16a" />
-<img width="200" alt="bet and wallet on game screen" src="https://github.com/user-attachments/assets/4eabf71c-d9dd-43f1-95de-5bf70504ed93" />
+<img height="200" alt="blackjack win" src="https://github.com/user-attachments/assets/18f3a552-fbf9-4de6-a4ad-f098c21ab16a" />
+<img height="200" alt="bet and wallet on game screen" src="https://github.com/user-attachments/assets/4eabf71c-d9dd-43f1-95de-5bf70504ed93" />
 
 8. Bet mechanic was added last after the main gameplay was functional and complete.
     - Started as a single bet option then added bet selectors to choose the amount
@@ -96,12 +96,12 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - Added reset wallet for when player runs out of currency in wallet
 9. Once the MVP requirements were functional and tested, I had a basic Blackjack skin for the game theme and used CSS to make it responsive for mobile and web (before deciding on a pixel theme).
 
-<img height="180" alt="mobile home screen" src="https://github.com/user-attachments/assets/e0b41cc6-5dc8-4f1f-b7ac-48a47c80dcbd" />
-<img height="180" alt="mobile game screen" src="https://github.com/user-attachments/assets/4109cbcc-2a5f-4124-97f9-63d71566d25f" />
-<br>
 <img height="100" alt="desktop bet screen" src="https://github.com/user-attachments/assets/9867e0f0-202b-44dc-ae8b-32469eb07acd" />
 <img height="100" alt="desktop game screen" src="https://github.com/user-attachments/assets/8360d999-fc02-42ae-8c2f-5ff21488eae6" />
 <img height="100" alt="desktop blackjack" src="https://github.com/user-attachments/assets/5c5dcb5e-9e48-4d25-9740-8a62dae18cf2" />
+<br>
+<img height="180" alt="mobile home screen" src="https://github.com/user-attachments/assets/e0b41cc6-5dc8-4f1f-b7ac-48a47c80dcbd" />
+<img height="180" alt="mobile game screen" src="https://github.com/user-attachments/assets/4109cbcc-2a5f-4124-97f9-63d71566d25f" />
 
 ### Refactoring Code
 1. Refactored from using `.innerHTML` declarations ie. `display.innerHTML = <img src="${player.cards[0}">` and instead now `createCardImg(card)` takes a card object and will construct the entire element and I can just append it to the necessary `div` element. 
@@ -146,7 +146,7 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 - Adjust cards to be stacked in a peek on top of each other rather than displayed fully
 - Potentially, allow player to forfeit game and exit to home screen before game has ended
 
-## ♦️ Resources Used
+## ♦️ Resource Credits
 - Card assets by [Magory.itch.io](https://magory.itch.io/cute-pixel-playing-cards)
 - Cursors by [Kenney.nl](https://kenney.nl/assets/cursor-pixel-pack)
 - Icons
@@ -157,3 +157,7 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
     - [freesound community](https://pixabay.com/users/freesound_community-46691455/)
     - [Kenney.nl](https://kenney.nl/assets/casino-audio)
     - [Lumora Studios](https://pixabay.com/users/lumora_studios-39090352/)
+- BG Music
+    - [moodmode](https://pixabay.com/users/moodmode-33139253/)
+    - [DjLofi](https://pixabay.com/users/djlofi-46868546/)
+    - [nickpanek620](https://pixabay.com/users/nickpanek620-38266323/)

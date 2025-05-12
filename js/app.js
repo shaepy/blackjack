@@ -145,8 +145,8 @@ document.querySelectorAll('.bet').forEach(b => b.addEventListener('click', (e) =
     displayFunds()
 }))
 
-const h3betAmounts = document.querySelectorAll('.bet-amnt h3')
-const h3walletAmounts = document.querySelectorAll('.wallet-amnt h3')
+const h3betAmounts = document.querySelectorAll('.bet-amnt')
+const h3walletAmounts = document.querySelectorAll('.wallet-amnt')
 
 function displayFunds() {
     h3betAmounts.forEach(amnt => amnt.innerText = bet)

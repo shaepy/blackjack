@@ -1,6 +1,6 @@
 # ♠️ Pixeljack
 
-**Deployment Link - https://shaepy.github.io/pixeljack/**
+### **Deployment Link - https://shaepy.github.io/pixeljack/**
 
 <img src="https://github.com/user-attachments/assets/b112bc3f-c518-4d47-8057-ce2ac7b098d6" width="650px">
 <img src="https://github.com/user-attachments/assets/f1b2105e-7036-4e86-beaa-53a8a17c3a1a" width="650px">
@@ -8,7 +8,7 @@
 ### Description
 Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by getting as close to 21 as possible without going over. Both you and the dealer start with two cards and take turns choosing to 'hit' (get another card) or 'stand' (keep your hand). Whoever gets closer to 21 without going over wins.
 
-**[Pixeljack Presentation PDF](https://drive.google.com/file/d/1buH4nGbc1BMpjQOJtaJd6Sc1Y0gGODK0/view?usp=sharing)**
+**[Pixeljack Presentation PDF](https://drive.google.com/file/d/1fcyV7OTtDYuM8APRIy4v5IXm-6-J7hra/view?usp=sharing)**
 
 ## ♦️ Tech Stack
 - HTML
@@ -57,7 +57,6 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 <img height="180" alt="mobile-pj" src="https://github.com/user-attachments/assets/49d06bac-1940-4c0d-8d1a-7336b0a2723e" />
 <img height="180" alt="desktop-pj" src="https://github.com/user-attachments/assets/1dbd0311-6e01-48de-a8fb-473c058b1bfc" />
 
-
 ## ♦️ Code Process
 
 ### Early Code 
@@ -92,8 +91,8 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 
 8. Bet mechanic was added last after the main gameplay was functional and complete.
     - Started as a single bet option then added bet selectors to choose the amount
-        - Using `data-bet = "10"` for values since the bets are images
-    - Added reset wallet for when player runs out of currency in wallet
+        - Then evolved to more options using `data-bet = "10"` for values since the bets are images
+    - Added reset funds button that appears when player runs out of currency
 9. Once the MVP requirements were functional and tested, I had a basic Blackjack skin for the game theme and used CSS to make it responsive for mobile and web (before deciding on a pixel theme).
 
 <img height="100" alt="desktop bet screen" src="https://github.com/user-attachments/assets/9867e0f0-202b-44dc-ae8b-32469eb07acd" />
@@ -104,22 +103,22 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 <img height="180" alt="mobile game screen" src="https://github.com/user-attachments/assets/4109cbcc-2a5f-4124-97f9-63d71566d25f" />
 
 ### Refactoring Code
-1. Refactored from using `.innerHTML` declarations ie. `display.innerHTML = <img src="${player.cards[0}">` and instead now `createCardImg(card)` takes a card object and will construct the entire element and I can just append it to the necessary `div` element. 
-2. Originally, the temporary user-facing messages ex. "Your Ace value has been changed" or "Choose a bet amount to start a game" were coded into the HTML and hidden. Since the messages all looked the same and appeared in similar spots, I refactored this to be two dynamic pieces so I could reuse it for any string that needed a temporary user-facing message.
-    - `handleFadeEffect(element)` will take an element and apply or remove the opacity fading css classes
-    - `createTempMsg(string)` will take a string and make it into a temp message which calls the `handleFadeEffect` to add the effect to this string. 
+1. Refactored from using `.innerHTML` declarations ie. `display.innerHTML = <img src="${player.cards[0]}">` and instead now `createCardImg(card)` takes a card object and will construct the entire element and I can just append it to the necessary `div` element. 
+2. Originally, the temporary user-facing messages ex. "Your Ace value has been changed", "Choose a bet amount to start a game", "Your wallet is too low", etc. were coded into the HTML and hidden. Since the messages all looked the same and appeared in similar spots, I refactored this to be two dynamic pieces so I could reuse it for any string that needed a temporary user-facing message.
+    - `handleFadeEffect(element)` will take an element and apply or remove the opacity fading CSS classes
+    - `createTempMsg(string)` will take a string and make a `p` element with that string, append it to the `#temp-msg div` then calls the `handleFadeEffect` to add the effect. 
 3. Since the code uses a lot of setting `display: none` and `display: flex` for showing or hiding elements on the page, I use two functions that will take an array and set each element in the array to either `display: flex` or `display: none`
     - `turnDisplayToFlex(arr)` and `turnDisplayToNone(arr)`
     - This is also the method used to setAttribute of `disabled` or removeAttribute, for player action buttons. 
     - Future improvement would be to change this to utility classes for displays and applying/removing a separate class but might need to review the current usage of IDs
 4. Updated `compareResult()` and `compareSplitResult()` to take all the result cases, including when a player busts. This way, `checkForBust()` only handles the checking of it, passing any visual elements and changing to `isBust: true`, and is directed towards the `compare` functions.
-    - Doing this keeps the functions separate. All result outputs are now in either `compareResult` or `compareSplitResult` rather than being in `checkForBust`. The only exception is when getting a natural blackjack (a case that does not result in the normal flow of operations).
+    - Doing this keeps the functions separate. Previously, the `checkForBust` function would branch a way to display a bust result for when a player or dealer busts. Now, all result outputs are in either `compareResult` or `compareSplitResult`. The only exception is when getting a natural blackjack (a case that does not result in the normal flow of operations).
 
 ## ♦️ Key Takeaways
 
 ### Challenges
-- Using a relative path versus direct path for images in JavaScript for local host versus remote live servers was causing issues. A solution found was to reference the direct path but use a ternary operator to pass in either the local host IP or /pixeljack.
-- The Split feature required a lot of areas to refactor and change since the feature was implemented post-MVP. This led to a lot of things breaking during the process. My learning is to keep track of unit testing and existing technical areas the new feature will touch, rather than focusing only on the implementation logic.
+- Using a relative path versus direct path for images in JavaScript for local host versus remote live servers was causing issues. A solution found was to reference the direct path but use a ternary operator to pass in a `${srcUrl}` of either the local host IP or `/pixeljack`.
+- The Split feature required a lot of areas to refactor since the feature was implemented post-MVP. This led to a lot of things breaking during the process. My takeaway is to keep track of unit testing and listing out existing technical areas the new feature will touch, rather than focusing only on the implementation logic.
 - The ability for Aces to be flexible of either 1 or 11 value made Split hands difficult. It opened up a lot of edge cases since having a pair of aces can lead to the total of '22' unless accounting for switches to the value of 1. A large majority of time spent in implementing the Split feature was fixing cases and issues derived from this flexibility.
 
 <img width="380" alt="edge case two aces" src="https://github.com/user-attachments/assets/9b8af7ee-c0a5-4e5e-b846-e7eaca70c558">
@@ -132,12 +131,13 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 <img height="200" alt="user stories for split" src="https://github.com/user-attachments/assets/3abcb809-17d7-41e2-a2d8-56fb7ab2e040">
 <img height="200" alt="sketch code for split" src="https://github.com/user-attachments/assets/c0e9864d-5f43-4d6a-9978-47288965f5ae" />
 
-- By building in a modular design and cleaning up redundant code as I went, building the Double Down feature took only a few hours due to the reusability of previous functions. I also found debugging to go quicker when I understood the flow of operations really well thanks to the readability.
-    - `createTempMsg` creates a temporary message that displays with a fade-in/fade-out effect to inform users when they do not have enough coins
-    - `displayFunds` will show the updated wallet and bet
-    - `hit` will `getCard` and call to display the card, `addCardTotal`, and `checkForBust`
-    - If player did not bust, call `stand`
-    - Return bet to normal
+- By building in a modular design and cleaning up redundant code as I went, building the Double Down feature took only a few hours due to the reusability of previous functions. I also found debugging to go quicker when I understood the flow of operations really well thanks to the ease of readability.
+    - Double Down is comprised of existing actions and behaviors:
+        - `createTempMsg` creates a temporary message that displays with a fade-in/fade-out effect to inform users when they do not have enough coins
+        - `displayFunds` will show the updated wallet and bet
+        - `hit` will `getCard` and call to display the card, `addCardTotal`, and `checkForBust`
+        - If player did not bust, call `stand`
+        - Return bet to normal
 
 <img width="400" alt="double down code" src="https://github.com/user-attachments/assets/6c6a63e7-cb0c-4def-a180-426f76222bd1">
 
@@ -147,6 +147,7 @@ Pixeljack is a pixel-style Blackjack game where you try to beat the dealer by ge
 - Potentially, allow player to forfeit game and exit to home screen before game has ended
 
 ## ♦️ Resource Credits
+**Special thank you to,**
 - Card assets by [Magory.itch.io](https://magory.itch.io/cute-pixel-playing-cards)
 - Cursors by [Kenney.nl](https://kenney.nl/assets/cursor-pixel-pack)
 - Icons

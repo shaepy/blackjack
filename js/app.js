@@ -491,9 +491,9 @@ bustSound.playbackRate = 1.1
 blackjackSound.playbackRate = 1.3
 
 const masterVolume = [selectCoinSound, hitCardSound, splitCardSound, bustSound, loseSound, blackjackSound, coinJingleSound, standSound]
-masterVolume.forEach(s => s.volume = 0.15)
+masterVolume.forEach(s => s.volume = 0.16)
 winSound.volume = 0.06
-menuClickSound.volume = 0.06
+menuClickSound.volume = 0.07
 pushSound.volume = 0.09
 dealingCardsSound.volume = 0.14
 
@@ -503,12 +503,12 @@ const soundElements = [
 ]
 
 const bgMusicTracks = [retroArcadeTrack, retroGameTrack, happyPixelTrack, pixDreamsTrack, adventureTrack]
-happyPixelTrack.volume = 0.006
-happyPixelTrack.playbackRate = 0.96
-pixDreamsTrack.volume = 0.009
-adventureTrack.volume = 0.012
-retroArcadeTrack.volume = 0.006
-retroGameTrack.volume = 0.006
+happyPixelTrack.playbackRate = 0.97
+happyPixelTrack.volume = 0.012
+retroArcadeTrack.volume = 0.012
+retroGameTrack.volume = 0.012
+pixDreamsTrack.volume = 0.014
+adventureTrack.volume = 0.014
 
 let soundIsMuted = false
 const muteButton = document.querySelector('#mute-button')
